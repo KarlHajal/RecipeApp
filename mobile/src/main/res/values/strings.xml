@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Recipe App</string>
+    <string name="FoodPreferencesTitle">Customize your food preferences</string>
 </resources>
