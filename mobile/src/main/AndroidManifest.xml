@@ -11,8 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".SearchResultsActivity"></activity>
         <activity android:name=".Recipe_activity" />
+
+        <activity android:name=".FoodPreferencesActivity"></activity>
+        <activity android:name=".HomepageActivity" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

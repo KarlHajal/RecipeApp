@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        .setLogo(R.drawable.spatula)
+                        .setTheme(R.style.LoginTheme)
                         .build(),
                 RC_SIGN_IN);
     }
@@ -50,7 +51,16 @@ public class LoginActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                // ...
+
+                if(response.isNewUser()){
+                    Intent goToRegistration = new Intent(LoginActivity.this, FoodPreferencesActivity.class);
+                    LoginActivity.this.startActivity(goToRegistration);
+                }
+                else {
+                    Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
+                    LoginActivity.this.startActivity(goToHomepage);
+                }
+
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
@@ -60,19 +70,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    public void signOut() {
-        // [START auth_fui_signout]
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
-                });
-        // [END auth_fui_signout]
-    }
-     */
     /*
     public void delete() {
         // [START auth_fui_delete]
@@ -89,30 +86,10 @@ public class LoginActivity extends AppCompatActivity {
      */
 
     /*
-    public void themeAndLogo() {
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
-
-        // [START auth_fui_theme_logo]
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .setLogo(R.drawable.my_great_logo)      // Set logo drawable
-                        .setTheme(R.style.MySuperAppTheme)      // Set theme
-                        .build(),
-                RC_SIGN_IN);
-        // [END auth_fui_theme_logo]
-    }
-     */
-
-    /*
     public void privacyAndTerms() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
-        // [START auth_fui_pp_tos]
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -122,7 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                                 "https://example.com/privacy.html")
                         .build(),
                 RC_SIGN_IN);
-        // [END auth_fui_pp_tos]
     }
-     */
+    */
 }
