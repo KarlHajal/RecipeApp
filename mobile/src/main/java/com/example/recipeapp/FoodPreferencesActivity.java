@@ -6,7 +6,6 @@ import androidx.core.content.res.ResourcesCompat;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -15,7 +14,11 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 
+import java.util.HashSet;
+
 public class FoodPreferencesActivity extends AppCompatActivity {
+
+    private HashSet<String> checkedFoodPreferences = new HashSet<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,10 @@ public class FoodPreferencesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_food_preferences);
 
         addDietaryPreferencesChoices();
+    }
+
+    private String titleToDbFormat(CharSequence title){
+        return title.toString().toLowerCase().replace(' ', '_');
     }
 
     private void addDietaryPreferencesChoices() {
@@ -59,9 +66,12 @@ public class FoodPreferencesActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     checkedTextView.toggle();
-                    //if(checkedTextView.isChecked()){
-                    //
-                    //}
+                    if(checkedTextView.isChecked()) {
+                        checkedFoodPreferences.add(titleToDbFormat(checkedTextView.getText()));
+                    }
+                    else {
+                        checkedFoodPreferences.remove(titleToDbFormat(checkedTextView.getText()));
+                    }
                 }
             });
 
