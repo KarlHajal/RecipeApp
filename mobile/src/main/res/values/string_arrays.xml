@@ -7,4 +7,8 @@
         <item>dairy_free</item>
         <item>gluten_free</item>
     </string-array>
+    <string name="ingredient_instruction">Find recipes by entering ingredients, separated by a comma, which you have in your refrigerator</string>
+    <string name="ingredient">Enter ingredient(s)</string>
+    <string name="search_button">Find Recipes</string>
+
 </resources>
