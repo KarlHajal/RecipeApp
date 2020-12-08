@@ -2,5 +2,15 @@
     <string name="app_name">Recipe App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="FoodPreferencesTitle">Customize your food preferences</string>
+    <string name="recipe_title">Recipe Title</string>
+    <string name="ready_in_min_img">ready_in_min_img</string>
+    <string name="_000">000</string>
+    <string name="servings">servings</string>
+    <string name="mins">mins</string>
+    <string name="health">health</string>
+    <string name="not_healthy">nothealthy</string>
+    <string name="vegetarian">veg</string>
+    <string name="ingridients">ingridients</string>
+    <string name="instructions">instructions</string>
 
 </resources>
