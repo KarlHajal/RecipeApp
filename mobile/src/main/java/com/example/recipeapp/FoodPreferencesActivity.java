@@ -19,7 +19,6 @@ import java.util.HashSet;
 public class FoodPreferencesActivity extends AppCompatActivity {
 
     private HashSet<String> checkedFoodPreferences = new HashSet<String>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

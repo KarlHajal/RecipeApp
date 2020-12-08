@@ -13,7 +13,6 @@ import com.google.android.gms.tasks.Task;
 
 public class HomepageActivity extends AppCompatActivity {
 
-    String temp = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
