@@ -25,7 +25,7 @@ public class enter_ingredient extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String ingredient = mingredients.getText().toString();
-                Intent intent = new Intent(enter_ingredient.this, search.class);
+                Intent intent = new Intent(enter_ingredient.this, SearchResultsActivity.class);
                 intent.putExtra("ingredient_value", ingredient);
                 startActivity(intent);
             }
