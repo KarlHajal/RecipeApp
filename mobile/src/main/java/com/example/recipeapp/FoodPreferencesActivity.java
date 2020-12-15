@@ -3,12 +3,15 @@ package com.example.recipeapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
@@ -25,6 +28,25 @@ public class FoodPreferencesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_food_preferences);
 
         addDietaryPreferencesChoices();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_food_preferences, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_validate) {
+            goToHomepage();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void goToHomepage() {
+        Intent goToHomepage = new Intent(FoodPreferencesActivity.this, HomepageActivity.class);
+        startActivity(goToHomepage);
     }
 
     private String titleToDbFormat(CharSequence title){
