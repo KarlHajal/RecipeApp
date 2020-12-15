@@ -11,18 +11,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".enter_ingredient"></activity>
-        <activity android:name=".search" />
+        <activity android:name=".enter_ingredient">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".search">
+
+        </activity>
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".Recipe_activity" />
         <activity android:name=".FoodPreferencesActivity" />
         <activity android:name=".HomepageActivity" />
         <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
