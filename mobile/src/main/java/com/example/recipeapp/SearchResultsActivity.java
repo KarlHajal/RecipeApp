@@ -29,6 +29,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private List<Recipe> lstRecipe = new ArrayList<>();
     private static String class_tag = "SearchResultsActivity";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
