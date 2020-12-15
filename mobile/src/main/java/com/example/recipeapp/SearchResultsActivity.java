@@ -80,7 +80,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     public void onResponse(Call call, Response response) throws IOException {
                         try {
                             String jsonData = response.body().string();
-                            JSONArray resultsArr = new JSONArray(jsonData);
+                            resultsArr = new JSONArray(jsonData);
                             // resultsArr = Jarray;
                             Log.i("the res is:", String.valueOf(resultsArr));
                             for (int i = 0; i < resultsArr.length(); i++) {
