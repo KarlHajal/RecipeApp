@@ -1,13 +1,12 @@
 package com.example.recipeapp;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class enter_ingredient extends AppCompatActivity {
 
@@ -16,7 +15,7 @@ public class enter_ingredient extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_enter_ingredient);
         mingredients = findViewById(R.id.ingredient);
 
 
@@ -25,7 +24,7 @@ public class enter_ingredient extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String ingredient = mingredients.getText().toString();
-                Intent intent = new Intent(enter_ingredient.this, search.class);
+                Intent intent = new Intent(enter_ingredient.this, SearchResultsActivity.class);
                 intent.putExtra("ingredient_value", ingredient);
                 startActivity(intent);
             }

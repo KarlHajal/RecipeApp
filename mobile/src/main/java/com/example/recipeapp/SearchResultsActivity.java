@@ -25,14 +25,17 @@ public class SearchResultsActivity extends AppCompatActivity {
     private RecyclerView search_results;
     private JSONArray resultsArr;
     private List<Recipe> lstRecipe = new ArrayList<>();
-
+    String class_tag = "SearchResultsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-        String searchText=getStringFromList(RecyclerViewAdapterIngredient.ingredientsList);
+        // String searchText=getStringFromList(RecyclerViewAdapterIngredient.ingredientsList);
+        String searchText=getIntent().getExtras().getString("ingredient_value");
         try {
+
+            Log.i(class_tag,searchText);
             getResults(searchText);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
@@ -59,13 +62,13 @@ public class SearchResultsActivity extends AppCompatActivity {
                 .addHeader("cache-control", "no-cache")
                 .addHeader("postman-token", "0c62c820-d52c-fa96-eab0-b6829dc11b00")
                 .build();
-        Response response = null;
+        //Response response = null;
 
 
 
-        String jsonData = response.body().string();
+        //String jsonData = response.body().string();
 
-        final JSONArray Jarray = new JSONArray(jsonData);
+        //final JSONArray Jarray = new JSONArray(jsonData);
         //  RequestQueue requestQueue = Volley.newRequestQueue(this);
         client.newCall(request).enqueue( new Callback() {
                     @Override
@@ -76,16 +79,23 @@ public class SearchResultsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         try {
-                            resultsArr = Jarray;
+                            String jsonData = response.body().string();
+                            JSONArray resultsArr = new JSONArray(jsonData);
+                            // resultsArr = Jarray;
                             Log.i("the res is:", String.valueOf(resultsArr));
                             for (int i = 0; i < resultsArr.length(); i++) {
                                 JSONObject jsonObject1;
                                 jsonObject1 = resultsArr.getJSONObject(i);
                                 lstRecipe.add(new Recipe(jsonObject1.optString("id"), jsonObject1.optString("title"), jsonObject1.optString("image"), 0, 0, 0));
                             }
+                            SearchResultsActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    RecyclerViewAdapterSearchResult myAdapter = new RecyclerViewAdapterSearchResult(getApplicationContext(), lstRecipe);
+                                    search_results.setAdapter(myAdapter);
+                                }
+                            });
 
-                            RecyclerViewAdapterSearchResult myAdapter = new RecyclerViewAdapterSearchResult(getApplicationContext(), lstRecipe);
-                            search_results.setAdapter(myAdapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
