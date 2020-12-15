@@ -76,6 +76,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                         try {
                             String jsonData = response.body().string();
                             resultsArr = new JSONArray(jsonData);
+
                             Log.i("the res is:", String.valueOf(resultsArr));
                             for (int i = 0; i < resultsArr.length(); i++) {
                                 JSONObject jsonObject1;
