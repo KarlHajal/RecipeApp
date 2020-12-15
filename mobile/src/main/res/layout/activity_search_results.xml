@@ -15,12 +15,12 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="349dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="cursive"
             android:text="Results"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/holo_blue_dark"
             android:textSize="35sp" />
     </LinearLayout>
     <RelativeLayout

@@ -131,10 +131,7 @@ public class Recipe_activity extends AppCompatActivity {
                 .addHeader("cache-control", "no-cache")
                 .addHeader("postman-token", "0c62c820-d52c-fa96-eab0-b6829dc11b00")
                 .build();
-        Response response = null;
-        String jsonData = response.body().string();
 
-        final JSONArray Jarray = new JSONArray(jsonData);
         //  RequestQueue requestQueue = Volley.newRequestQueue(this);
         client.newCall(request).enqueue( new Callback() {
 
@@ -165,7 +162,7 @@ public class Recipe_activity extends AppCompatActivity {
                             instructions.setText(Html.fromHtml((String) results.get("instructions")));
                     }
                     catch(Exception e){
-                        String msg= "Unfortunately, the recipe you were looking for not found, to view the original recipe click on the link below:" + "<a href="+results.get("spoonacularSourceUrl")+">"+results.get("spoonacularSourceUrl")+"</a>";
+                        String msg= "Unfortunately, the recipe you were looking for was not found, to view the original recipe click on the link below:" + "<a href="+results.get("spoonacularSourceUrl")+">"+results.get("spoonacularSourceUrl")+"</a>";
                         instructions.setMovementMethod(LinkMovementMethod.getInstance());
                         instructions.setText(Html.fromHtml(msg));
                     }
