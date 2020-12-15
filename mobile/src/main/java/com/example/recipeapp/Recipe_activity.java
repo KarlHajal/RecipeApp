@@ -42,6 +42,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Recipe_activity extends AppCompatActivity {
+
+    private static final String TAG = "Recipe_activity";
+    
     private TextView title, ready_in, servings, instructions, healthy;
     private ImageView img, vegeterian;
 //    private DatabaseReference mRootRef;
@@ -55,6 +58,9 @@ public class Recipe_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+
+        Log.i(TAG, " : OnCreate - starting");
+
         final Intent intent = getIntent();
         final String recipeId = Objects.requireNonNull(intent.getExtras()).getString("id");
 //        mAuth = FirebaseAuth.getInstance();
@@ -68,11 +74,11 @@ public class Recipe_activity extends AppCompatActivity {
         vegeterian = findViewById(R.id.recipe_vegetarian);
         instructions = findViewById(R.id.recipe_instructions);
         fab = findViewById(R.id.floatingActionButton);
+
+        Log.i(TAG, "OnCreate - try getRecipeInstructions");
         try {
             getRecipeInstructions(recipeId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
@@ -92,6 +98,7 @@ public class Recipe_activity extends AppCompatActivity {
 //            }
 //        });
 
+        Log.i(TAG, "OnCreate - add listeners to fab");
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,13 +126,17 @@ public class Recipe_activity extends AppCompatActivity {
 //                });
             }
         });
+
+        Log.i(TAG, "OnCreate - set recycler view");
         myrv = findViewById(R.id.recipe_ingredients_rv);
         myrv.setLayoutManager(new GridLayoutManager(this, 2));
 
     }
 
     private void getRecipeInstructions(final String recipeId) throws IOException, JSONException {
-        String URL = " https://api.spoonacular.com/recipes/" + recipeId + "/information?apiKey=e5f41960a96343569669c5435cdc2710";
+        //https://api.spoonacular.com/recipes/informationBulk?ids=1&apiKey=e5f41960a96343569669c5435cdc2710
+//        String URL = " https://api.spoonacular.com/recipes/" + recipeId + "/information?apiKey=e5f41960a96343569669c5435cdc2710";
+        String URL = "https://api.spoonacular.com/recipes/informationBulk?ids=" + recipeId + "&apiKey=e5f41960a96343569669c5435cdc2710&instructions=true";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
@@ -133,10 +144,7 @@ public class Recipe_activity extends AppCompatActivity {
                 .addHeader("cache-control", "no-cache")
                 .addHeader("postman-token", "0c62c820-d52c-fa96-eab0-b6829dc11b00")
                 .build();
-        Response response = null;
-        String jsonData = response.body().string();
 
-        final JSONArray Jarray = new JSONArray(jsonData);
         //  RequestQueue requestQueue = Volley.newRequestQueue(this);
         client.newCall(request).enqueue( new Callback() {
 
@@ -147,42 +155,47 @@ public class Recipe_activity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final String myResponse;
-                myResponse =response.body().string();
-                try {
-                    JSONObject results = new JSONObject(myResponse);
-                    try {
-                        Picasso.get().load((String) results.get("image")).into(img);
-                    } catch (Exception e) {
-                        img.setImageResource(R.drawable.nopicture);
-                    }
-                title.setText((String) results.getString("title"));
-                ready_in.setText(Integer.toString((Integer) results.get("readyInMinutes")));
-                servings.setText(Integer.toString((Integer) results.get("servings")));
-                    try{
-                        if(results.getString("instructions").equals("")){
-                            throw new Exception("No Instructions");
+                final String myResponse = response.body().string();
+                Recipe_activity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONArray jsonArray = new JSONArray(myResponse);
+                            JSONObject results = jsonArray.getJSONObject(0);
+                            Log.i(TAG, results.toString());
+                            try {
+                                Picasso.get().load((String) results.get("image")).into(img);
+                            } catch (Exception e) {
+                                img.setImageResource(R.drawable.nopicture);
+                            }
+                            title.setText((String) results.getString("title"));
+                            ready_in.setText(Integer.toString((Integer) results.get("readyInMinutes")));
+                            servings.setText(Integer.toString((Integer) results.get("servings")));
+                            try{
+                                if(results.getString("instructions").equals("")){
+                                    throw new Exception("No Instructions");
+                                }
+                                else {
+                                    instructions.setText(Html.fromHtml((String) results.get("instructions")));
+                                }
+                            } catch(Exception e) {
+                                String msg= "Unfortunately, the instructions you were looking for not found, to view the original recipe click on the link below:" + "<a href="+results.get("sourceUrl")+">"+results.get("sourceUrl")+"</a>";
+                                instructions.setMovementMethod(LinkMovementMethod.getInstance());
+                                instructions.setText(Html.fromHtml(msg));
+                            }
+                            ingredientsArr = (JSONArray) results.get("extendedIngredients");
+                            for (int i = 0; i < ingredientsArr.length(); i++) {
+                                JSONObject ingredient = ingredientsArr.getJSONObject(i);
+                                ingredientsLst.add(new Ingredient(ingredient.optString("originalString"), ingredient.optString("image")));
+                            }
+                            RecyclerViewAdapterRecipeIngredient myAdapter = new RecyclerViewAdapterRecipeIngredient(getApplicationContext(), ingredientsLst);
+                            myrv.setAdapter(myAdapter);
+                            myrv.setItemAnimator(new DefaultItemAnimator());
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        else
-                            instructions.setText(Html.fromHtml((String) results.get("instructions")));
                     }
-                    catch(Exception e){
-                        String msg= "Unfortunately, the recipe you were looking for not found, to view the original recipe click on the link below:" + "<a href="+results.get("spoonacularSourceUrl")+">"+results.get("spoonacularSourceUrl")+"</a>";
-                        instructions.setMovementMethod(LinkMovementMethod.getInstance());
-                        instructions.setText(Html.fromHtml(msg));
-                    }
-                    ingredientsArr = (JSONArray) results.get("extendedIngredients");
-                    for (int i = 0; i < ingredientsArr.length(); i++) {
-                        JSONObject jsonObject1;
-                        jsonObject1 = ingredientsArr.getJSONObject(i);
-                        ingredientsLst.add(new Ingredient(jsonObject1.optString("originalString"), jsonObject1.optString("image")));
-                    }
-                    RecyclerViewAdapterRecipeIngredient myAdapter = new RecyclerViewAdapterRecipeIngredient(getApplicationContext(), ingredientsLst);
-                    myrv.setAdapter(myAdapter);
-                    myrv.setItemAnimator(new DefaultItemAnimator());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                });
             }
         });
     }
