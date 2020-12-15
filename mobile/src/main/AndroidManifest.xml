@@ -18,7 +18,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".search">
-
         </activity>
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".Recipe_activity" />
