@@ -44,8 +44,8 @@ import okhttp3.Response;
 public class Recipe_activity extends AppCompatActivity {
     private TextView title, ready_in, servings, instructions, healthy;
     private ImageView img, vegeterian;
-    private DatabaseReference mRootRef;
-    private FirebaseAuth mAuth;
+//    private DatabaseReference mRootRef;
+//    private FirebaseAuth mAuth;
     private JSONArray ingredientsArr;
     private List<Ingredient> ingredientsLst = new ArrayList<Ingredient>();
     private RecyclerView myrv;
@@ -57,9 +57,9 @@ public class Recipe_activity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe);
         final Intent intent = getIntent();
         final String recipeId = Objects.requireNonNull(intent.getExtras()).getString("id");
-        mAuth = FirebaseAuth.getInstance();
-        final String uid = mAuth.getCurrentUser().getUid();
-        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child(recipeId);
+//        mAuth = FirebaseAuth.getInstance();
+//        final String uid = mAuth.getCurrentUser().getUid();
+//        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child(recipeId);
         img = findViewById(R.id.recipe_img);
         title = findViewById(R.id.recipe_title);
         ready_in = findViewById(R.id.recipe_ready_in);
@@ -75,46 +75,48 @@ public class Recipe_activity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i("mRootRef", String.valueOf(dataSnapshot));
-                if (dataSnapshot.getValue() != null) {
-                    fab.setImageResource(R.drawable.ic_favorite_black_24dp);
-                    like = true;
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+//        Log.i(TAG, "OnCreate - add listeners to firebase");
+//        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                Log.i("mRootRef", String.valueOf(dataSnapshot));
+//                if (dataSnapshot.getValue() != null) {
+//                    fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+//                    like = true;
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 like = !like;
-                mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (like) {
-                            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
-                            Map favorites = new HashMap();
-                            favorites.put("img", intent.getExtras().getString("img"));
-                            favorites.put("title", intent.getExtras().getString("title"));
-                            mRootRef.setValue(favorites);
-                        } else {
-                            try {
-                                fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                                mRootRef.setValue(null);
-                            } catch (Exception e) {
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+//                mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        if (like) {
+//                            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+//                            Map favorites = new HashMap();
+//                            favorites.put("img", intent.getExtras().getString("img"));
+//                            favorites.put("title", intent.getExtras().getString("title"));
+//                            mRootRef.setValue(favorites);
+//                        } else {
+//                            try {
+//                                fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+////                                mRootRef.setValue(null);
+//                            } catch (Exception e) {
+//                            }
+//                        }
+//                    }
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//                    }
+//                });
             }
         });
         myrv = findViewById(R.id.recipe_ingredients_rv);
