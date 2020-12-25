@@ -51,7 +51,9 @@ public class Recipe_activity extends AppCompatActivity {
 //    private FirebaseAuth mAuth;
     private JSONArray ingredientsArr;
     private List<Ingredient> ingredientsLst = new ArrayList<Ingredient>();
+    private AnalysedInstructions analysedInstructions;
     private RecyclerView myrv;
+    private RecyclerView instructions_rv;
     private FloatingActionButton fab;
     private boolean like = false;
     @Override
@@ -78,6 +80,13 @@ public class Recipe_activity extends AppCompatActivity {
         Log.i(TAG, "OnCreate - try getRecipeInstructions");
         try {
             getRecipeInstructions(recipeId);
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.i(TAG, "OnCreate - try getAnalysedInstructions");
+        try {
+            getAnalysedInstructions(recipeId);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
@@ -135,8 +144,8 @@ public class Recipe_activity extends AppCompatActivity {
 
     private void getRecipeInstructions(final String recipeId) throws IOException, JSONException {
         //https://api.spoonacular.com/recipes/informationBulk?ids=1&apiKey=e5f41960a96343569669c5435cdc2710
-//        String URL = " https://api.spoonacular.com/recipes/" + recipeId + "/information?apiKey=e5f41960a96343569669c5435cdc2710";
-        String URL = "https://api.spoonacular.com/recipes/informationBulk?ids=" + recipeId + "&apiKey=e5f41960a96343569669c5435cdc2710&instructions=true";
+        String URL = " https://api.spoonacular.com/recipes/" + recipeId + "/information?apiKey=e5f41960a96343569669c5435cdc2710";
+//        String URL = "https://api.spoonacular.com/recipes/informationBulk?ids=" + recipeId + "&apiKey=e5f41960a96343569669c5435cdc2710&instructions=true";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
@@ -179,7 +188,7 @@ public class Recipe_activity extends AppCompatActivity {
                                     instructions.setText(Html.fromHtml((String) results.get("instructions")));
                                 }
                             } catch(Exception e) {
-                                String msg= "Unfortunately, the instructions you were looking for not found, to view the original recipe click on the link below:" + "<a href="+results.get("sourceUrl")+">"+results.get("sourceUrl")+"</a>";
+                                String msg= "Unfortunately, the instructions you were looking for not found, view the original recipe <a href="+results.get("sourceUrl")+">here</a>";
                                 instructions.setMovementMethod(LinkMovementMethod.getInstance());
                                 instructions.setText(Html.fromHtml(msg));
                             }
@@ -191,6 +200,47 @@ public class Recipe_activity extends AppCompatActivity {
                             RecyclerViewAdapterRecipeIngredient myAdapter = new RecyclerViewAdapterRecipeIngredient(getApplicationContext(), ingredientsLst);
                             myrv.setAdapter(myAdapter);
                             myrv.setItemAnimator(new DefaultItemAnimator());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void getAnalysedInstructions(final String recipeId) throws IOException, JSONException {
+        String URL = "https://api.spoonacular.com/recipes/" + recipeId + "/analyzedInstructions?apiKey=e5f41960a96343569669c5435cdc2710";
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(URL)
+                .get()
+                .addHeader("cache-control", "no-cache")
+                .addHeader("postman-token", "0c62c820-d52c-fa96-eab0-b6829dc11b00")
+                .build();
+
+        //  RequestQueue requestQueue = Volley.newRequestQueue(this);
+        client.newCall(request).enqueue( new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String resultString = response.body().string();
+                Recipe_activity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONArray resultJSONArray = new JSONArray(resultString);
+                            JSONObject resultJSONObject = resultJSONArray.getJSONObject(0);
+                            Log.i(TAG, resultJSONObject.toString());
+                            analysedInstructions = new AnalysedInstructions(resultJSONObject);
+                            RVAdapterRecipeInstructions adapter = new RVAdapterRecipeInstructions(getApplicationContext(), analysedInstructions);
+                            instructions_rv.setAdapter(adapter);
+                            instructions_rv.setItemAnimator(new DefaultItemAnimator());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
