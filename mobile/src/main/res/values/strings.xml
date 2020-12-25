@@ -14,5 +14,6 @@
     <string name="instructions">instructions</string>
     <string name="validate_food_preferences">Done</string>
     <string name="ingredient_name">Ingredient_name</string>
+    <string name="instruction_step">Instruction_step</string>
 
 </resources>

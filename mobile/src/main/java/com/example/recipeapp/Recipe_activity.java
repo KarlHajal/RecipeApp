@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -52,7 +53,7 @@ public class Recipe_activity extends AppCompatActivity {
     private JSONArray ingredientsArr;
     private List<Ingredient> ingredientsLst = new ArrayList<Ingredient>();
     private AnalysedInstructions analysedInstructions;
-    private RecyclerView myrv;
+    private RecyclerView ingredients_rv;
     private RecyclerView instructions_rv;
     private FloatingActionButton fab;
     private boolean like = false;
@@ -136,16 +137,19 @@ public class Recipe_activity extends AppCompatActivity {
             }
         });
 
-        Log.i(TAG, "OnCreate - set recycler view");
-        myrv = findViewById(R.id.recipe_ingredients_rv);
-        myrv.setLayoutManager(new GridLayoutManager(this, 2));
+        Log.i(TAG, "OnCreate - set recycler view ingredient");
+        ingredients_rv = findViewById(R.id.recipe_ingredients_rv);
+        ingredients_rv.setLayoutManager(new GridLayoutManager(this, 2));
+
+        Log.i(TAG, "OnCreate - set recycler view instructions");
+        instructions_rv = findViewById(R.id.recipe_instructions_rv);
+        instructions_rv.setLayoutManager(new LinearLayoutManager(this));
 
     }
 
     private void getRecipeInstructions(final String recipeId) throws IOException, JSONException {
         //https://api.spoonacular.com/recipes/informationBulk?ids=1&apiKey=e5f41960a96343569669c5435cdc2710
         String URL = " https://api.spoonacular.com/recipes/" + recipeId + "/information?apiKey=e5f41960a96343569669c5435cdc2710";
-//        String URL = "https://api.spoonacular.com/recipes/informationBulk?ids=" + recipeId + "&apiKey=e5f41960a96343569669c5435cdc2710&instructions=true";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
@@ -169,37 +173,36 @@ public class Recipe_activity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            JSONArray jsonArray = new JSONArray(myResponse);
-                            JSONObject results = jsonArray.getJSONObject(0);
-                            Log.i(TAG, results.toString());
+                            JSONObject result = new JSONObject(myResponse);
+                            Log.i(TAG, result.toString());
                             try {
-                                Picasso.get().load((String) results.get("image")).into(img);
+                                Picasso.get().load((String) result.get("image")).into(img);
                             } catch (Exception e) {
                                 img.setImageResource(R.drawable.nopicture);
                             }
-                            title.setText((String) results.getString("title"));
-                            ready_in.setText(Integer.toString((Integer) results.get("readyInMinutes")));
-                            servings.setText(Integer.toString((Integer) results.get("servings")));
+                            title.setText((String) result.getString("title"));
+                            ready_in.setText(Integer.toString((Integer) result.get("readyInMinutes")));
+                            servings.setText(Integer.toString((Integer) result.get("servings")));
                             try{
-                                if(results.getString("instructions").equals("")){
+                                if(result.getString("instructions").equals("")){
                                     throw new Exception("No Instructions");
                                 }
                                 else {
-                                    instructions.setText(Html.fromHtml((String) results.get("instructions")));
+                                    instructions.setText(Html.fromHtml((String) result.get("instructions")));
                                 }
                             } catch(Exception e) {
-                                String msg= "Unfortunately, the instructions you were looking for not found, view the original recipe <a href="+results.get("sourceUrl")+">here</a>";
+                                String msg= "Unfortunately, the instructions you were looking for not found, view the original recipe <a href="+result.get("sourceUrl")+">here</a>";
                                 instructions.setMovementMethod(LinkMovementMethod.getInstance());
                                 instructions.setText(Html.fromHtml(msg));
                             }
-                            ingredientsArr = (JSONArray) results.get("extendedIngredients");
+                            ingredientsArr = (JSONArray) result.get("extendedIngredients");
                             for (int i = 0; i < ingredientsArr.length(); i++) {
                                 JSONObject ingredient = ingredientsArr.getJSONObject(i);
                                 ingredientsLst.add(new Ingredient(ingredient.optString("originalString"), ingredient.optString("image")));
                             }
                             RecyclerViewAdapterRecipeIngredient myAdapter = new RecyclerViewAdapterRecipeIngredient(getApplicationContext(), ingredientsLst);
-                            myrv.setAdapter(myAdapter);
-                            myrv.setItemAnimator(new DefaultItemAnimator());
+                            ingredients_rv.setAdapter(myAdapter);
+                            ingredients_rv.setItemAnimator(new DefaultItemAnimator());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -229,6 +232,7 @@ public class Recipe_activity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                Log.i(TAG, "getAnalysedInstructions");
                 final String resultString = response.body().string();
                 Recipe_activity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -236,11 +240,21 @@ public class Recipe_activity extends AppCompatActivity {
                         try {
                             JSONArray resultJSONArray = new JSONArray(resultString);
                             JSONObject resultJSONObject = resultJSONArray.getJSONObject(0);
-                            Log.i(TAG, resultJSONObject.toString());
+                            Log.v(TAG, resultJSONObject.toString());
                             analysedInstructions = new AnalysedInstructions(resultJSONObject);
-                            RVAdapterRecipeInstructions adapter = new RVAdapterRecipeInstructions(getApplicationContext(), analysedInstructions);
+                            final RVAdapterRecipeInstructions adapter = new RVAdapterRecipeInstructions(getApplicationContext(), analysedInstructions);
+                            Log.i(TAG, "getAnalysedInstructions - setOnItemClickListener");
+                            adapter.setOnItemClickListener(new RVAdapterRecipeInstructions.ClickListener() {
+                                @Override
+                                public void onItemClick(int position, View v) {
+                                    Log.i(TAG, "onItemClick at pos " + position);
+                                    adapter.itemClicked(position);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
                             instructions_rv.setAdapter(adapter);
                             instructions_rv.setItemAnimator(new DefaultItemAnimator());
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

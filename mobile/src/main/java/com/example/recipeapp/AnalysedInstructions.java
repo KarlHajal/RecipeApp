@@ -30,4 +30,12 @@ public class AnalysedInstructions {
         }
         instructionsOk = !(this.name.equals("") && this.instructionStepList.isEmpty());
     }
+
+    public int size(){
+        return this.instructionStepList.size();
+    }
+
+    public InstructionStep get(int index){
+        return this.instructionStepList.get(index);
+    }
 }
