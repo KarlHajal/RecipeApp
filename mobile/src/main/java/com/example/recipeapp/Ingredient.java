@@ -10,4 +10,20 @@ public class Ingredient {
         Thumbnail = "https://spoonacular.com/cdn/ingredients_100x100/" + thumbnail;
         selected = false;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getThumbnail() {
+        return Thumbnail;
+    }
+
+    public boolean isSelected(){
+        return selected;
+    }
+
+    public void setSelected() {
+        selected = !selected;
+    }
 }
