@@ -13,5 +13,6 @@
     <string name="ingridients">ingridients</string>
     <string name="instructions">instructions</string>
     <string name="validate_food_preferences">Done</string>
+    <string name="ingredient_name">Ingredient_name</string>
 
 </resources>
