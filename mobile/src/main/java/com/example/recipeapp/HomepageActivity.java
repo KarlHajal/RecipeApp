@@ -31,13 +31,12 @@ public class HomepageActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         Fragment selectedFragment = null;
-                        switch (item.getItemId()) {
-                            case R.id.profile_button:
-                                selectedFragment = EnterIngredientFragment.newInstance();
-                                break;
-                            case R.id.search_recipes_button:
-                                selectedFragment = EnterIngredientFragment.newInstance();
-                                break;
+
+                        if(item.getItemId() == R.id.profile_button) {
+                            selectedFragment = ProfileFragment.newInstance();
+                        }
+                        else if(item.getItemId() == R.id.search_recipes_button) {
+                            selectedFragment = EnterIngredientFragment.newInstance();
                         }
 
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -48,7 +47,7 @@ public class HomepageActivity extends AppCompatActivity {
                 });
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.homepage_frame_layout, EnterIngredientFragment.newInstance());
+        transaction.replace(R.id.homepage_frame_layout, ProfileFragment.newInstance());
         transaction.commit();
         //Used to select an item programmatically
         //bottomNavigationView.getMenu().getItem(2).setChecked(true);

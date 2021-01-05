@@ -16,5 +16,7 @@
     <string name="ingredient_name">Ingredient_name</string>
     <string name="search_for_recipes">Search for Recipes</string>
     <string name="profile_button">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
