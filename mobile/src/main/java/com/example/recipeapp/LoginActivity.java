@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 //if(response.isNewUser()){
-                //    Intent goToRegistration = new Intent(LoginActivity.this, FoodPreferencesActivity.class);
+                //    Intent goToRegistration = new Intent(LoginActivity.this, EditProfileActivity.class);
                 //    LoginActivity.this.startActivity(goToRegistration);
                 //}
                 //else {

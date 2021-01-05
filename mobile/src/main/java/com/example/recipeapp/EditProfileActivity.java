@@ -3,7 +3,6 @@ package com.example.recipeapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -19,34 +18,30 @@ import android.widget.LinearLayout;
 
 import java.util.HashSet;
 
-public class FoodPreferencesActivity extends AppCompatActivity {
+public class EditProfileActivity extends AppCompatActivity {
 
     private HashSet<String> checkedFoodPreferences = new HashSet<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_food_preferences);
+        setContentView(R.layout.activity_edit_profile);
 
         addDietaryPreferencesChoices();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_food_preferences, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_validate) {
-            goToHomepage();
+            finish();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void goToHomepage() {
-        Intent goToHomepage = new Intent(FoodPreferencesActivity.this, HomepageActivity.class);
-        startActivity(goToHomepage);
     }
 
     private String titleToDbFormat(CharSequence title){

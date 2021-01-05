@@ -15,7 +15,7 @@
         </activity>
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".Recipe_activity" />
-        <activity android:name=".FoodPreferencesActivity" />
+        <activity android:name=".EditProfileActivity" />
         <activity android:name=".HomepageActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
