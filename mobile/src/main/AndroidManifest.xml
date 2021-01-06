@@ -17,6 +17,15 @@
         <activity android:name=".Recipe_activity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".HomepageActivity" />
+        <receiver
+            android:name=".Alarm"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.recipeapp.receiver.Message"></action>
+
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

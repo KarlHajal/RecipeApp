@@ -46,6 +46,9 @@ public class Recipe_activity extends AppCompatActivity {
     private List<Ingredient> ingredientsLst = new ArrayList<Ingredient>();
     private RecyclerView myrv;
     private FloatingActionButton fab;
+    private FloatingActionButton useontab;
+    private FloatingActionButton sendtowatch;
+
     private boolean like = false;
     private int RecipeAlarmTime;
 
@@ -70,6 +73,9 @@ public class Recipe_activity extends AppCompatActivity {
         vegeterian = findViewById(R.id.recipe_vegetarian);
         instructions = findViewById(R.id.recipe_instructions);
         fab = findViewById(R.id.floatingActionButton);
+        useontab = findViewById(R.id.fab_useontab);
+        sendtowatch = findViewById(R.id.fab_sendtowatch);
+
 
         Log.i(TAG, "OnCreate - try getRecipeInstructions");
         try {
@@ -122,7 +128,20 @@ public class Recipe_activity extends AppCompatActivity {
 //                });
             }
         });
+        useontab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startcountdown to alarm
+                StartRecipeAlarm(v);
+            }
+        });
 
+        sendtowatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //send instructions to watch
+            }
+        });
         Log.i(TAG, "OnCreate - set recycler view");
         myrv = findViewById(R.id.recipe_ingredients_rv);
         myrv.setLayoutManager(new GridLayoutManager(this, 2));
@@ -167,7 +186,7 @@ public class Recipe_activity extends AppCompatActivity {
                             title.setText((String) results.getString("title"));
                             ready_in.setText(Integer.toString((Integer) results.get("readyInMinutes")));
                             servings.setText(Integer.toString((Integer) results.get("servings")));
-                            RecipeAlarmTime = (int) results.get("servings");
+                            RecipeAlarmTime = (int) results.get("readyInMinutes");
                             try{
                                 if(results.getString("instructions").equals("")){
                                     throw new Exception("No Instructions");
@@ -202,7 +221,7 @@ public class Recipe_activity extends AppCompatActivity {
         i1.setAction("com.example.recipeapp.receiver.Message");
         i1.addCategory("android.intent.category.DEFAULT");
         PendingIntent pd = PendingIntent.getBroadcast(this,0,i1,0);
-        myAlarmManager.set(AlarmManager.RTC_WAKEUP,RecipeAlarmTime,pd);
+        myAlarmManager.set(AlarmManager.RTC_WAKEUP,RecipeAlarmTime*60*1000,pd);
     }
 
     private void StopRecipeAlarm(View view){
