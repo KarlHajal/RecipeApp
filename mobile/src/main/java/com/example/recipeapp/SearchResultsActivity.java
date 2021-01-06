@@ -27,7 +27,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private RecyclerView search_results;
     private JSONArray resultsArr;
     private List<Recipe> lstRecipe = new ArrayList<>();
-    private static String class_tag = "SearchResultsActivity";
+    private static String TAG = "SearchResultsActivity";
 
 
     @Override
@@ -36,7 +36,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_results);
         String searchText = getIntent().getExtras().getString("ingredient_value");
         try {
-            Log.i(class_tag, searchText);
+            Log.v(TAG, "searchText" + searchText);
             getResults(searchText);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
@@ -77,7 +77,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                             String jsonData = response.body().string();
                             resultsArr = new JSONArray(jsonData);
 
-                            Log.i("the res is:", String.valueOf(resultsArr));
+                            Log.v(TAG, "the res is:" + resultsArr);
                             for (int i = 0; i < resultsArr.length(); i++) {
                                 JSONObject jsonObject1;
                                 jsonObject1 = resultsArr.getJSONObject(i);
