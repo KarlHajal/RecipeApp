@@ -46,7 +46,6 @@ public class RVAdapterRecipeInstructions extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        Log.i(TAG, "onBindViewHolder " + holder.getAdapterPosition());
         if (holder.getItemViewType() == 0) {
             ViewHolderSimple viewHolderSimple = (ViewHolderSimple) holder;
             viewHolderSimple.instruction_step.setText(this.instructions.get(position).getStepText());
@@ -77,15 +76,15 @@ public class RVAdapterRecipeInstructions extends RecyclerView.Adapter<RecyclerVi
     }
 
     public void itemClicked(int position){
-        Log.i(TAG, "itemClicked at pos " + position);
+        Log.v(TAG, "itemClicked at pos " + position);
         String st_i = String.valueOf(position);
         if(positionToExtend.contains(st_i)){
             positionToExtend.remove(st_i);
-            Log.i(TAG, "removing from list " + position);
+            Log.v(TAG, "removing from list " + position);
         }
         else {
             positionToExtend.add(st_i);
-            Log.i(TAG, "adding to list " + position);
+            Log.v(TAG, "adding to list " + position);
         }
     }
 
@@ -95,14 +94,14 @@ public class RVAdapterRecipeInstructions extends RecyclerView.Adapter<RecyclerVi
 
         public ViewHolderSimple(View view) {
             super(view);
-            Log.i(TAG, "constructor");
+            Log.v(TAG, "constructor");
             view.setOnClickListener(this);
             instruction_step = itemView.findViewById(R.id.instruction_step);
         }
 
         @Override
         public void onClick(View v) {
-            Log.i(TAG, "on click");
+            Log.v(TAG, "on click");
             clickListener.onItemClick(getAdapterPosition(), v);
         }
     }
@@ -114,7 +113,7 @@ public class RVAdapterRecipeInstructions extends RecyclerView.Adapter<RecyclerVi
 
         public ViewHolderDetails(View view) {
             super(view);
-            Log.i(TAG, "constructor");
+            Log.v(TAG, "constructor");
             view.setOnClickListener(this);
             instruction_step = itemView.findViewById(R.id.instruction_step);
             equipment_img = itemView.findViewById(R.id.instruction_ingredient_img);
@@ -122,7 +121,7 @@ public class RVAdapterRecipeInstructions extends RecyclerView.Adapter<RecyclerVi
 
         @Override
         public void onClick(View v) {
-            Log.i(TAG, "on click");
+            Log.v(TAG, "on click");
             clickListener.onItemClick(getAdapterPosition(), v);
         }
     }

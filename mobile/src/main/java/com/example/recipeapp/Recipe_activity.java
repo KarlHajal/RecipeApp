@@ -62,7 +62,7 @@ public class Recipe_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        Log.i(TAG, " : OnCreate - starting");
+        Log.v(TAG, " : OnCreate - starting");
 
         final Intent intent = getIntent();
         final String recipeId = Objects.requireNonNull(intent.getExtras()).getString("id");
@@ -78,14 +78,14 @@ public class Recipe_activity extends AppCompatActivity {
         instructions = findViewById(R.id.recipe_instructions);
         fab = findViewById(R.id.floatingActionButton);
 
-        Log.i(TAG, "OnCreate - try getRecipeInstructions");
+        Log.v(TAG, "OnCreate - try getRecipeInstructions");
         try {
             getRecipeInstructions(recipeId);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
-        Log.i(TAG, "OnCreate - try getAnalysedInstructions");
+        Log.v(TAG, "OnCreate - try getAnalysedInstructions");
         try {
             getAnalysedInstructions(recipeId);
         } catch (IOException | JSONException e) {
@@ -108,7 +108,7 @@ public class Recipe_activity extends AppCompatActivity {
 //            }
 //        });
 
-        Log.i(TAG, "OnCreate - add listeners to fab");
+        Log.v(TAG, "OnCreate - add listeners to fab");
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,11 +137,11 @@ public class Recipe_activity extends AppCompatActivity {
             }
         });
 
-        Log.i(TAG, "OnCreate - set recycler view ingredient");
+        Log.v(TAG, "OnCreate - set recycler view ingredient");
         ingredients_rv = findViewById(R.id.recipe_ingredients_rv);
         ingredients_rv.setLayoutManager(new GridLayoutManager(this, 2));
 
-        Log.i(TAG, "OnCreate - set recycler view instructions");
+        Log.v(TAG, "OnCreate - set recycler view instructions");
         instructions_rv = findViewById(R.id.recipe_instructions_rv);
         instructions_rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -174,7 +174,7 @@ public class Recipe_activity extends AppCompatActivity {
                     public void run() {
                         try {
                             JSONObject result = new JSONObject(myResponse);
-                            Log.i(TAG, result.toString());
+                            Log.v(TAG, "getRecipeInstructions - " + result.toString());
                             try {
                                 Picasso.get().load((String) result.get("image")).into(img);
                             } catch (Exception e) {
@@ -232,7 +232,7 @@ public class Recipe_activity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, "getAnalysedInstructions");
+                Log.v(TAG, "getAnalysedInstructions - onResponse");
                 final String resultString = response.body().string();
                 Recipe_activity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -243,11 +243,11 @@ public class Recipe_activity extends AppCompatActivity {
                             Log.v(TAG, resultJSONObject.toString());
                             analysedInstructions = new AnalysedInstructions(resultJSONObject);
                             final RVAdapterRecipeInstructions adapter = new RVAdapterRecipeInstructions(getApplicationContext(), analysedInstructions);
-                            Log.i(TAG, "getAnalysedInstructions - setOnItemClickListener");
+                            Log.v(TAG, "getAnalysedInstructions - setOnItemClickListener");
                             adapter.setOnItemClickListener(new RVAdapterRecipeInstructions.ClickListener() {
                                 @Override
                                 public void onItemClick(int position, View v) {
-                                    Log.i(TAG, "onItemClick at pos " + position);
+                                    Log.v(TAG, "onItemClick at pos " + position);
                                     adapter.itemClicked(position);
                                     adapter.notifyDataSetChanged();
                                 }

@@ -1,5 +1,7 @@
 package com.example.recipeapp;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +11,9 @@ import java.util.List;
 
 
 public class AnalysedInstructions {
+
+    private static final String TAG = "AnalysedInstructions";
+
     private String name;
     private List<InstructionStep> instructionStepList = new ArrayList<InstructionStep>();
     private boolean instructionsOk;
