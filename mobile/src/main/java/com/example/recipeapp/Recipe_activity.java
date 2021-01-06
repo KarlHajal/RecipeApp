@@ -1,5 +1,7 @@
 package com.example.recipeapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -9,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -17,12 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -31,9 +26,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -57,12 +50,16 @@ public class Recipe_activity extends AppCompatActivity {
     private RecyclerView instructions_rv;
     private FloatingActionButton fab;
     private boolean like = false;
+    private int RecipeAlarmTime;
+
+    AlarmManager myAlarmManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
         Log.v(TAG, " : OnCreate - starting");
+        myAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         final Intent intent = getIntent();
         final String recipeId = Objects.requireNonNull(intent.getExtras()).getString("id");
@@ -180,9 +177,12 @@ public class Recipe_activity extends AppCompatActivity {
                             } catch (Exception e) {
                                 img.setImageResource(R.drawable.nopicture);
                             }
-                            title.setText((String) result.getString("title"));
-                            ready_in.setText(Integer.toString((Integer) result.get("readyInMinutes")));
-                            servings.setText(Integer.toString((Integer) result.get("servings")));
+                            
+                            title.setText((String) results.getString("title"));
+                            ready_in.setText(Integer.toString((Integer) results.get("readyInMinutes")));
+                            servings.setText(Integer.toString((Integer) results.get("servings")));
+                            RecipeAlarmTime = (int) results.get("readyInMinutes");
+
                             try{
                                 if(result.getString("instructions").equals("")){
                                     throw new Exception("No Instructions");
@@ -262,5 +262,21 @@ public class Recipe_activity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void StartRecipeAlarm(View view){
+        Intent i1 = new Intent();
+        i1.setAction("com.example.recipeapp.receiver.Message");
+        i1.addCategory("android.intent.category.DEFAULT");
+        PendingIntent pd = PendingIntent.getBroadcast(this,0,i1,0);
+        myAlarmManager.set(AlarmManager.RTC_WAKEUP,RecipeAlarmTime,pd);
+    }
+
+    private void StopRecipeAlarm(View view){
+        Intent i1 = new Intent();
+        i1.setAction("com.example.recipeapp.receiver.Message");
+        i1.addCategory("android.intent.category.DEFAULT");
+        PendingIntent pd = PendingIntent.getBroadcast(this,0,i1,0);
+        myAlarmManager.cancel(pd);
     }
 }

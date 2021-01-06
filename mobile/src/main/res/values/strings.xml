@@ -15,5 +15,10 @@
     <string name="validate_food_preferences">Done</string>
     <string name="ingredient_name">Ingredient_name</string>
     <string name="instruction_step">Instruction_step</string>
+    <string name="search_for_recipes">Search for Recipes</string>
+    <string name="profile_button">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_profile_button_title">Edit Profile</string>
 
 </resources>

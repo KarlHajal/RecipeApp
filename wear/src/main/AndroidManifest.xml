@@ -24,8 +24,25 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
+        <receiver
+            android:name=".ShowAlarm"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.recipeapp.receiver.Message"></action>
+
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".wearservice"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".recipe_instructions" />
         <activity
-            android:name="com.example.recipeapp.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

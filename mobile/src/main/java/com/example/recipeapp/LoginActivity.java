@@ -52,14 +52,14 @@ public class LoginActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                if(response.isNewUser()){
-                    Intent goToRegistration = new Intent(LoginActivity.this, FoodPreferencesActivity.class);
-                    LoginActivity.this.startActivity(goToRegistration);
-                }
-                else {
+                //if(response.isNewUser()){
+                //    Intent goToRegistration = new Intent(LoginActivity.this, EditProfileActivity.class);
+                //    LoginActivity.this.startActivity(goToRegistration);
+                //}
+                //else {
                     Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
                     LoginActivity.this.startActivity(goToHomepage);
-                }
+                //}
 
             } else {
                 // Sign in failed. If response is null the user canceled the
