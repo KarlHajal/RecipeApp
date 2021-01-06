@@ -26,6 +26,7 @@
 
                 <category android:name="android.intent.category.DEFAULT"></category>
             </intent-filter>
+        </receiver>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
