@@ -178,10 +178,10 @@ public class Recipe_activity extends AppCompatActivity {
                                 img.setImageResource(R.drawable.nopicture);
                             }
                             
-                            title.setText((String) results.getString("title"));
-                            ready_in.setText(Integer.toString((Integer) results.get("readyInMinutes")));
-                            servings.setText(Integer.toString((Integer) results.get("servings")));
-                            RecipeAlarmTime = (int) results.get("readyInMinutes");
+                            title.setText((String) result.getString("title"));
+                            ready_in.setText(Integer.toString((Integer) result.get("readyInMinutes")));
+                            servings.setText(Integer.toString((Integer) result.get("servings")));
+                            RecipeAlarmTime = (int) result.get("readyInMinutes");
 
                             try{
                                 if(result.getString("instructions").equals("")){
