@@ -62,7 +62,7 @@
                 android:focusable="true"
                 app:backgroundTint="#D8CDA6"
                 app:borderWidth="0.5dp"
-                app:srcCompat="@android:drawable/ic_media_play" />
+                app:srcCompat="@drawable/starticon" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
