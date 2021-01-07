@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.net.Uri;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -15,10 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataClient;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
@@ -43,6 +40,8 @@ public class WearService extends WearableListenerService {
     public static final String IMAGE = "IMAGE";
     public static final String PATH = "PATH";
     public static final String PROFILE = "PROFILE";
+    public static final String INSTRUCTIONS = "INSTRUCTIONS";
+
     public static final String USERNAME = "USERNAME";
     public static final String USERIMAGE = "USERIMAGE";
 
@@ -133,10 +132,10 @@ public class WearService extends WearableListenerService {
                         intent.getParcelableExtra(IMAGE));
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
-            case PROFILE_SEND:
+            case INSTRUCTIONS_SEND:
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_profile_path);
-                Profile userProfile = (Profile) intent.getSerializableExtra(PROFILE);
-                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_profile_key, userProfile
+                AnalysedInstructions instructions = (AnalysedInstructions) intent.getSerializableExtra(PROFILE);
+                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_profile_key, instructions
                         .toDataMap());
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
@@ -148,81 +147,7 @@ public class WearService extends WearableListenerService {
         return START_NOT_STICKY;
     }
 
-    @Override
-    public void onDataChanged(DataEventBuffer dataEvents) {
-        Log.v(TAG, "onDataChanged: " + dataEvents);
 
-        for (DataEvent event : dataEvents) {
-
-            // Get the URI of the event
-            Uri uri = event.getDataItem().getUri();
-
-            // Test if data has changed or has been removed
-            if (event.getType() == DataEvent.TYPE_CHANGED) {
-
-                // Extract the dataMap from the event
-                DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-
-                Log.v(TAG, "DataItem Changed: " + event.getDataItem().toString() + "\n" +
-                        "\tPath: " + uri + "\tDatamap: " + dataMapItem.getDataMap() + "\n");
-
-                Intent intent;
-
-                assert uri.getPath() != null;
-                switch (uri.getPath()) {
-                    case BuildConfig.W_example_path_asset:
-                        // Extract the data behind the key you know contains data
-                        Asset asset = dataMapItem.getDataMap().getAsset(BuildConfig
-                                .W_some_other_key);
-                        intent = new Intent
-                                ("REPLACE_THIS_WITH_A_STRING_OF_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        bitmapFromAsset(asset, intent,
-                                "REPLACE_THIS_WITH_A_STRING_OF_IMAGE_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        break;
-                    case BuildConfig.W_example_path_datamap:
-                        // Extract the data behind the key you know contains data
-                        int integer = dataMapItem.getDataMap().getInt(BuildConfig.W_a_key);
-                        ArrayList<Integer> arraylist = dataMapItem.getDataMap()
-                                .getIntegerArrayList(BuildConfig.W_some_other_key);
-                        for (Integer i : arraylist)
-                            Log.i(TAG, "Got integer " + i + " from array list");
-                        intent = new Intent
-                                ("REPLACE_THIS_WITH_A_STRING_OF_ANOTHER_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        intent.putExtra
-                                ("REPLACE_THIS_WITH_A_STRING_OF_INTEGER_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", integer);
-                        intent.putExtra
-                                ("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-                        break;
-                    case BuildConfig.W_heart_rate_path:
-                        int heartRate = dataMapItem.getDataMap().getInt(BuildConfig
-                                .W_heart_rate_key);
-                        intent = new Intent(ExerciseLiveActivity.RECEIVE_HEART_RATE);
-                        intent.putExtra(ExerciseLiveActivity.HEART_RATE, heartRate);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-                        break;
-                    case BuildConfig.W_location_path:
-                        double longitude = dataMapItem.getDataMap().getDouble(BuildConfig
-                                .W_longitude_key);
-                        double latitude = dataMapItem.getDataMap().getDouble(BuildConfig
-                                .W_latitude_key);
-                        intent = new Intent(ExerciseLiveActivity.RECEIVED_LOCATION);
-                        intent.putExtra(ExerciseLiveActivity.LONGITUDE, longitude);
-                        intent.putExtra(ExerciseLiveActivity.LATITUDE, latitude);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-                        break;
-                    default:
-                        Log.v(TAG, "Data changed for unhandled path: " + uri);
-                        break;
-                }
-            } else if (event.getType() == DataEvent.TYPE_DELETED) {
-                Log.w(TAG, "DataItem deleted: " + event.getDataItem().toString());
-            }
-
-            // For demo, send a acknowledgement message back to the node that created the data item
-            sendMessage("Received data OK!", BuildConfig.W_path_acknowledge, uri.getHost());
-        }
-    }
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
@@ -359,6 +284,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, STOPACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, PROFILE_SEND
+        STARTACTIVITY, STOPACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, INSTRUCTIONS_SEND
     }
 }

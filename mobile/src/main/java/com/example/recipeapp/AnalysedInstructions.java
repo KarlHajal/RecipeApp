@@ -1,16 +1,17 @@
 package com.example.recipeapp;
 
-import android.util.Log;
+import com.google.android.gms.wearable.DataMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class AnalysedInstructions {
+public class AnalysedInstructions implements Serializable {
 
     private static final String TAG = "AnalysedInstructions";
 
@@ -42,5 +43,10 @@ public class AnalysedInstructions {
 
     public InstructionStep get(int index){
         return this.instructionStepList.get(index);
+    }
+
+    public DataMap toDataMap() {
+        //to do
+        return null;
     }
 }

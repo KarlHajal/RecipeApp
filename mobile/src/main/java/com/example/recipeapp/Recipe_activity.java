@@ -154,8 +154,8 @@ public class Recipe_activity extends AppCompatActivity {
         sendtowatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //send instructions to watch
+                sendRecipetoWatch();
             }
         });
 
@@ -292,8 +292,8 @@ public class Recipe_activity extends AppCompatActivity {
 
     private void sendRecipetoWatch() {
         Intent intentWear = new Intent(this, WearService.class);
-        intentWear.setAction(WearService.ACTION_SEND.PROFILE_SEND.name());
-        intentWear.putExtra(WearService.PROFILE, analysedInstructions);
+        intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS_SEND.name());
+        intentWear.putExtra(WearService.INSTRUCTIONS, analysedInstructions);
         this.startService(intentWear);
     }
 
