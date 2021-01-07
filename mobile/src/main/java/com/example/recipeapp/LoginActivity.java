@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                     final FirebaseDatabase database = FirebaseDatabase.getInstance();
                     final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
                     profileRef.child("intolerances").setValue("");
+                    profileRef.child("diet").setValue("");
                 }
 
                 //if(response.isNewUser()){

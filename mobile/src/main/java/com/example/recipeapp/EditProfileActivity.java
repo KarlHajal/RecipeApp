@@ -57,6 +57,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private void saveDietPreferencesInDb() {
         String commaSeparatedIntolerances = checkedIntolerances.toString().replace("[", "").replace("]", "");
         profileRef.child("intolerances").setValue(commaSeparatedIntolerances);
+        profileRef.child("diet").setValue(diet);
     }
 
     public void onIntoleranceCheckboxClicked(View view) {
