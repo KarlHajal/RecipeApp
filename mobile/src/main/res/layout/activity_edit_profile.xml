@@ -31,12 +31,46 @@
                     android:id="@+id/foodPreferencesTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/DietPreferencesTitle"
+                    android:text="@string/EditProfileTitle"
                     android:textSize="24sp"
-                    app:layout_constraintBottom_toTopOf="@id/dietRadioButtons"
+                    app:layout_constraintBottom_toTopOf="@id/fullNameEditLayout"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/spaceAboveTitle" />
+
+                <LinearLayout
+                    android:id="@+id/fullNameEditLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintBottom_toTopOf="@id/dietRadioButtons"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/foodPreferencesTitle">
+
+                    <TextView
+                        android:id="@+id/nameTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nameTitle"
+                        android:textSize="20sp"
+                         />
+
+                    <EditText
+                        android:inputType="textPersonName|textCapWords|text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                        android:layout_width="fill_parent"
+                        android:maxLength="30"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="20dp"
+                        android:textCursorDrawable="@null"
+                        android:textColor="#000000"
+                        android:backgroundTint="@color/common_google_signin_btn_text_light"></EditText>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/dietRadioButtons"
@@ -48,7 +82,7 @@
                     app:layout_constraintBottom_toTopOf="@id/intoleranceCheckboxes"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/foodPreferencesTitle">
+                    app:layout_constraintTop_toBottomOf="@id/fullNameEditLayout">
 
                     <TextView
                         android:id="@+id/dietTitle"

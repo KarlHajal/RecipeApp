@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RecipeApp</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="DietPreferencesTitle">Diet preferences</string>
+    <string name="EditProfileTitle">Edit Profile</string>
     <string name="recipe_title">Recipe Title</string>
     <string name="ready_in_min_img">ready_in_min_img</string>
     <string name="_000">000</string>
@@ -26,5 +26,6 @@
     <string name="intolerancesTitle">Intolerances</string>
     <string name="dietTitle">Diet</string>
     <string name="diet_non_restrictive">Non-Restrictive</string>
+    <string name="nameTitle">Name</string>
 
 </resources>

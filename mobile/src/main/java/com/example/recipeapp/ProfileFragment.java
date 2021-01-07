@@ -123,6 +123,13 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setProfileInfo() {
+        TextView fullnameTextView = fragmentView.findViewById(R.id.profileFullName);
+        String fullname = user.getDisplayName();
+        if(fullname == null || fullname.isEmpty()){
+            fullname = "Amazing Chef";
+        }
+        fullnameTextView.setText(fullname);
+
         TextView dietTextView = fragmentView.findViewById(R.id.dietValue);
         String dietText = userProfile.diet;
 
