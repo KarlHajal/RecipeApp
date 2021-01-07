@@ -27,7 +27,7 @@
             android:layout_height="100dp"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_profile_circle"
+            android:src="@drawable/chef_hat_silhouette"
             app:tint="@color/colorAccent"/>
 
         <TextView
