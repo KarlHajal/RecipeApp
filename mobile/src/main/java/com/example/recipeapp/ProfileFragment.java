@@ -1,10 +1,12 @@
 package com.example.recipeapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -34,6 +36,8 @@ public class ProfileFragment extends Fragment {
 
     private View fragmentView;
     private Profile userProfile;
+
+    private static int EDIT_PROFILE = 444;
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -70,9 +74,24 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.edit_profile_button) {
             Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, EDIT_PROFILE);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == EDIT_PROFILE){
+
+            if(resultCode == Activity.RESULT_OK) {
+
+                final String enteredName = data.getStringExtra(EditProfileActivity.EXTRA_ENTERED_NAME);
+
+                setProfileInfo(enteredName, false);
+            }
+        }
     }
 
     @Override
@@ -95,7 +114,7 @@ public class ProfileFragment extends Fragment {
 
                 userProfile = new Profile(diet, intolerances);
 
-                setProfileInfo();
+                setProfileInfo("", true);
             }
 
             @Override
@@ -122,10 +141,17 @@ public class ProfileFragment extends Fragment {
         return original;
     }
 
-    private void setProfileInfo() {
+    private void setProfileInfo(String enteredName, boolean nameFromDB) {
         TextView fullnameTextView = fragmentView.findViewById(R.id.profileFullName);
-        String fullname = user.getDisplayName();
-        if(fullname == null || fullname.isEmpty()){
+        String fullname;
+        if(!nameFromDB) {
+            fullname = enteredName;
+        }
+        else {
+            fullname = user.getDisplayName();
+        }
+
+        if (fullname == null || fullname.isEmpty()) {
             fullname = "Amazing Chef";
         }
         fullnameTextView.setText(fullname);

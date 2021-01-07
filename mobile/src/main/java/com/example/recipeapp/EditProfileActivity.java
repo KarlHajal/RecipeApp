@@ -2,17 +2,20 @@ package com.example.recipeapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,12 +30,13 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private static final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
 
-
+    public static final String EXTRA_ENTERED_NAME = "ENTERED_NAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        initializeName();
     }
 
     @Override
@@ -44,10 +48,35 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_validate) {
+            String enteredName = updateUserFullName();
             saveDietPreferencesInDb();
+
+            final Intent data = new Intent();
+
+            // Add the required data to be returned to the MainActivity
+            data.putExtra(EXTRA_ENTERED_NAME, enteredName);
+
+            // Set the resultCode to Activity.RESULT_OK to
+            // indicate a success and attach the Intent
+            // which contains our result data
+            setResult(Activity.RESULT_OK, data);
+
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initializeName(){
+        EditText nameEditText = (EditText)findViewById(R.id.nameEditText);
+        nameEditText.setText(user.getDisplayName());
+    }
+
+    private String updateUserFullName(){
+        EditText nameEditText = (EditText)findViewById(R.id.nameEditText);
+        String enteredName = nameEditText.getText().toString();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(enteredName).build();
+        user.updateProfile(profileUpdates);
+        return enteredName;
     }
 
     private String titleToDbFormat(CharSequence title){
@@ -86,5 +115,13 @@ public class EditProfileActivity extends AppCompatActivity {
             diet = newDiet;
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        // When the user hits the back button set the resultCode
+        // to Activity.RESULT_CANCELED to indicate a failure
+        setResult(Activity.RESULT_CANCELED);
+        super.onBackPressed();
     }
 }
