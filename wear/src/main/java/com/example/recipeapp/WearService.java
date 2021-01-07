@@ -171,7 +171,7 @@ public class WearService extends WearableListenerService {
                     case BuildConfig.W_mainactivity:
                         startIntent = new Intent(this, MainActivity.class);
                         break;
-                    case BuildConfig.W_recordingactivity:
+                    case BuildConfig.W_recipe_instructions_activity:
                         Log.d(TAG, "Start recording message received");
                         startIntent = new Intent(this, RecipeInstructionsActivity.class);
                         break;
@@ -186,7 +186,7 @@ public class WearService extends WearableListenerService {
                 break;
             case BuildConfig.W_path_stop_activity:
                 switch (data) {
-                    case BuildConfig.W_recordingactivity:
+                    case BuildConfig.W_recipe_instructions_activity:
                         Intent intentStop = new Intent();
                         intentStop.setAction(RecipeInstructionsActivity.STOP_ACTIVITY);
                         LocalBroadcastManager.getInstance(WearService.this).sendBroadcast

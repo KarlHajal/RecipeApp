@@ -136,14 +136,12 @@ public class WearService extends WearableListenerService {
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             case INSTRUCTIONS_SEND:
-
                 String activity = intent.getStringExtra(ACTIVITY_TO_START);
                 sendMessage(activity, BuildConfig.W_path_start_activity);
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_profile_path);
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
                 AnalysedInstructions instructions = (AnalysedInstructions) intent.getSerializableExtra(INSTRUCTIONS);
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_profile_path);
-                AnalysedInstructions instructions = (AnalysedInstructions) intent.getSerializableExtra(PROFILE);
-                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_profile_key, instructions
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
+                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions
                         .toDataMap());
                 sendPutDataMapRequest(putDataMapRequest);
                 break;

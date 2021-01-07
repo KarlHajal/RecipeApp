@@ -31,11 +31,15 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".search"></activity>
+        <activity android:name=".search">
+
+        </activity>
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".Recipe_activity" />
         <activity android:name=".EditProfileActivity" />
-        <activity android:name=".HomepageActivity" />
+        <activity android:name=".HomepageActivity" >
+
+        </activity>>
 
         <receiver
             android:name=".Alarm"
@@ -51,7 +55,6 @@
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
