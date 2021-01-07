@@ -34,7 +34,7 @@
                 android:focusable="true"
                 app:backgroundTint="#FFFFFF"
                 app:borderWidth="0.5dp"
-                tools:srcCompat="@drawable/ca4477c4eeff8d0ac211fa114be21e6c" />
+                app:srcCompat="@drawable/ca4477c4eeff8d0ac211fa114be21e6c" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_sendtowatch"
@@ -46,9 +46,9 @@
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:backgroundTint="#FFFFFF"
+                app:backgroundTint="#E86565"
                 app:borderWidth="0.5dp"
-                tools:srcCompat="@drawable/smartwatch" />
+                app:srcCompat="@drawable/smartwatch" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_useontab"
@@ -60,9 +60,9 @@
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:backgroundTint="#FFFFFF"
+                app:backgroundTint="#D8CDA6"
                 app:borderWidth="0.5dp"
-                tools:srcCompat="@drawable/starticon" />
+                app:srcCompat="@android:drawable/ic_media_play" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"

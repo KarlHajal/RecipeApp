@@ -23,7 +23,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.example.recipeapp.receiver.Message"></action>
-
                 <category android:name="android.intent.category.DEFAULT"></category>
             </intent-filter>
         </receiver>
