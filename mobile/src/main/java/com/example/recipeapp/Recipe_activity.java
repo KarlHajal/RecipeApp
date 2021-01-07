@@ -292,6 +292,7 @@ public class Recipe_activity extends AppCompatActivity {
         Intent intentWear = new Intent(this, WearService.class);
         intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS_SEND.name());
         intentWear.putExtra(WearService.INSTRUCTIONS, analysedInstructions);
+        intentWear.putExtra(WearService.ACTIVITY_TO_START, BuildConfig.W_recipe_instructions_activity);
         this.startService(intentWear);
     }
 

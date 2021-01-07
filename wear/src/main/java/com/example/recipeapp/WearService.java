@@ -103,10 +103,10 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
         PutDataMapRequest putDataMapRequest;
         switch (action) {
-            case STARTACTIVITY:
-                String activity = intent.getStringExtra(ACTIVITY_TO_START);
-                sendMessage(activity, BuildConfig.W_path_start_activity);
-                break;
+            //case STARTACTIVITY:
+            //    String activity = intent.getStringExtra(ACTIVITY_TO_START);
+            //    sendMessage(activity, BuildConfig.W_path_start_activity);
+            //    break;
             case MESSAGE:
                 String message = intent.getStringExtra(MESSAGE);
                 if (message == null) message = "";
@@ -139,6 +139,14 @@ public class WearService extends WearableListenerService {
                 putDataMapRequest.getDataMap().putDouble(BuildConfig.W_longitude_key, intent
                         .getDoubleExtra(LONGITUDE, -1));
                 sendPutDataMapRequest(putDataMapRequest);
+                break;
+            case INSTRUCTIONS_SEND:
+                String activity = intent.getStringExtra(ACTIVITY_TO_START);
+                sendMessage(activity, BuildConfig.W_path_start_activity);
+                //putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
+                //putDataMapRequest.getDataMap().putDouble(BuildConfig.W_instructions_key, intent
+                //        .getDoubleExtra(INSTRUCTIONS, -1));
+                //sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
                 Log.w(TAG, "Unknown action");
@@ -298,6 +306,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, HEART_RATE, LOCATION,
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, HEART_RATE, LOCATION,INSTRUCTIONS_SEND,
     }
 }
