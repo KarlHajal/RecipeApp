@@ -165,8 +165,6 @@ public class Recipe_activity extends AppCompatActivity {
         Log.v(TAG, "OnCreate - set recycler view instructions");
         instructions_rv = findViewById(R.id.recipe_instructions_rv);
         instructions_rv.setLayoutManager(new LinearLayoutManager(this));
-
-
     }
 
     private void getRecipeInstructions(final String recipeId) throws IOException, JSONException {
