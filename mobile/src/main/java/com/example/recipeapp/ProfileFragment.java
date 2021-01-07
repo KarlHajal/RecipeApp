@@ -105,20 +105,36 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    public String capitalizeFirstLetter(String original) {
+    private static String capitalizeFirstLetter(String original) {
         if (original == null || original.length() == 0) {
             return original;
         }
         return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
+    private static String capitalizeLetterAfterSequencer(String original, String sequence) {
+        int position = original.indexOf(sequence);
+
+        if (position != -1) {
+            original = original.substring(0, position+1) + Character.toUpperCase(original.charAt(position+1)) + original.substring(position + 2);
+        }
+
+        return original;
+    }
+
     private void setProfileInfo() {
         TextView dietTextView = fragmentView.findViewById(R.id.dietValue);
         String dietText = userProfile.diet;
+
+        dietText = dietText.replace('_', ' ');
+        dietText = capitalizeFirstLetter(dietText);
+        dietText = capitalizeLetterAfterSequencer(dietText, "-");
+        dietText = capitalizeLetterAfterSequencer(dietText, " ");
+
         if(dietText.isEmpty()) {
             dietText = getString(R.string.diet_non_restrictive);
         }
-        dietText = capitalizeFirstLetter(dietText);
+
         dietTextView.setText(dietText);
 
         TextView intolerancesTextView = fragmentView.findViewById(R.id.intolerancesValue);
