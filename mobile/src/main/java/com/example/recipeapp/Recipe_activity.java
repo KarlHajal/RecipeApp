@@ -151,6 +151,7 @@ public class Recipe_activity extends AppCompatActivity {
         sendtowatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //send instructions to watch
             }
         });
@@ -289,11 +290,11 @@ public class Recipe_activity extends AppCompatActivity {
     }
 
     private void StartRecipeAlarm(View view){
-        Intent i1 = new Intent();
+        Intent i1 = new Intent(this, Alarm.class);
         i1.setAction("com.example.recipeapp.receiver.Message");
         i1.addCategory("android.intent.category.DEFAULT");
         PendingIntent pd = PendingIntent.getBroadcast(this,0,i1,0);
-        myAlarmManager.set(AlarmManager.RTC_WAKEUP,RecipeAlarmTime*60*1000,pd);
+        myAlarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+RecipeAlarmTime*60*1000,pd);
     }
 
     private void StopRecipeAlarm(View view){

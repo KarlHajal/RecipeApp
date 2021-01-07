@@ -20,5 +20,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_profile_button_title">Edit Profile</string>
+    <string name="sendtotab">sendtotab</string>
+    <string name="bookmark">bookmark</string>
+    <string name="useontab">useontab</string>
 
 </resources>

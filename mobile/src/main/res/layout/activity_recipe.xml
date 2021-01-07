@@ -30,11 +30,12 @@
                 android:layout_marginTop="-25dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="10dp"
+                android:contentDescription="@string/bookmark"
                 android:clickable="true"
                 android:focusable="true"
                 app:backgroundTint="#FFFFFF"
                 app:borderWidth="0.5dp"
-                tools:srcCompat="@drawable/ca4477c4eeff8d0ac211fa114be21e6c" />
+                app:srcCompat="@drawable/ca4477c4eeff8d0ac211fa114be21e6c" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_sendtowatch"
@@ -45,10 +46,11 @@
                 android:layout_marginEnd="65dp"
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
+                android:contentDescription="@string/sendtotab"
                 android:focusable="true"
                 app:backgroundTint="#FFFFFF"
                 app:borderWidth="0.5dp"
-                tools:srcCompat="@drawable/smartwatch" />
+                app:srcCompat="@drawable/smartwatch" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_useontab"
@@ -58,11 +60,12 @@
                 android:layout_marginTop="-65dp"
                 android:layout_marginEnd="125dp"
                 android:layout_marginBottom="10dp"
+                android:contentDescription="@string/useontab"
                 android:clickable="true"
                 android:focusable="true"
                 app:backgroundTint="#FFFFFF"
                 app:borderWidth="0.5dp"
-                tools:srcCompat="@drawable/starticon" />
+                app:srcCompat="@drawable/starticon" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
