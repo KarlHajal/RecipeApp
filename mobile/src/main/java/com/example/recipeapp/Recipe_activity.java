@@ -290,6 +290,13 @@ public class Recipe_activity extends AppCompatActivity {
         });
     }
 
+    private void sendRecipetoWatch() {
+        Intent intentWear = new Intent(this, WearService.class);
+        intentWear.setAction(WearService.ACTION_SEND.PROFILE_SEND.name());
+        intentWear.putExtra(WearService.PROFILE, analysedInstructions);
+        this.startService(intentWear);
+    }
+
     private void StartRecipeAlarm(View view){
 
         Log.i(TAG, "StartRecipeAlarm");
