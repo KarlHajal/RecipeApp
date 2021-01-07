@@ -12,6 +12,18 @@
     <string name="intolerance_sulfite">Sulfite</string>
     <string name="intolerance_tree_nut">Tree Nut</string>
     <string name="intolerance_wheat">Wheat</string>
+
+    <string name="diet_gluten_free">Gluten Free</string>
+    <string name="diet_ketogenic">Ketogenic</string>
+    <string name="diet_vegetarian">Vegetarian</string>
+    <string name="diet_lacto_vegetarian">Lacto-Vegetarian</string>
+    <string name="diet_ovo_vegetarian">Ovo-Vegetarian</string>
+    <string name="diet_vegan">Vegan</string>
+    <string name="diet_pescetarian">Pescetarian</string>
+    <string name="diet_paleo">Paleo</string>
+    <string name="diet_primal">Primal</string>
+    <string name="diet_whole30">Whole30</string>
+
     
     <string name="ingredient_instruction">Find recipes by entering ingredients, separated by a comma, which you have in your refrigerator</string>
     <string name="ingredient">Enter ingredient(s)</string>

@@ -3,10 +3,13 @@ package com.example.recipeapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,17 +21,18 @@ import java.util.HashSet;
 public class EditProfileActivity extends AppCompatActivity {
 
     private HashSet<String> checkedIntolerances = new HashSet<String>();
+    private String diet = "";
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private static final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-
-        //addIntoleranceChoices();
     }
 
     @Override
@@ -66,52 +70,20 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    private void addIntoleranceChoices() {
-        Resources res = getResources();
-        String[] dietaryPreferences = res.getStringArray(R.array.intolerances);
-        LinearLayout linearLayout = findViewById(R.id.intolerancesLinearLayout);
+    public void onDietRadioButtonClicked(View view) {
 
-        TypedValue value = new TypedValue();
-        getTheme().resolveAttribute(android.R.attr.listChoiceIndicatorSingle, value, true);
-        int checkMarkDrawableResId = value.resourceId;
-
-        for(String dietaryPreference : dietaryPreferences){
-
-            final CheckedTextView checkedTextView = new CheckedTextView(this);
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMarginStart(10);
-            layoutParams.setMarginEnd(10);
-            checkedTextView.setLayoutParams(layoutParams);
-
-            int imgId = res.getIdentifier(dietaryPreference, "drawable", getPackageName());
-            Drawable img = ResourcesCompat.getDrawable(res, imgId, null);
-            checkedTextView.setCompoundDrawablesWithIntrinsicBounds(null, img, null, null);
-
-            checkedTextView.setCheckMarkDrawable(checkMarkDrawableResId);
-            checkedTextView.setCheckMarkTintList(ColorStateList.valueOf(Color.rgb(225, 170, 4)));
-
-            checkedTextView.setChecked(false);
-            checkedTextView.setText(dietaryPreference.replace('_', ' ').toUpperCase());
-            checkedTextView.setTextAppearance(R.style.DietaryPreferencesCheckboxes);
-            checkedTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-            checkedTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    checkedTextView.toggle();
-                    if(checkedTextView.isChecked()) {
-                        checkedIntolerances.add(titleToDbFormat(checkedTextView.getText()));
-                    }
-                    else {
-                        checkedIntolerances.remove(titleToDbFormat(checkedTextView.getText()));
-                    }
-                }
-            });
-
-            linearLayout.addView(checkedTextView);
+        RadioButton radioButton = (RadioButton) view;
+        String newDiet = titleToDbFormat(radioButton.getText());
+        if(diet.equals(newDiet)) {
+            diet = "";
+            if(radioButton.getParent() instanceof RadioGroup) {
+                RadioGroup radioGroup = (RadioGroup) radioButton.getParent();
+                radioGroup.clearCheck();
+            }
         }
+        else{
+            diet = newDiet;
+        }
+
     }
-     */
 }

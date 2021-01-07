@@ -24,5 +24,6 @@
     <string name="bookmark">bookmark</string>
     <string name="useontab">useontab</string>
     <string name="intolerancesTitle">Intolerances</string>
+    <string name="dietTitle">Diet</string>
 
 </resources>
