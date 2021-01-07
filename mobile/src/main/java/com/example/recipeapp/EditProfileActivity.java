@@ -20,8 +20,10 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -35,6 +37,7 @@ public class EditProfileActivity extends AppCompatActivity {
     public static final String EXTRA_ENTERED_NAME = "ENTERED_NAME";
 
     public final HashMap<String, Integer> dietNameToRadioButton = new HashMap<>();
+    public final HashMap<String, Integer> intoleranceToCheckbox = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +49,37 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void initializeDietaryPreferences() {
         initializeDietHashMap();
+        initializeIntoleranceHashMap();
+
         Bundle b = getIntent().getExtras();
         if(b != null){
             Profile userProfile = (Profile) b.getSerializable("userProfile");
 
-            String diet = userProfile.diet;
-            if(diet != null && !diet.isEmpty()){
-                int radioButtonId = dietNameToRadioButton.get(diet);
+            String dietText = userProfile.diet;
+            if(dietText != null && !dietText.isEmpty()){
+                int radioButtonId = dietNameToRadioButton.get(dietText);
                 RadioButton radioButton = (RadioButton) findViewById(radioButtonId);
                 if(radioButton != null){
                     radioButton.setChecked(true);
+                    diet = dietText;
+                }
+            }
+
+            String intolerancesText = userProfile.intolerances;
+            if(intolerancesText != null && !intolerancesText.isEmpty()){
+                List<String> intolerancesList = Arrays.asList(intolerancesText.split("\\s*,\\s*"));
+
+                for(String intoleranceText : intolerancesList){
+                    int checkboxId = intoleranceToCheckbox.get(intoleranceText);
+                    CheckBox checkBox = (CheckBox) findViewById(checkboxId);
+                    if(checkBox != null){
+                        checkBox.setChecked(true);
+                        checkedIntolerances.add(intoleranceText);
+                    }
                 }
             }
         }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,4 +179,20 @@ public class EditProfileActivity extends AppCompatActivity {
         dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_primal)), R.id.radio_primal);
         dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_whole30)), R.id.radio_whole30);
     }
+
+    private void initializeIntoleranceHashMap() {
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_dairy)), R.id.checkbox_dairy);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_egg)), R.id.checkbox_egg);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_gluten)), R.id.checkbox_gluten);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_grain)), R.id.checkbox_grain);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_peanut)), R.id.checkbox_peanut);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_seafood)), R.id.checkbox_seafood);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_sesame)), R.id.checkbox_sesame);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_shellfish)), R.id.checkbox_shellfish);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_soy)), R.id.checkbox_soy);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_sulfite)), R.id.checkbox_sulfite);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_tree_nut)), R.id.checkbox_tree_nut);
+        intoleranceToCheckbox.put(titleToDbFormat(getString(R.string.intolerance_wheat)), R.id.checkbox_wheat);
+    }
+
 }
