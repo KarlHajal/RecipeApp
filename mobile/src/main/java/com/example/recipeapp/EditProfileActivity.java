@@ -1,22 +1,16 @@
 package com.example.recipeapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CheckedTextView;
-import android.widget.LinearLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashSet;
@@ -24,6 +18,10 @@ import java.util.HashSet;
 public class EditProfileActivity extends AppCompatActivity {
 
     private HashSet<String> checkedIntolerances = new HashSet<String>();
+
+    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +48,22 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private String titleToDbFormat(CharSequence title){
         return title.toString().toLowerCase().replace(' ', '_');
+    }
+
+    private void saveDietPreferencesInDb() {
+        String commaSeparatedIntolerances = checkedIntolerances.toString().replace("[", "").replace("]", "");
+        profileRef.child("intolerances").setValue(commaSeparatedIntolerances);
+    }
+
+    public void onIntoleranceCheckboxClicked(View view) {
+        CheckBox checkbox = (CheckBox) view;
+
+        if(checkbox.isChecked()) {
+            checkedIntolerances.add(titleToDbFormat(checkbox.getText()));
+        }
+        else {
+            checkedIntolerances.remove(titleToDbFormat(checkbox.getText()));
+        }
     }
 
     /*
@@ -100,20 +114,4 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
      */
-
-    private void saveDietPreferencesInDb() {
-        // Write a message to the database
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-    }
-
-    public void onIntoleranceCheckboxClicked(View view) {
-        CheckBox checkbox = (CheckBox) view;
-
-        if(checkbox.isChecked()) {
-            checkedIntolerances.add(titleToDbFormat(checkbox.getText()));
-        }
-        else {
-            checkedIntolerances.remove(titleToDbFormat(checkbox.getText()));
-        }
-    }
 }
