@@ -36,6 +36,9 @@ allprojects {
                 a_key               : "a_value",
                 some_other_key      : "some_other_value",
 
+                instructions_path        : "/INSTRUCTIONS",
+                instructions_key         : "instructions",
+
                 profile_path        : "/PROFILE",
                 profile_key         : "profile",
 
