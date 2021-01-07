@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Recipe App</string>
+    <string name="app_name">RecipeApp</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="FoodPreferencesTitle">Customize your food preferences</string>
+    <string name="EditProfileTitle">Edit Profile</string>
     <string name="recipe_title">Recipe Title</string>
     <string name="ready_in_min_img">ready_in_min_img</string>
     <string name="_000">000</string>
@@ -10,7 +10,7 @@
     <string name="health">health</string>
     <string name="not_healthy">nothealthy</string>
     <string name="vegetarian">veg</string>
-    <string name="ingridients">ingridients</string>
+    <string name="ingredients">ingredients</string>
     <string name="instructions">instructions</string>
     <string name="validate_food_preferences">Done</string>
     <string name="ingredient_name">Ingredient_name</string>
@@ -20,5 +20,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_profile_button_title">Edit Profile</string>
+    <string name="sendtowatch">sendtowatch</string>
+    <string name="bookmark">bookmark</string>
+    <string name="useontab">useontab</string>
+    <string name="intolerancesTitle">Intolerances</string>
+    <string name="dietTitle">Diet</string>
+    <string name="diet_non_restrictive">Non-Restrictive</string>
+    <string name="nameTitle">Name</string>
 
 </resources>

@@ -29,21 +29,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 public class WearService extends WearableListenerService {
 
-    public static final String ACTIVITY_TO_START = "ACTIVITY_TO_START";
-    public static final String ACTIVITY_TO_STOP = "ACTIVITY_TO_STOP";
-    public static final String MESSAGE = "MESSAGE";
-    public static final String DATAMAP_INT = "DATAMAP_INT";
-    public static final String DATAMAP_INT_ARRAYLIST = "DATAMAP_INT_ARRAYLIST";
-    public static final String IMAGE = "IMAGE";
-    public static final String PATH = "PATH";
-    public static final String PROFILE = "PROFILE";
+    public static final String HEART_RATE = "HEART_RATE";
+    public static final String LONGITUDE = "LONGITUDE";
+    public static final String LATITUDE = "LATITUDE";
     public static final String INSTRUCTIONS = "INSTRUCTIONS";
-
-    public static final String USERNAME = "USERNAME";
-    public static final String USERIMAGE = "USERIMAGE";
 
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
@@ -78,6 +69,13 @@ public class WearService extends WearableListenerService {
         return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
     }
 
+    public static final String ACTIVITY_TO_START = "ACTIVITY_TO_START";
+    public static final String MESSAGE = "MESSAGE";
+    public static final String DATAMAP_INT = "DATAMAP_INT";
+    public static final String DATAMAP_INT_ARRAYLIST = "DATAMAP_INT_ARRAYLIST";
+    public static final String IMAGE = "IMAGE";
+    public static final String PATH = "PATH";
+
     public static Asset createAssetFromBitmap(Bitmap bitmap) {
         bitmap = resizeImage(bitmap, 390);
 
@@ -105,16 +103,9 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
         PutDataMapRequest putDataMapRequest;
         switch (action) {
-
-            //case STARTACTIVITY:
-             //   String activity = intent.getStringExtra(ACTIVITY_TO_START);
-              //  sendMessage(activity, BuildConfig.W_path_start_activity);
-               // break;
-
-            
-            case STOPACTIVITY:
-                String activityStop = intent.getStringExtra(ACTIVITY_TO_STOP);
-                sendMessage(activityStop, BuildConfig.W_path_stop_activity);
+            case STARTACTIVITY:
+                String activity = intent.getStringExtra(ACTIVITY_TO_START);
+                sendMessage(activity, BuildConfig.W_path_start_activity);
                 break;
             case MESSAGE:
                 String message = intent.getStringExtra(MESSAGE);
@@ -135,26 +126,27 @@ public class WearService extends WearableListenerService {
                         intent.getParcelableExtra(IMAGE));
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
-            case INSTRUCTIONS_SEND:
-
-                String activity = intent.getStringExtra(ACTIVITY_TO_START);
-                sendMessage(activity, BuildConfig.W_path_start_activity);
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_profile_path);
-                AnalysedInstructions instructions = (AnalysedInstructions) intent.getSerializableExtra(INSTRUCTIONS);
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_profile_path);
-                AnalysedInstructions instructions = (AnalysedInstructions) intent.getSerializableExtra(PROFILE);
-                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_profile_key, instructions
-                        .toDataMap());
+            case HEART_RATE:
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_heart_rate_path);
+                putDataMapRequest.getDataMap().putInt(BuildConfig.W_heart_rate_key, intent
+                        .getIntExtra(HEART_RATE, -1));
+                sendPutDataMapRequest(putDataMapRequest);
+                break;
+            case LOCATION:
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_location_path);
+                putDataMapRequest.getDataMap().putDouble(BuildConfig.W_latitude_key, intent
+                        .getDoubleExtra(LATITUDE, -1));
+                putDataMapRequest.getDataMap().putDouble(BuildConfig.W_longitude_key, intent
+                        .getDoubleExtra(LONGITUDE, -1));
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
-                Log.w(TAG, "Unknown action \" " + action + " \" ");
+                Log.w(TAG, "Unknown action");
                 break;
         }
 
         return START_NOT_STICKY;
     }
-
 
 
     @Override
@@ -179,6 +171,10 @@ public class WearService extends WearableListenerService {
                     case BuildConfig.W_mainactivity:
                         startIntent = new Intent(this, MainActivity.class);
                         break;
+                    case BuildConfig.W_recordingactivity:
+                        Log.d(TAG, "Start recording message received");
+                        startIntent = new Intent(this, RecipeInstructionsActivity.class);
+                        break;
                 }
 
                 if (startIntent == null) {
@@ -187,6 +183,16 @@ public class WearService extends WearableListenerService {
                 }
                 startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(startIntent);
+                break;
+            case BuildConfig.W_path_stop_activity:
+                switch (data) {
+                    case BuildConfig.W_recordingactivity:
+                        Intent intentStop = new Intent();
+                        intentStop.setAction(RecipeInstructionsActivity.STOP_ACTIVITY);
+                        LocalBroadcastManager.getInstance(WearService.this).sendBroadcast
+                                (intentStop);
+                        break;
+                }
                 break;
             case BuildConfig.W_path_acknowledge:
                 Log.v(TAG, "Received acknowledgment");
@@ -230,7 +236,7 @@ public class WearService extends WearableListenerService {
         sendMessageToNodes(message, path);
     }
 
-    void sendMessageToNodes(final String message, final String path) {
+    private void sendMessageToNodes(final String message, final String path) {
         Log.v(TAG, "Sending message " + message);
         // Lists all the nodes (devices) connected to the Wear API
         Wearable.getNodeClient(this).getConnectedNodes().addOnCompleteListener(new OnCompleteListener<List<Node>>() {
@@ -245,7 +251,7 @@ public class WearService extends WearableListenerService {
         });
     }
 
-    void sendPutDataMapRequest(PutDataMapRequest putDataMapRequest) {
+    private void sendPutDataMapRequest(PutDataMapRequest putDataMapRequest) {
         putDataMapRequest.getDataMap().putLong("time", System.nanoTime());
         PutDataRequest request = putDataMapRequest.asPutDataRequest();
         request.setUrgent();
@@ -292,6 +298,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, STOPACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, INSTRUCTIONS_SEND
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, HEART_RATE, LOCATION,
     }
 }

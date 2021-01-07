@@ -1,33 +1,38 @@
 package com.example.recipeapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.TypedValue;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckedTextView;
-import android.widget.LinearLayout;
+import android.widget.CheckBox;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashSet;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private HashSet<String> checkedFoodPreferences = new HashSet<String>();
+    private HashSet<String> checkedIntolerances = new HashSet<String>();
+    private String diet = "";
+
+    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-
-        addDietaryPreferencesChoices();
     }
 
     @Override
@@ -39,6 +44,7 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_validate) {
+            saveDietPreferencesInDb();
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -48,50 +54,37 @@ public class EditProfileActivity extends AppCompatActivity {
         return title.toString().toLowerCase().replace(' ', '_');
     }
 
-    private void addDietaryPreferencesChoices() {
-        Resources res = getResources();
-        String[] dietaryPreferences = res.getStringArray(R.array.dietary_preferences);
-        LinearLayout linearLayout = findViewById(R.id.dietaryPreferencesLinearLayout);
+    private void saveDietPreferencesInDb() {
+        String commaSeparatedIntolerances = checkedIntolerances.toString().replace("[", "").replace("]", "");
+        profileRef.child("intolerances").setValue(commaSeparatedIntolerances);
+        profileRef.child("diet").setValue(diet);
+    }
 
-        TypedValue value = new TypedValue();
-        getTheme().resolveAttribute(android.R.attr.listChoiceIndicatorSingle, value, true);
-        int checkMarkDrawableResId = value.resourceId;
+    public void onIntoleranceCheckboxClicked(View view) {
+        CheckBox checkbox = (CheckBox) view;
 
-        for(String dietaryPreference : dietaryPreferences){
-
-            final CheckedTextView checkedTextView = new CheckedTextView(this);
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMarginStart(10);
-            layoutParams.setMarginEnd(10);
-            checkedTextView.setLayoutParams(layoutParams);
-
-            int imgId = res.getIdentifier(dietaryPreference, "drawable", getPackageName());
-            Drawable img = ResourcesCompat.getDrawable(res, imgId, null);
-            checkedTextView.setCompoundDrawablesWithIntrinsicBounds(null, img, null, null);
-
-            checkedTextView.setCheckMarkDrawable(checkMarkDrawableResId);
-            checkedTextView.setCheckMarkTintList(ColorStateList.valueOf(Color.rgb(225, 170, 4)));
-
-            checkedTextView.setChecked(false);
-            checkedTextView.setText(dietaryPreference.replace('_', ' ').toUpperCase());
-            checkedTextView.setTextAppearance(R.style.DietaryPreferencesCheckboxes);
-            checkedTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-            checkedTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    checkedTextView.toggle();
-                    if(checkedTextView.isChecked()) {
-                        checkedFoodPreferences.add(titleToDbFormat(checkedTextView.getText()));
-                    }
-                    else {
-                        checkedFoodPreferences.remove(titleToDbFormat(checkedTextView.getText()));
-                    }
-                }
-            });
-
-            linearLayout.addView(checkedTextView);
+        if(checkbox.isChecked()) {
+            checkedIntolerances.add(titleToDbFormat(checkbox.getText()));
         }
+        else {
+            checkedIntolerances.remove(titleToDbFormat(checkbox.getText()));
+        }
+    }
+
+    public void onDietRadioButtonClicked(View view) {
+
+        RadioButton radioButton = (RadioButton) view;
+        String newDiet = titleToDbFormat(radioButton.getText());
+        if(diet.equals(newDiet)) {
+            diet = "";
+            if(radioButton.getParent() instanceof RadioGroup) {
+                RadioGroup radioGroup = (RadioGroup) radioButton.getParent();
+                radioGroup.clearCheck();
+            }
+        }
+        else{
+            diet = newDiet;
+        }
+
     }
 }

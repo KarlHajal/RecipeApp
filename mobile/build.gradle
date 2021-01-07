@@ -20,7 +20,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        buildTypes.each {
+            project.ext.constants.each {
+                    // - String constants used in Java as `BuildConfig.W_a_key`
+                    // - Resources are used as usual:
+                    // - in Java as:
+                    // `[getApplicationContext().]getString(R.string.W_a_key)`
+                    // - in XML as:
+                    // `@string/W_a_key`
+                k, v ->
+                    it.buildConfigField 'String', "W_${k}", "\"${v}\""
+                    it.resValue 'string', "W_${k}", v
+            }
+        }
     }
+
+
 }
 
 dependencies {
@@ -29,7 +44,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wearable:17.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.firebase:firebase-auth:20.0.1'
-    implementation 'com.google.firebase:firebase-database:16.0.4'
+    implementation 'com.google.firebase:firebase-database:19.6.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'

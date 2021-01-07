@@ -155,6 +155,7 @@ public class Recipe_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //send instructions to watch
+                sendRecipetoWatch();
             }
         });
 
@@ -287,13 +288,23 @@ public class Recipe_activity extends AppCompatActivity {
         });
     }
 
+    private void sendRecipetoWatch() {
+        Intent intentWear = new Intent(this, WearService.class);
+        intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS_SEND.name());
+        intentWear.putExtra(WearService.INSTRUCTIONS, analysedInstructions);
+        this.startService(intentWear);
+    }
+
     private void StartRecipeAlarm(View view){
+
         Log.i(TAG, "StartRecipeAlarm");
+
         Intent i1 = new Intent(this, Alarm.class);
         i1.setAction("com.example.recipeapp.receiver.Message");
         i1.addCategory("android.intent.category.DEFAULT");
         PendingIntent pd = PendingIntent.getBroadcast(this,0,i1,0);
         myAlarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + RecipeAlarmTime*60*1000,pd);
+
     }
 
     private void StopRecipeAlarm(View view){

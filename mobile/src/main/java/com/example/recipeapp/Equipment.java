@@ -1,13 +1,15 @@
 package com.example.recipeapp;
 
+import com.google.android.gms.wearable.DataMap;
+
 public class Equipment {
     private String name;
-    private String Thumbnail;
+    private String thumbnail;
     private boolean selected;
 
     Equipment(String name, String thumbnail) {
         this.name = name;
-        Thumbnail = "https://spoonacular.com/cdn/equipment_100x100/" + thumbnail;
+        this.thumbnail = "https://spoonacular.com/cdn/equipment_100x100/" + thumbnail;
         selected = false;
     }
 
@@ -16,7 +18,7 @@ public class Equipment {
     }
 
     public String getThumbnail() {
-        return Thumbnail;
+        return thumbnail;
     }
 
     public boolean isSelected(){
@@ -25,5 +27,14 @@ public class Equipment {
 
     public void setSelected() {
         selected = !selected;
+    }
+
+    public DataMap toDataMap() {
+        // current ingredient into dataMap
+        DataMap map = new DataMap();
+        map.putString("name", name);
+        map.putString("thumbnail", thumbnail);
+        map.putBoolean("selected", selected);
+        return map;
     }
 }

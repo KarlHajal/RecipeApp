@@ -30,6 +30,7 @@
                 android:layout_marginTop="-25dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="10dp"
+                android:contentDescription="@string/bookmark"
                 android:clickable="true"
                 android:focusable="true"
                 app:backgroundTint="#FFFFFF"
@@ -45,6 +46,7 @@
                 android:layout_marginEnd="65dp"
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
+                android:contentDescription="@string/sendtowatch"
                 android:focusable="true"
                 app:backgroundTint="#E86565"
                 app:borderWidth="0.5dp"
@@ -58,6 +60,7 @@
                 android:layout_marginTop="-65dp"
                 android:layout_marginEnd="125dp"
                 android:layout_marginBottom="10dp"
+                android:contentDescription="@string/useontab"
                 android:clickable="true"
                 android:focusable="true"
                 app:backgroundTint="#D8CDA6"
@@ -184,7 +187,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:text="@string/ingridients"
+                        android:text="@string/ingredients"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 

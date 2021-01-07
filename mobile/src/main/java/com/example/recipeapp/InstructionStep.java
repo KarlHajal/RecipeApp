@@ -1,5 +1,7 @@
 package com.example.recipeapp;
 
+import com.google.android.gms.wearable.DataMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,5 +73,28 @@ public class InstructionStep {
 
     public List<Equipment> getEquipments(){
         return this.equipments;
+    }
+
+    public DataMap toDataMap() {
+        // list of instructions steps to dataMap array
+        ArrayList<DataMap> ingredientsDataMap = new ArrayList<DataMap>();
+        for (Ingredient ingredient: ingredients) {
+            ingredientsDataMap.add(ingredient.toDataMap());
+        }
+
+        // list of instructions steps to dataMap array
+        ArrayList<DataMap> equipmentsDataMap = new ArrayList<DataMap>();
+        for (Equipment equipment: equipments) {
+            equipmentsDataMap.add(equipment.toDataMap());
+        }
+
+        // current InstructionStep into dataMap
+        DataMap map = new DataMap();
+        map.putString("number", number);
+        map.putString("step", step);
+        map.putInt("duration", duration);
+        map.putDataMapArrayList("ingredients", ingredientsDataMap);
+        map.putDataMapArrayList("equipments", equipmentsDataMap);
+        return map;
     }
 }

@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.1'
-        classpath 'com.google.gms:google-services:4.3.3'
+        classpath 'com.google.gms:google-services:4.3.4'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -18,8 +18,6 @@ allprojects {
         google()
         jcenter()
     }
-<<<<<<< Updated upstream
-=======
     project.ext {
         constants = [
                 path_start_activity : "/START_ACTIVITY",
@@ -31,7 +29,7 @@ allprojects {
                 example_path_datamap: "/DATAMAP",
 
                 mainactivity        : "MainActivity",
-                recordingactivity   : "recipe_instructions",
+                recipe_instructions_activity   : "RecipeInstructionsActivity",
 
                 a_key               : "a_value",
                 some_other_key      : "some_other_value",
@@ -50,7 +48,6 @@ allprojects {
                 latitude_key        : "latitude",
         ]
     }
->>>>>>> Stashed changes
 }
 
 task clean(type: Delete) {
