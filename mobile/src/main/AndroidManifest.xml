@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,24 +12,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".search">
-        </activity>
+        <service
+            android:name=".WearService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".search"></activity>
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".Recipe_activity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".HomepageActivity" />
+
         <receiver
             android:name=".Alarm"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.example.recipeapp.receiver.Message"></action>
-                <category android:name="android.intent.category.DEFAULT"></category>
+                <action android:name="com.example.recipeapp.receiver.Message" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
