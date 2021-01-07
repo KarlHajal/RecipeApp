@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -32,12 +34,34 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public static final String EXTRA_ENTERED_NAME = "ENTERED_NAME";
 
+    public final HashMap<String, Integer> dietNameToRadioButton = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         initializeName();
+        initializeDietaryPreferences();
     }
+
+    private void initializeDietaryPreferences() {
+        initializeDietHashMap();
+        Bundle b = getIntent().getExtras();
+        if(b != null){
+            Profile userProfile = (Profile) b.getSerializable("userProfile");
+
+            String diet = userProfile.diet;
+            if(diet != null && !diet.isEmpty()){
+                int radioButtonId = dietNameToRadioButton.get(diet);
+                RadioButton radioButton = (RadioButton) findViewById(radioButtonId);
+                if(radioButton != null){
+                    radioButton.setChecked(true);
+                }
+            }
+        }
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -123,5 +147,18 @@ public class EditProfileActivity extends AppCompatActivity {
         // to Activity.RESULT_CANCELED to indicate a failure
         setResult(Activity.RESULT_CANCELED);
         super.onBackPressed();
+    }
+
+    private void initializeDietHashMap() {
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_gluten_free)), R.id.radio_gluten_free);
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_ketogenic)), R.id.radio_ketogenic);
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_vegetarian)), R.id.radio_vegetarian);
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_lacto_vegetarian)), R.id.radio_lacto_vegetarian);
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_ovo_vegetarian)), R.id.radio_ovo_vegetarian);
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_vegan)), R.id.radio_vegan);
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_pescetarian)), R.id.radio_pescetarian);
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_paleo)), R.id.radio_paleo);
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_primal)), R.id.radio_primal);
+        dietNameToRadioButton.put(titleToDbFormat(getString(R.string.diet_whole30)), R.id.radio_whole30);
     }
 }

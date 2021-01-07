@@ -74,6 +74,11 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.edit_profile_button) {
             Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+
+            Bundle b = new Bundle();
+            b.putSerializable("userProfile", userProfile);
+
+            intent.putExtras(b); //Put your id to your next Intent
             startActivityForResult(intent, EDIT_PROFILE);
         }
         return super.onOptionsItemSelected(item);
