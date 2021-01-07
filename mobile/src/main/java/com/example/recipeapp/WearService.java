@@ -140,7 +140,7 @@ public class WearService extends WearableListenerService {
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
-                Log.w(TAG, "Unknown action");
+                Log.w(TAG, "Unknown action \" " + action + " \" ");
                 break;
         }
 
