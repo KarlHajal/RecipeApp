@@ -48,7 +48,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/sendtotab"
                 android:focusable="true"
-                app:backgroundTint="#FFFFFF"
+                app:backgroundTint="#E86565"
                 app:borderWidth="0.5dp"
                 app:srcCompat="@drawable/smartwatch" />
 
@@ -63,7 +63,7 @@
                 android:contentDescription="@string/useontab"
                 android:clickable="true"
                 android:focusable="true"
-                app:backgroundTint="#FFFFFF"
+                app:backgroundTint="#D8CDA6"
                 app:borderWidth="0.5dp"
                 app:srcCompat="@drawable/starticon" />
 
