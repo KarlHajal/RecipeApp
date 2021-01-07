@@ -173,7 +173,7 @@ public class WearService extends WearableListenerService {
                         break;
                     case BuildConfig.W_recordingactivity:
                         Log.d(TAG, "Start recording message received");
-                        startIntent = new Intent(this, recipe_instructions.class);
+                        startIntent = new Intent(this, RecipeInstructionsActivity.class);
                         break;
                 }
 
@@ -188,7 +188,7 @@ public class WearService extends WearableListenerService {
                 switch (data) {
                     case BuildConfig.W_recordingactivity:
                         Intent intentStop = new Intent();
-                        intentStop.setAction(recipe_instructions.STOP_ACTIVITY);
+                        intentStop.setAction(RecipeInstructionsActivity.STOP_ACTIVITY);
                         LocalBroadcastManager.getInstance(WearService.this).sendBroadcast
                                 (intentStop);
                         break;

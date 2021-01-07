@@ -29,7 +29,7 @@ allprojects {
                 example_path_datamap: "/DATAMAP",
 
                 mainactivity        : "MainActivity",
-                recordingactivity   : "RecordingActivity",
+                recipe_instructions_activity   : "RecipeInstructionsActivity",
 
                 a_key               : "a_value",
                 some_other_key      : "some_other_value",
