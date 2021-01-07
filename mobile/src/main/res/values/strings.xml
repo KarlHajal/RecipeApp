@@ -25,5 +25,6 @@
     <string name="useontab">useontab</string>
     <string name="intolerancesTitle">Intolerances</string>
     <string name="dietTitle">Diet</string>
+    <string name="diet_non_restrictive">Non-Restrictive</string>
 
 </resources>
