@@ -56,6 +56,7 @@ public class AnalysedInstructions implements Serializable {
         DataMap map = new DataMap();
         map.putString("name", name);
         map.putDataMapArrayList("instructionSteps", instructionStepsDataMap);
+        map.putBoolean("instructionsOk", instructionsOk);
         return map;
     }
 }
