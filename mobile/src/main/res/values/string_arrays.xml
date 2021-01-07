@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="dietary_preferences">
-        <item>vegan</item>
-        <item>vegetarian</item>
-        <item>keto</item>
-        <item>dairy_free</item>
-        <item>gluten_free</item>
-    </string-array>
+    <string name="intolerance_dairy">Dairy</string>
+    <string name="intolerance_egg">Egg</string>
+    <string name="intolerance_gluten">Gluten</string>
+    <string name="intolerance_grain">Grain</string>
+    <string name="intolerance_peanut">Peanut</string>
+    <string name="intolerance_seafood">Seafood</string>
+    <string name="intolerance_sesame">Sesame</string>
+    <string name="intolerance_shellfish">Shellfish</string>
+    <string name="intolerance_soy">Soy</string>
+    <string name="intolerance_sulfite">Sulfite</string>
+    <string name="intolerance_tree_nut">Tree Nut</string>
+    <string name="intolerance_wheat">Wheat</string>
+    
     <string name="ingredient_instruction">Find recipes by entering ingredients, separated by a comma, which you have in your refrigerator</string>
     <string name="ingredient">Enter ingredient(s)</string>
     <string name="search_button">Find Recipes</string>

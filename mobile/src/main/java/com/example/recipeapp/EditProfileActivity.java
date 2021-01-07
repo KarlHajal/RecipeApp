@@ -13,21 +13,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
+
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashSet;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private HashSet<String> checkedFoodPreferences = new HashSet<String>();
+    private HashSet<String> checkedIntolerances = new HashSet<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        addDietaryPreferencesChoices();
+        //addIntoleranceChoices();
     }
 
     @Override
@@ -39,6 +42,7 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_validate) {
+            saveDietPreferencesInDb();
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -48,10 +52,11 @@ public class EditProfileActivity extends AppCompatActivity {
         return title.toString().toLowerCase().replace(' ', '_');
     }
 
-    private void addDietaryPreferencesChoices() {
+    /*
+    private void addIntoleranceChoices() {
         Resources res = getResources();
-        String[] dietaryPreferences = res.getStringArray(R.array.dietary_preferences);
-        LinearLayout linearLayout = findViewById(R.id.dietaryPreferencesLinearLayout);
+        String[] dietaryPreferences = res.getStringArray(R.array.intolerances);
+        LinearLayout linearLayout = findViewById(R.id.intolerancesLinearLayout);
 
         TypedValue value = new TypedValue();
         getTheme().resolveAttribute(android.R.attr.listChoiceIndicatorSingle, value, true);
@@ -83,15 +88,32 @@ public class EditProfileActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     checkedTextView.toggle();
                     if(checkedTextView.isChecked()) {
-                        checkedFoodPreferences.add(titleToDbFormat(checkedTextView.getText()));
+                        checkedIntolerances.add(titleToDbFormat(checkedTextView.getText()));
                     }
                     else {
-                        checkedFoodPreferences.remove(titleToDbFormat(checkedTextView.getText()));
+                        checkedIntolerances.remove(titleToDbFormat(checkedTextView.getText()));
                     }
                 }
             });
 
             linearLayout.addView(checkedTextView);
+        }
+    }
+     */
+
+    private void saveDietPreferencesInDb() {
+        // Write a message to the database
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+    }
+
+    public void onIntoleranceCheckboxClicked(View view) {
+        CheckBox checkbox = (CheckBox) view;
+
+        if(checkbox.isChecked()) {
+            checkedIntolerances.add(titleToDbFormat(checkbox.getText()));
+        }
+        else {
+            checkedIntolerances.remove(titleToDbFormat(checkbox.getText()));
         }
     }
 }
