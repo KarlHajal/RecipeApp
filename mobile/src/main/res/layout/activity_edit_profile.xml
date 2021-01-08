@@ -59,6 +59,7 @@
                          />
 
                     <EditText
+                        android:id="@+id/nameEditText"
                         android:inputType="textPersonName|textCapWords|text"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                         android:layout_width="fill_parent"

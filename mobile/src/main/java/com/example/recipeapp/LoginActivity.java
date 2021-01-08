@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -59,22 +60,23 @@ public class LoginActivity extends AppCompatActivity {
                     final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
                     profileRef.child("intolerances").setValue("");
                     profileRef.child("diet").setValue("");
+
+                    Intent goToEditProfile = new Intent(LoginActivity.this, EditProfileActivity.class);
+                    startActivity(goToEditProfile);
+                }
+                else{
+                    Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
+                    startActivity(goToHomepage);
                 }
 
-                //if(response.isNewUser()){
-                //    Intent goToRegistration = new Intent(LoginActivity.this, EditProfileActivity.class);
-                //    LoginActivity.this.startActivity(goToRegistration);
-                //}
-                //else {
-                    Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
-                    LoginActivity.this.startActivity(goToHomepage);
-                //}
-
+                finish();
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
+                Toast.makeText(this, "Sign in failed.", Toast.LENGTH_SHORT).show();
+                createSignInIntent();
             }
         }
     }

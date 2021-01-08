@@ -37,9 +37,8 @@
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".Recipe_activity" />
         <activity android:name=".EditProfileActivity" />
-        <activity android:name=".HomepageActivity" >
-
-        </activity>>
+        <activity android:name=".HomepageActivity"
+            android:launchMode="singleTask"/>
 
         <receiver
             android:name=".Alarm"

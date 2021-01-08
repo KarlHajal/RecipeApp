@@ -6,4 +6,9 @@
         android:title="@string/edit_profile_button_title"
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/sign_out_button"
+        android:icon="@drawable/sign_out_arrow"
+        android:title="@string/sign_out"></item>
 </menu>
