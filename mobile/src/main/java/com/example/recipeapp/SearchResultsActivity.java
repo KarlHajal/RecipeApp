@@ -37,41 +37,20 @@ public class SearchResultsActivity extends AppCompatActivity {
     private JSONArray resultsArr;
     private List<Recipe> lstRecipe = new ArrayList<>();
     private static String TAG = "SearchResultsActivity";
-    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private static final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
-    private Profile userProfile;
+    private Profile userProfile = new Profile("", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        readUserProfile();
         setContentView(R.layout.activity_search_results);
         String searchText = getIntent().getExtras().getString("ingredient_value");
+        userProfile = (Profile) getIntent().getExtras().getSerializable("user_profile");
         try {
             Log.v(TAG, "searchText" + searchText);
             getResults(searchText);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void readUserProfile() {
-        profileRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String diet = dataSnapshot.child("diet").getValue(String.class);
-                String intolerances = dataSnapshot.child("intolerances").getValue(String.class);
-
-                userProfile = new Profile(diet, intolerances);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Empty
-            }
-        });
     }
 
 
