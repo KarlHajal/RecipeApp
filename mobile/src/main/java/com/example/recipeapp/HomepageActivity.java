@@ -1,18 +1,13 @@
 package com.example.recipeapp;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomepageActivity extends AppCompatActivity {
@@ -37,6 +32,9 @@ public class HomepageActivity extends AppCompatActivity {
                         }
                         else if(item.getItemId() == R.id.search_recipes_button) {
                             selectedFragment = EnterIngredientFragment.newInstance();
+                        }
+                        else if(item.getItemId() == R.id.favourites_button) {
+                            selectedFragment = FavouritesFragment.newInstance();
                         }
 
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

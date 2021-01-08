@@ -8,4 +8,8 @@
         android:id="@+id/search_recipes_button"
         android:icon="@drawable/ic_search_for_recipes"
         android:title="@string/search_for_recipes"/>
+    <item
+        android:id="@+id/favourites_button"
+        android:icon="@drawable/ca4477c4eeff8d0ac211fa114be21e6c"
+        android:title="@string/favourites" />
 </menu>
