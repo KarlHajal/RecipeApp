@@ -78,6 +78,12 @@ public class InstructionStep implements Parcelable {
         return this.equipments;
     }
 
+    @Override
+    public String toString(){
+        String s = "{ number " + number + ", step " + step + "}";
+        return s;
+    }
+
     // needed for dataMap -> sending through wear api
 
     public DataMap toDataMap() {

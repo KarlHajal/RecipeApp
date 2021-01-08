@@ -136,8 +136,6 @@ public class WearService extends WearableListenerService {
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             case INSTRUCTIONS_SEND:
-                String activity = intent.getStringExtra(ACTIVITY_TO_START);
-                sendMessage(activity, BuildConfig.W_path_start_activity);
                 AnalysedInstructions instructions = (AnalysedInstructions) intent.getParcelableExtra(INSTRUCTIONS);
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
                 putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions.toDataMap());
@@ -150,8 +148,6 @@ public class WearService extends WearableListenerService {
 
         return START_NOT_STICKY;
     }
-
-
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {

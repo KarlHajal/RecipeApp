@@ -183,7 +183,7 @@ public class WearService extends WearableListenerService {
                         startIntent = new Intent(this, MainActivity.class);
                         break;
                     case BuildConfig.W_recipe_instructions_activity:
-                        Log.d(TAG, "Start recording message received");
+                        Log.d(TAG, "Start recipe instructions received");
                         startIntent = new Intent(this, RecipeInstructionsActivity.class);
                         break;
                 }
@@ -262,11 +262,11 @@ public class WearService extends WearableListenerService {
                         DataMap instructionDataMap = dataMapItem.getDataMap().getDataMap(BuildConfig.W_instructions_key);
                         AnalysedInstructions instructions = new AnalysedInstructions(instructionDataMap);
                         Log.i(TAG, "received instructions " + instructions.toString());
-//                        intent = new Intent
-//                                ("REPLACE_THIS_WITH_A_STRING_OF_ANOTHER_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-//                        intent.putExtra
-//                                ("REPLACE_THIS_WITH_A_STRING_OF_INTEGER_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", instructions);
-//                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+                        Intent startIntent = new Intent(this, RecipeInstructionsActivity.class);
+                        startIntent.putExtra(INSTRUCTIONS, instructions);
+                        startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(startIntent);
                         break;
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
