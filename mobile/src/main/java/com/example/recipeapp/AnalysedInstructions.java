@@ -1,5 +1,8 @@
 package com.example.recipeapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.wearable.DataMap;
 
 import org.json.JSONArray;
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AnalysedInstructions implements Serializable {
+public class AnalysedInstructions implements Parcelable {
 
     private static final String TAG = "AnalysedInstructions";
 
@@ -59,4 +62,36 @@ public class AnalysedInstructions implements Serializable {
         map.putBoolean("instructionsOk", instructionsOk);
         return map;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeList(instructionSteps);
+        dest.writeBoolean(instructionsOk);
+    }
+
+    // example constructor that takes a Parcel and gives you an object populated with it's values
+    private AnalysedInstructions(Parcel in) {
+        name = in.readString();
+        in.readList(instructionSteps, InstructionStep.class.getClassLoader());
+        instructionsOk = in.readBoolean();
+    }
+
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<AnalysedInstructions> CREATOR = new Parcelable.Creator<AnalysedInstructions>() {
+        public AnalysedInstructions createFromParcel(Parcel in) {
+            return new AnalysedInstructions(in);
+        }
+
+        public AnalysedInstructions[] newArray(int size) {
+            return new AnalysedInstructions[size];
+        }
+    };
+
+
 }
