@@ -39,6 +39,11 @@ public class FavouritesFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView emptyView;
 
+    public static Fragment newInstance() {
+        FavouritesFragment fragment = new FavouritesFragment();
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
