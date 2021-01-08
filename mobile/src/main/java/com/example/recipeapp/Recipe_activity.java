@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,6 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -26,7 +33,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -41,8 +50,8 @@ public class Recipe_activity extends AppCompatActivity {
     
     private TextView title, ready_in, servings, instructions, healthy;
     private ImageView img, vegeterian;
-//    private DatabaseReference mRootRef;
-//    private FirebaseAuth mAuth;
+    private DatabaseReference mRootRef;
+    private FirebaseAuth mAuth;
     private JSONArray ingredientsArr;
     private List<Ingredient> ingredientsLst = new ArrayList<Ingredient>();
     private AnalysedInstructions analysedInstructions;
@@ -67,15 +76,15 @@ public class Recipe_activity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         final String recipeId = Objects.requireNonNull(intent.getExtras()).getString("id");
-//        mAuth = FirebaseAuth.getInstance();
-//        final String uid = mAuth.getCurrentUser().getUid();
-//        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child(recipeId);
+        mAuth = FirebaseAuth.getInstance();
+        final String uid = mAuth.getCurrentUser().getUid();
+        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child(recipeId);
         img = findViewById(R.id.recipe_img);
         title = findViewById(R.id.recipe_title);
         ready_in = findViewById(R.id.recipe_ready_in);
         servings = findViewById(R.id.recipe_servings);
         healthy = findViewById(R.id.recipe_healthy);
-        vegeterian = findViewById(R.id.recipe_vegetarian);
+        //vegeterian = findViewById(R.id.recipe_vegetarian);
         instructions = findViewById(R.id.recipe_instructions);
         fab = findViewById(R.id.floatingActionButton);
         useontab = findViewById(R.id.fab_useontab);
@@ -95,48 +104,48 @@ public class Recipe_activity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-//        Log.i(TAG, "OnCreate - add listeners to firebase");
-//        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Log.i("mRootRef", String.valueOf(dataSnapshot));
-//                if (dataSnapshot.getValue() != null) {
-//                    fab.setImageResource(R.drawable.ic_favorite_black_24dp);
-//                    like = true;
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        Log.i(TAG, "OnCreate - add listeners to firebase");
+        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i("mRootRef", String.valueOf(dataSnapshot));
+                if (dataSnapshot.getValue() != null) {
+                    fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    like = true;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         Log.v(TAG, "OnCreate - add listeners to fab");
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 like = !like;
-//                mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        if (like) {
-//                            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
-//                            Map favorites = new HashMap();
-//                            favorites.put("img", intent.getExtras().getString("img"));
-//                            favorites.put("title", intent.getExtras().getString("title"));
-//                            mRootRef.setValue(favorites);
-//                        } else {
-//                            try {
-//                                fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-////                                mRootRef.setValue(null);
-//                            } catch (Exception e) {
-//                            }
-//                        }
-//                    }
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//                    }
-//                });
+                mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (like) {
+                            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+                            Map favorites = new HashMap();
+                            favorites.put("img", intent.getExtras().getString("img"));
+                            favorites.put("title", intent.getExtras().getString("title"));
+                            mRootRef.setValue(favorites);
+                        } else {
+                            try {
+                                fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                                mRootRef.setValue(null);
+                            } catch (Exception e) {
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
             }
         });
 
@@ -292,6 +301,7 @@ public class Recipe_activity extends AppCompatActivity {
         Intent intentWear = new Intent(this, WearService.class);
         intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS_SEND.name());
         intentWear.putExtra(WearService.INSTRUCTIONS, analysedInstructions);
+        intentWear.putExtra(WearService.ACTIVITY_TO_START, BuildConfig.W_recipe_instructions_activity);
         this.startService(intentWear);
     }
 

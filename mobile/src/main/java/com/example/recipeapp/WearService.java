@@ -105,10 +105,13 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
         PutDataMapRequest putDataMapRequest;
         switch (action) {
-            case STARTACTIVITY:
-                String activity = intent.getStringExtra(ACTIVITY_TO_START);
-                sendMessage(activity, BuildConfig.W_path_start_activity);
-                break;
+
+            //case STARTACTIVITY:
+             //   String activity = intent.getStringExtra(ACTIVITY_TO_START);
+              //  sendMessage(activity, BuildConfig.W_path_start_activity);
+               // break;
+
+            
             case STOPACTIVITY:
                 String activityStop = intent.getStringExtra(ACTIVITY_TO_STOP);
                 sendMessage(activityStop, BuildConfig.W_path_stop_activity);
@@ -133,10 +136,11 @@ public class WearService extends WearableListenerService {
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             case INSTRUCTIONS_SEND:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_profile_path);
-                AnalysedInstructions instructions = (AnalysedInstructions) intent.getSerializableExtra(PROFILE);
-                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_profile_key, instructions
-                        .toDataMap());
+                String activity = intent.getStringExtra(ACTIVITY_TO_START);
+                sendMessage(activity, BuildConfig.W_path_start_activity);
+                AnalysedInstructions instructions = (AnalysedInstructions) intent.getParcelableExtra(INSTRUCTIONS);
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
+                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions.toDataMap());
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
@@ -188,11 +192,9 @@ public class WearService extends WearableListenerService {
                 ArrayList<Integer> arrayList = new ArrayList<>();
                 Collections.addAll(arrayList, 5, 7, 9, 10);
 
-                PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(BuildConfig
-                        .W_example_path_datamap);
+                PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_datamap);
                 putDataMapRequest.getDataMap().putInt(BuildConfig.W_a_key, 42);
-                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key,
-                        arrayList);
+                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key,arrayList);
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:

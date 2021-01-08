@@ -21,7 +21,7 @@ public class ShowAlarm extends BroadcastReceiver {
         myNotif.setContentTitle("Recipe Done");
         myNotif.setContentText("Your dish should now be ready!");
 
-        Intent i1 = new Intent(context, recipe_instructions.class);
+        Intent i1 = new Intent(context, RecipeInstructionsActivity.class);
         PendingIntent pd = PendingIntent.getActivity(context,0,i1,0);
         myNotif.setContentIntent(pd);
         myNotif.setAutoCancel(true);

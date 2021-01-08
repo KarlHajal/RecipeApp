@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,7 +16,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
@@ -103,10 +108,10 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
         PutDataMapRequest putDataMapRequest;
         switch (action) {
-            case STARTACTIVITY:
-                String activity = intent.getStringExtra(ACTIVITY_TO_START);
-                sendMessage(activity, BuildConfig.W_path_start_activity);
-                break;
+            //case STARTACTIVITY:
+            //    String activity = intent.getStringExtra(ACTIVITY_TO_START);
+            //    sendMessage(activity, BuildConfig.W_path_start_activity);
+            //    break;
             case MESSAGE:
                 String message = intent.getStringExtra(MESSAGE);
                 if (message == null) message = "";
@@ -140,6 +145,14 @@ public class WearService extends WearableListenerService {
                         .getDoubleExtra(LONGITUDE, -1));
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
+            case INSTRUCTIONS_SEND:
+                String activity = intent.getStringExtra(ACTIVITY_TO_START);
+                sendMessage(activity, BuildConfig.W_path_start_activity);
+                //putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
+                //putDataMapRequest.getDataMap().putDouble(BuildConfig.W_instructions_key, intent
+                //        .getDoubleExtra(INSTRUCTIONS, -1));
+                //sendPutDataMapRequest(putDataMapRequest);
+                break;
             default:
                 Log.w(TAG, "Unknown action");
                 break;
@@ -147,7 +160,6 @@ public class WearService extends WearableListenerService {
 
         return START_NOT_STICKY;
     }
-
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
@@ -158,10 +170,9 @@ public class WearService extends WearableListenerService {
         Log.v(TAG, "Received a message for path " + path + " : \"" + data + "\", from node " +
                 messageEvent.getSourceNodeId());
 
-        if (path.equals(BuildConfig.W_path_start_activity) && data.equals(BuildConfig
-                .W_mainactivity)) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
+//        if (path.equals(BuildConfig.W_path_start_activity) && data.equals(BuildConfig.W_mainactivity)) {
+//            startActivity(new Intent(this, MainActivity.class));
+//        }
 
         switch (path) {
             case BuildConfig.W_path_start_activity:
@@ -171,9 +182,9 @@ public class WearService extends WearableListenerService {
                     case BuildConfig.W_mainactivity:
                         startIntent = new Intent(this, MainActivity.class);
                         break;
-                    case BuildConfig.W_recordingactivity:
+                    case BuildConfig.W_recipe_instructions_activity:
                         Log.d(TAG, "Start recording message received");
-                        startIntent = new Intent(this, recipe_instructions.class);
+                        startIntent = new Intent(this, RecipeInstructionsActivity.class);
                         break;
                 }
 
@@ -186,9 +197,9 @@ public class WearService extends WearableListenerService {
                 break;
             case BuildConfig.W_path_stop_activity:
                 switch (data) {
-                    case BuildConfig.W_recordingactivity:
+                    case BuildConfig.W_recipe_instructions_activity:
                         Intent intentStop = new Intent();
-                        intentStop.setAction(recipe_instructions.STOP_ACTIVITY);
+                        intentStop.setAction(RecipeInstructionsActivity.STOP_ACTIVITY);
                         LocalBroadcastManager.getInstance(WearService.this).sendBroadcast
                                 (intentStop);
                         break;
@@ -212,6 +223,62 @@ public class WearService extends WearableListenerService {
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + new String
                         (messageEvent.getData()));
+        }
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEvents) {
+        Log.v(TAG, "onDataChanged: " + dataEvents);
+
+        for (DataEvent event : dataEvents) {
+
+            // Get the URI of the event
+            Uri uri = event.getDataItem().getUri();
+
+            // Test if data has changed or has been removed
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
+
+                // Extract the dataMap from the event
+                DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
+
+                Log.v(TAG, "DataItem Changed: " + event.getDataItem().toString() + "\n" +
+                        "\tPath: " + uri + "\tDatamap: " + dataMapItem.getDataMap() + "\n");
+
+                Intent intent;
+
+                assert uri.getPath() != null;
+                switch (uri.getPath()) {
+                    case BuildConfig.W_example_path_asset:
+                        // Extract the data behind the key you know contains data
+                        Asset asset = dataMapItem.getDataMap().getAsset(BuildConfig
+                                .W_some_other_key);
+                        intent = new Intent
+                                ("REPLACE_THIS_WITH_A_STRING_OF_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
+                        bitmapFromAsset(asset, intent,
+                                "REPLACE_THIS_WITH_A_STRING_OF_IMAGE_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
+                        break;
+                    case BuildConfig.W_instructions_path:
+                        // Extract the data behind the key you know contains data
+                        DataMap instructionDataMap = dataMapItem.getDataMap().getDataMap(BuildConfig.W_instructions_key);
+                        AnalysedInstructions instructions = new AnalysedInstructions(instructionDataMap);
+                        Log.i(TAG, "received instructions " + instructions.toString());
+//                        intent = new Intent
+//                                ("REPLACE_THIS_WITH_A_STRING_OF_ANOTHER_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
+//                        intent.putExtra
+//                                ("REPLACE_THIS_WITH_A_STRING_OF_INTEGER_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", instructions);
+//                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                        break;
+                    default:
+                        Log.v(TAG, "Data changed for unhandled path: " + uri);
+                        Log.v(TAG, BuildConfig.W_profile_path);
+                        break;
+                }
+            } else if (event.getType() == DataEvent.TYPE_DELETED) {
+                Log.w(TAG, "DataItem deleted: " + event.getDataItem().toString());
+            }
+
+            // For demo, send a acknowledgement message back to the node that created the data item
+            sendMessage("Received data OK!", BuildConfig.W_path_acknowledge, uri.getHost());
         }
     }
 
@@ -298,6 +365,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, HEART_RATE, LOCATION,
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, HEART_RATE, LOCATION,INSTRUCTIONS_SEND,
     }
 }
