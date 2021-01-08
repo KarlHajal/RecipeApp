@@ -1,12 +1,13 @@
 package com.example.recipeapp;
 
 import android.os.Bundle;
+import android.support.wearable.activity.WearableActivity;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RecipeInstructionsActivity extends AppCompatActivity {
+public class RecipeInstructionsActivity extends WearableActivity {
     public static final String STOP_ACTIVITY = "STOP_ACTIVITY";
 
     private TextView tv_instructionStep;

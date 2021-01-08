@@ -18,8 +18,11 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="#7BCD4F"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="6dp">
 
             <TextView
                 android:id="@+id/tv_instruction_step"
@@ -30,6 +33,7 @@
         </ScrollView>
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -41,15 +45,18 @@
                 android:id="@+id/bt_prev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="#F5343E95"
                 android:contentDescription="prev"
-                app:srcCompat="@android:drawable/ic_media_previous" />
+                android:src="@android:drawable/ic_media_previous" />
 
             <ImageButton
                 android:id="@+id/bt_next"
-                android:layout_width="56dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="#963EB6"
                 android:contentDescription="next"
-                app:srcCompat="@android:drawable/ic_media_next" />
+                android:foregroundTint="#FFFFFF"
+                android:src="@android:drawable/ic_media_next" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
