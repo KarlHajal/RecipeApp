@@ -19,6 +19,7 @@ import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
@@ -161,65 +162,6 @@ public class WearService extends WearableListenerService {
     }
 
     @Override
-    public void onDataChanged(DataEventBuffer dataEvents) {
-        Log.v(TAG, "onDataChanged: " + dataEvents);
-
-        for (DataEvent event : dataEvents) {
-
-            // Get the URI of the event
-            Uri uri = event.getDataItem().getUri();
-
-            // Test if data has changed or has been removed
-            if (event.getType() == DataEvent.TYPE_CHANGED) {
-
-                // Extract the dataMap from the event
-                DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-
-                Log.v(TAG, "DataItem Changed: " + event.getDataItem().toString() + "\n" +
-                        "\tPath: " + uri + "\tDatamap: " + dataMapItem.getDataMap() + "\n");
-
-                Intent intent;
-
-                assert uri.getPath() != null;
-                switch (uri.getPath()) {
-                    case BuildConfig.W_example_path_asset:
-                        // Extract the data behind the key you know contains data
-                        Asset asset = dataMapItem.getDataMap().getAsset(BuildConfig
-                                .W_some_other_key);
-                        intent = new Intent
-                                ("REPLACE_THIS_WITH_A_STRING_OF_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        bitmapFromAsset(asset, intent,
-                                "REPLACE_THIS_WITH_A_STRING_OF_IMAGE_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        break;
-                    case BuildConfig.W_example_path_datamap:
-                        // Extract the data behind the key you know contains data
-                        int integer = dataMapItem.getDataMap().getInt(BuildConfig.W_a_key);
-                        ArrayList<Integer> arraylist = dataMapItem.getDataMap()
-                                .getIntegerArrayList(BuildConfig.W_some_other_key);
-                        for (Integer i : arraylist)
-                            Log.i(TAG, "Got integer " + i + " from array list");
-                        intent = new Intent
-                                ("REPLACE_THIS_WITH_A_STRING_OF_ANOTHER_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        intent.putExtra
-                                ("REPLACE_THIS_WITH_A_STRING_OF_INTEGER_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", integer);
-                        intent.putExtra
-                                ("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-                        break;
-                    default:
-                        Log.v(TAG, "Data changed for unhandled path: " + uri);
-                        Log.v(TAG, BuildConfig.W_profile_path);
-                        break;
-                }
-            } else if (event.getType() == DataEvent.TYPE_DELETED) {
-                Log.w(TAG, "DataItem deleted: " + event.getDataItem().toString());
-            }
-
-            // For demo, send a acknowledgement message back to the node that created the data item
-            sendMessage("Received data OK!", BuildConfig.W_path_acknowledge, uri.getHost());
-        }
-    }
-    @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         // A message has been received from the Wear API
         // Get the URI of the event
@@ -228,10 +170,9 @@ public class WearService extends WearableListenerService {
         Log.v(TAG, "Received a message for path " + path + " : \"" + data + "\", from node " +
                 messageEvent.getSourceNodeId());
 
-        if (path.equals(BuildConfig.W_path_start_activity) && data.equals(BuildConfig
-                .W_mainactivity)) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
+//        if (path.equals(BuildConfig.W_path_start_activity) && data.equals(BuildConfig.W_mainactivity)) {
+//            startActivity(new Intent(this, MainActivity.class));
+//        }
 
         switch (path) {
             case BuildConfig.W_path_start_activity:
@@ -282,6 +223,62 @@ public class WearService extends WearableListenerService {
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + new String
                         (messageEvent.getData()));
+        }
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEvents) {
+        Log.v(TAG, "onDataChanged: " + dataEvents);
+
+        for (DataEvent event : dataEvents) {
+
+            // Get the URI of the event
+            Uri uri = event.getDataItem().getUri();
+
+            // Test if data has changed or has been removed
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
+
+                // Extract the dataMap from the event
+                DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
+
+                Log.v(TAG, "DataItem Changed: " + event.getDataItem().toString() + "\n" +
+                        "\tPath: " + uri + "\tDatamap: " + dataMapItem.getDataMap() + "\n");
+
+                Intent intent;
+
+                assert uri.getPath() != null;
+                switch (uri.getPath()) {
+                    case BuildConfig.W_example_path_asset:
+                        // Extract the data behind the key you know contains data
+                        Asset asset = dataMapItem.getDataMap().getAsset(BuildConfig
+                                .W_some_other_key);
+                        intent = new Intent
+                                ("REPLACE_THIS_WITH_A_STRING_OF_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
+                        bitmapFromAsset(asset, intent,
+                                "REPLACE_THIS_WITH_A_STRING_OF_IMAGE_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
+                        break;
+                    case BuildConfig.W_instructions_path:
+                        // Extract the data behind the key you know contains data
+                        DataMap instructionDataMap = dataMapItem.getDataMap().getDataMap(BuildConfig.W_instructions_key);
+                        AnalysedInstructions instructions = new AnalysedInstructions(instructionDataMap);
+                        Log.i(TAG, "received instructions " + instructions.toString());
+//                        intent = new Intent
+//                                ("REPLACE_THIS_WITH_A_STRING_OF_ANOTHER_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
+//                        intent.putExtra
+//                                ("REPLACE_THIS_WITH_A_STRING_OF_INTEGER_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", instructions);
+//                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                        break;
+                    default:
+                        Log.v(TAG, "Data changed for unhandled path: " + uri);
+                        Log.v(TAG, BuildConfig.W_profile_path);
+                        break;
+                }
+            } else if (event.getType() == DataEvent.TYPE_DELETED) {
+                Log.w(TAG, "DataItem deleted: " + event.getDataItem().toString());
+            }
+
+            // For demo, send a acknowledgement message back to the node that created the data item
+            sendMessage("Received data OK!", BuildConfig.W_path_acknowledge, uri.getHost());
         }
     }
 

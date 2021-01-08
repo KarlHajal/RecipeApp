@@ -31,5 +31,6 @@
     <string name="no_favorite_yet">You have not saved any recipe yet</string>
     <string name="favourites">See Favourites</string>
     <string name="img_of_recipe">fav recipe image</string>
+    <string name="sign_out">Sign out</string>
 
 </resources>

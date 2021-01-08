@@ -138,12 +138,10 @@ public class WearService extends WearableListenerService {
             case INSTRUCTIONS_SEND:
                 String activity = intent.getStringExtra(ACTIVITY_TO_START);
                 sendMessage(activity, BuildConfig.W_path_start_activity);
-               // putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
-                //AnalysedInstructions instructions = (AnalysedInstructions) intent.getSerializableExtra(INSTRUCTIONS);
-                //putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
-                //putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions
-                //        .toDataMap());
-                //sendPutDataMapRequest(putDataMapRequest);
+                AnalysedInstructions instructions = (AnalysedInstructions) intent.getParcelableExtra(INSTRUCTIONS);
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
+                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions.toDataMap());
+                sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
                 Log.w(TAG, "Unknown action \" " + action + " \" ");
@@ -194,11 +192,9 @@ public class WearService extends WearableListenerService {
                 ArrayList<Integer> arrayList = new ArrayList<>();
                 Collections.addAll(arrayList, 5, 7, 9, 10);
 
-                PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(BuildConfig
-                        .W_example_path_datamap);
+                PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_datamap);
                 putDataMapRequest.getDataMap().putInt(BuildConfig.W_a_key, 42);
-                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key,
-                        arrayList);
+                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key,arrayList);
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
