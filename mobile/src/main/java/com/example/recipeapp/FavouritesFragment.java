@@ -1,20 +1,13 @@
 package com.example.recipeapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +29,6 @@ public class FavouritesFragment extends Fragment {
     private RecyclerView myrv;
     private DatabaseReference mRootRef;
     private FirebaseAuth mAuth;
-    private ProgressBar progressBar;
     private TextView emptyView;
 
     public static Fragment newInstance() {
@@ -54,10 +46,10 @@ public class FavouritesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View RootView = inflater.inflate(R.layout.fragment_favourites, container, false);
-        Toolbar mToolbarContact = RootView.findViewById(R.id.toolbar_favorites);
-        progressBar = RootView.findViewById(R.id.progressbar);
+       // Toolbar mToolbarContact = RootView.findViewById(R.id.toolbar_favorites);
+        //((AppCompatActivity) getActivity()).setSupportActionBar(mToolbarContact);
         emptyView= RootView.findViewById(R.id.empty_view);
-        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(mToolbarContact);
+        //((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(mToolbarContact);
         getFavorites(RootView);
         return RootView;
     }
@@ -78,7 +70,6 @@ public class FavouritesFragment extends Fragment {
                         lstFavorites.add(new Recipe(recipe.toString(), title, img, 0, 0,0));
                     }
                 }
-                progressBar.setVisibility(View.GONE);
                 myrv = rootView.findViewById(R.id.recycleview_favorites);
                 if(lstFavorites.isEmpty()){
                     myrv.setVisibility(View.GONE);
@@ -98,26 +89,4 @@ public class FavouritesFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.log_out, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.main_log_out) {
-            FirebaseAuth.getInstance().signOut();
-            sendToLogin();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    private void sendToLogin() {
-        Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(loginIntent);
-        Objects.requireNonNull(getActivity()).finish();// The user can't come back to this page
-    }
 }

@@ -50,7 +50,7 @@
                 android:focusable="true"
                 app:backgroundTint="#E86565"
                 app:borderWidth="0.5dp"
-                app:srcCompat="@drawable/smartwatch" />
+                app:srcCompat="@drawable/applewatchapps" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_useontab"
@@ -60,12 +60,12 @@
                 android:layout_marginTop="-65dp"
                 android:layout_marginEnd="125dp"
                 android:layout_marginBottom="10dp"
-                android:contentDescription="@string/useontab"
                 android:clickable="true"
+                android:contentDescription="@string/useontab"
                 android:focusable="true"
                 app:backgroundTint="#D8CDA6"
                 app:borderWidth="0.5dp"
-                app:srcCompat="@drawable/starticon" />
+                app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
