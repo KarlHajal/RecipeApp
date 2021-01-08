@@ -13,6 +13,7 @@ public class Alarm extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "onReceive");
         Toast.makeText(context, "Your dish should be ready!", Toast.LENGTH_LONG).show();
-        // todo - convert to notification
+
+        // todo fire notification tablet + watch
     }
 }

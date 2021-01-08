@@ -10,8 +10,8 @@
     <string name="health">health</string>
     <string name="not_healthy">nothealthy</string>
     <string name="vegetarian">veg</string>
-    <string name="ingredients">ingredients</string>
-    <string name="instructions">instructions</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="instructions">Instructions</string>
     <string name="validate_food_preferences">Done</string>
     <string name="ingredient_name">Ingredient_name</string>
     <string name="instruction_step">Instruction_step</string>
