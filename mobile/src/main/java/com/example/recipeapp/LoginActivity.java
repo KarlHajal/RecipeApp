@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -68,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 //else {
                     Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
                     LoginActivity.this.startActivity(goToHomepage);
+                    finish();
                 //}
 
             } else {
@@ -75,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
+                Toast.makeText(this, "Sign in failed.", Toast.LENGTH_SHORT).show();
+                createSignInIntent();
             }
         }
     }
