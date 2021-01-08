@@ -166,10 +166,9 @@ public class WearService extends WearableListenerService {
         Log.v(TAG, "Received a message for path " + path + " : \"" + data + "\", from node " +
                 messageEvent.getSourceNodeId());
 
-        if (path.equals(BuildConfig.W_path_start_activity) && data.equals(BuildConfig
-                .W_mainactivity)) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
+//        if (path.equals(BuildConfig.W_path_start_activity) && data.equals(BuildConfig.W_mainactivity)) {
+//            startActivity(new Intent(this, MainActivity.class));
+//        }
 
         switch (path) {
             case BuildConfig.W_path_start_activity:
