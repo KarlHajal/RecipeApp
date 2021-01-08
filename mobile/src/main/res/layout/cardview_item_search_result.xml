@@ -4,23 +4,25 @@
     android:id="@+id/search_result_cardview"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
+        <TextView
             android:id="@+id/search_result_recipe_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="cursive"
+            android:textAlignment="center"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <TextView
+        <ImageView
             android:id="@+id/search_result_recipe_img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="ImageView" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

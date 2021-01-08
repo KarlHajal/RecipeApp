@@ -30,11 +30,42 @@
                 android:layout_marginTop="-25dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="10dp"
+                android:contentDescription="@string/bookmark"
                 android:clickable="true"
                 android:focusable="true"
                 app:backgroundTint="#FFFFFF"
                 app:borderWidth="0.5dp"
-                tools:srcCompat="@tools:sample/avatars" />
+                app:srcCompat="@drawable/ca4477c4eeff8d0ac211fa114be21e6c" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_sendtowatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="-65dp"
+                android:layout_marginEnd="65dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:contentDescription="@string/sendtowatch"
+                android:focusable="true"
+                app:backgroundTint="#E86565"
+                app:borderWidth="0.5dp"
+                app:srcCompat="@drawable/smartwatch" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_useontab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="-65dp"
+                android:layout_marginEnd="125dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/useontab"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="#D8CDA6"
+                app:borderWidth="0.5dp"
+                app:srcCompat="@drawable/starticon" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -156,7 +187,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:text="@string/ingridients"
+                        android:text="@string/ingredients"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -181,6 +212,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
                         android:text="TextView" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recipe_instructions_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>

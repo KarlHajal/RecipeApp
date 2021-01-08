@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,20 +55,30 @@ public class LoginActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                if(response.isNewUser()){
-                    Intent goToRegistration = new Intent(LoginActivity.this, FoodPreferencesActivity.class);
-                    LoginActivity.this.startActivity(goToRegistration);
+                if(response.isNewUser()) {
+                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
+                    profileRef.child("intolerances").setValue("");
+                    profileRef.child("diet").setValue("");
                 }
-                else {
+
+                //if(response.isNewUser()){
+                //    Intent goToRegistration = new Intent(LoginActivity.this, EditProfileActivity.class);
+                //    LoginActivity.this.startActivity(goToRegistration);
+                //}
+                //else {
                     Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
                     LoginActivity.this.startActivity(goToHomepage);
-                }
+                    finish();
+                //}
 
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
+                Toast.makeText(this, "Sign in failed.", Toast.LENGTH_SHORT).show();
+                createSignInIntent();
             }
         }
     }

@@ -6,12 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".HomepageActivity">
 
-    <Button
-        android:id="@+id/sign_out"
-        android:layout_width="wrap_content"
+
+    <FrameLayout
+        android:id="@+id/homepage_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/homepage_navigation"
+        android:animateLayoutChanges="true"
+        app:layout_constraintBottom_toTopOf="@id/homepage_navigation">
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/homepage_navigation"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign out"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="261dp"
-        android:onClick="signOut"/>
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:itemIconTint="@color/colorAccent"
+        app:itemTextColor="@color/colorAccent"
+        app:menu="@menu/menu_homepage_bottom_navigation"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
