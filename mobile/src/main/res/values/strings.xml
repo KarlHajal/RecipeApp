@@ -28,8 +28,8 @@
     <string name="diet_non_restrictive">Non-Restrictive</string>
     <string name="nameTitle">Name</string>
     <string name="favorites">Favourites</string>
-    <string name="you_haven_t_saved_any_favorite_recipes_yet">You have not saved any recipe yet</string>
-    <string name="favourites">see favourites</string>
+    <string name="no_favorite_yet">You have not saved any recipe yet</string>
+    <string name="favourites">See Favourites</string>
     <string name="img_of_recipe">fav recipe image</string>
     <string name="sign_out">Sign out</string>
 
