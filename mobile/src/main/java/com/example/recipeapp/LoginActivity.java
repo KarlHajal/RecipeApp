@@ -60,18 +60,16 @@ public class LoginActivity extends AppCompatActivity {
                     final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
                     profileRef.child("intolerances").setValue("");
                     profileRef.child("diet").setValue("");
+
+                    Intent goToEditProfile = new Intent(LoginActivity.this, EditProfileActivity.class);
+                    startActivity(goToEditProfile);
+                }
+                else{
+                    Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
+                    startActivity(goToHomepage);
                 }
 
-                //if(response.isNewUser()){
-                //    Intent goToRegistration = new Intent(LoginActivity.this, EditProfileActivity.class);
-                //    LoginActivity.this.startActivity(goToRegistration);
-                //}
-                //else {
-                    Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
-                    LoginActivity.this.startActivity(goToHomepage);
-                    finish();
-                //}
-
+                finish();
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
