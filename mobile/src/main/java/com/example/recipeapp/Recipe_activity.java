@@ -84,7 +84,7 @@ public class Recipe_activity extends AppCompatActivity {
         ready_in = findViewById(R.id.recipe_ready_in);
         servings = findViewById(R.id.recipe_servings);
         healthy = findViewById(R.id.recipe_healthy);
-        vegeterian = findViewById(R.id.recipe_vegetarian);
+        //vegeterian = findViewById(R.id.recipe_vegetarian);
         instructions = findViewById(R.id.recipe_instructions);
         fab = findViewById(R.id.floatingActionButton);
         useontab = findViewById(R.id.fab_useontab);
