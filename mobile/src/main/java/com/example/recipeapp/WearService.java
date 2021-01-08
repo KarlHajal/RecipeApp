@@ -192,11 +192,9 @@ public class WearService extends WearableListenerService {
                 ArrayList<Integer> arrayList = new ArrayList<>();
                 Collections.addAll(arrayList, 5, 7, 9, 10);
 
-                PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(BuildConfig
-                        .W_example_path_datamap);
+                PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_datamap);
                 putDataMapRequest.getDataMap().putInt(BuildConfig.W_a_key, 42);
-                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key,
-                        arrayList);
+                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key,arrayList);
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
