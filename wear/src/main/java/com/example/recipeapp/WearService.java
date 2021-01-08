@@ -40,6 +40,7 @@ public class WearService extends WearableListenerService {
     public static final String LONGITUDE = "LONGITUDE";
     public static final String LATITUDE = "LATITUDE";
     public static final String INSTRUCTIONS = "INSTRUCTIONS";
+    public static final String ACCELERATION = "ACCELERATION";
 
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
@@ -108,53 +109,16 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
         PutDataMapRequest putDataMapRequest;
         switch (action) {
-            //case STARTACTIVITY:
-            //    String activity = intent.getStringExtra(ACTIVITY_TO_START);
-            //    sendMessage(activity, BuildConfig.W_path_start_activity);
-            //    break;
-            case MESSAGE:
-                String message = intent.getStringExtra(MESSAGE);
-                if (message == null) message = "";
-                sendMessage(message, intent.getStringExtra(PATH));
-                break;
-            case EXAMPLE_DATAMAP:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_datamap);
-                putDataMapRequest.getDataMap().putInt(BuildConfig.W_a_key, intent.getIntExtra
-                        (DATAMAP_INT, -1));
-                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key,
-                        intent.getIntegerArrayListExtra(DATAMAP_INT_ARRAYLIST));
+            case ACCELERATION:
+                Log.i(TAG, "ACCELERATION sending accel data");
+//                String acc = intent.getStringExtra(ACCELERATION);
+//                if (acc == null) acc = "";
+//                sendMessage(acc, BuildConfig.W_acceleration_path);
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_acceleration_path);
+                putDataMapRequest.getDataMap().putString(BuildConfig.W_acceleration_key, intent.getStringExtra(ACCELERATION));
                 sendPutDataMapRequest(putDataMapRequest);
-                break;
-            case EXAMPLE_ASSET:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_asset);
-                putDataMapRequest.getDataMap().putAsset(BuildConfig.W_some_other_key, (Asset)
-                        intent.getParcelableExtra(IMAGE));
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
-            case HEART_RATE:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_heart_rate_path);
-                putDataMapRequest.getDataMap().putInt(BuildConfig.W_heart_rate_key, intent
-                        .getIntExtra(HEART_RATE, -1));
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
-            case LOCATION:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_location_path);
-                putDataMapRequest.getDataMap().putDouble(BuildConfig.W_latitude_key, intent
-                        .getDoubleExtra(LATITUDE, -1));
-                putDataMapRequest.getDataMap().putDouble(BuildConfig.W_longitude_key, intent
-                        .getDoubleExtra(LONGITUDE, -1));
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
-            case INSTRUCTIONS_SEND:
-                String activity = intent.getStringExtra(ACTIVITY_TO_START);
-                sendMessage(activity, BuildConfig.W_path_start_activity);
-                //putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
-                //putDataMapRequest.getDataMap().putDouble(BuildConfig.W_instructions_key, intent
-                //        .getDoubleExtra(INSTRUCTIONS, -1));
-                //sendPutDataMapRequest(putDataMapRequest);
-                break;
             default:
-                Log.w(TAG, "Unknown action");
+                Log.w(TAG, "Unknown action " + action);
                 break;
         }
 
@@ -169,10 +133,6 @@ public class WearService extends WearableListenerService {
         String data = new String(messageEvent.getData());
         Log.v(TAG, "Received a message for path " + path + " : \"" + data + "\", from node " +
                 messageEvent.getSourceNodeId());
-
-//        if (path.equals(BuildConfig.W_path_start_activity) && data.equals(BuildConfig.W_mainactivity)) {
-//            startActivity(new Intent(this, MainActivity.class));
-//        }
 
         switch (path) {
             case BuildConfig.W_path_start_activity:
@@ -205,21 +165,6 @@ public class WearService extends WearableListenerService {
                         break;
                 }
                 break;
-            case BuildConfig.W_path_acknowledge:
-                Log.v(TAG, "Received acknowledgment");
-                break;
-            case BuildConfig.W_example_path_text:
-                Log.v(TAG, "Message contained text. Return a datamap for demo purpose");
-                ArrayList<Integer> arrayList = new ArrayList<>();
-                Collections.addAll(arrayList, 5, 7, 9, 10);
-
-                PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(BuildConfig
-                        .W_example_path_datamap);
-                putDataMapRequest.getDataMap().putInt(BuildConfig.W_a_key, 42);
-                putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.W_some_other_key,
-                        arrayList);
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + new String
                         (messageEvent.getData()));
@@ -248,15 +193,6 @@ public class WearService extends WearableListenerService {
 
                 assert uri.getPath() != null;
                 switch (uri.getPath()) {
-                    case BuildConfig.W_example_path_asset:
-                        // Extract the data behind the key you know contains data
-                        Asset asset = dataMapItem.getDataMap().getAsset(BuildConfig
-                                .W_some_other_key);
-                        intent = new Intent
-                                ("REPLACE_THIS_WITH_A_STRING_OF_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        bitmapFromAsset(asset, intent,
-                                "REPLACE_THIS_WITH_A_STRING_OF_IMAGE_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        break;
                     case BuildConfig.W_instructions_path:
                         // Extract the data behind the key you know contains data
                         DataMap instructionDataMap = dataMapItem.getDataMap().getDataMap(BuildConfig.W_instructions_key);
@@ -270,32 +206,12 @@ public class WearService extends WearableListenerService {
                         break;
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
-                        Log.v(TAG, BuildConfig.W_profile_path);
                         break;
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {
                 Log.w(TAG, "DataItem deleted: " + event.getDataItem().toString());
             }
-
-            // For demo, send a acknowledgement message back to the node that created the data item
-            sendMessage("Received data OK!", BuildConfig.W_path_acknowledge, uri.getHost());
         }
-    }
-
-    private void sendMessage(String message, String path, final String nodeId) {
-        // Sends a message through the Wear API
-        Wearable.getMessageClient(this).sendMessage(nodeId, path, message.getBytes())
-                .addOnSuccessListener(new OnSuccessListener<Integer>() {
-                    @Override
-                    public void onSuccess(Integer integer) {
-                        Log.v(TAG, "Sent message to " + nodeId + ". Result = " + integer);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "Message not sent. " + e.getMessage());
-            }
-        });
     }
 
     private void sendMessage(String message, String path) {
@@ -314,6 +230,22 @@ public class WearService extends WearableListenerService {
                     Log.v(TAG, "Try to send message to a specific node");
                     WearService.this.sendMessage(message, path, node.getId());
                 }
+            }
+        });
+    }
+
+    private void sendMessage(String message, String path, final String nodeId) {
+        // Sends a message through the Wear API
+        Wearable.getMessageClient(this).sendMessage(nodeId, path, message.getBytes())
+                .addOnSuccessListener(new OnSuccessListener<Integer>() {
+                    @Override
+                    public void onSuccess(Integer integer) {
+                        Log.v(TAG, "Sent message to " + nodeId + ". Result = " + integer);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "Message not sent. " + e.getMessage());
             }
         });
     }
@@ -365,6 +297,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, HEART_RATE, LOCATION,INSTRUCTIONS_SEND,
+        ACCELERATION
     }
 }

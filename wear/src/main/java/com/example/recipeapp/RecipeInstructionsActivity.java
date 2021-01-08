@@ -1,5 +1,10 @@
 package com.example.recipeapp;
 
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -10,7 +15,7 @@ import android.widget.TextView;
 
 import static com.example.recipeapp.WearService.INSTRUCTIONS;
 
-public class RecipeInstructionsActivity extends WearableActivity {
+public class RecipeInstructionsActivity extends WearableActivity implements SensorEventListener {
     public static final String STOP_ACTIVITY = "STOP_ACTIVITY";
 
     private TextView tv_instructionStep;
@@ -18,6 +23,9 @@ public class RecipeInstructionsActivity extends WearableActivity {
     private int currentInstructionShown;
 
     private AnalysedInstructions instructions;
+
+    private SensorManager mSensorManager;
+    private Sensor mSensor_acc;
 
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
@@ -41,8 +49,29 @@ public class RecipeInstructionsActivity extends WearableActivity {
         bt_prev.setOnClickListener(onClickListener);
         bt_next.setOnClickListener(onClickListener);
 
+        // get sensor manager for accelerometer
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        mSensor_acc = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if(mSensor_acc == null){
+            Log.w(TAG, "no TYPE_ACCELEROMETER sensor");
+        }
+
         // Enables Always-on
         setAmbientEnabled();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register accelerometer
+        mSensorManager.registerListener(this, mSensor_acc, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // unregister accelerometer
+        mSensorManager.unregisterListener(this);
     }
 
     private void updateInstructionsDisplay() {
@@ -82,4 +111,32 @@ public class RecipeInstructionsActivity extends WearableActivity {
             updateInstructionsDisplay();
         }
     };
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        switch(event.sensor.getType()) {
+            case Sensor.TYPE_ACCELEROMETER:
+                // get accelerometer data
+                float acc_x = event.values[0], acc_y = -event.values[1], acc_z = event.values[2];
+                String acc = acc_x + " " + acc_y + " " + acc_z;
+                sendAccToMobile(acc);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    private void sendAccToMobile(String acc) {
+        Log.i(TAG, "sendAccToMobile - sending new acc data : " + acc);
+        Intent intent = new Intent(this, WearService.class);
+        intent.setAction(WearService.ACTION_SEND.ACCELERATION.name());
+        intent.putExtra(WearService.ACCELERATION, acc);
+        this.startService(intent);
+    }
+
 }
