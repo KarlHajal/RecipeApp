@@ -27,5 +27,6 @@
     <string name="dietTitle">Diet</string>
     <string name="diet_non_restrictive">Non-Restrictive</string>
     <string name="nameTitle">Name</string>
+    <string name="sign_out">Sign out</string>
 
 </resources>

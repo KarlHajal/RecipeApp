@@ -81,6 +81,14 @@ public class ProfileFragment extends Fragment {
             intent.putExtras(b); //Put your id to your next Intent
             startActivityForResult(intent, EDIT_PROFILE);
         }
+        else if (item.getItemId() == R.id.sign_out_button){
+
+            FirebaseAuth.getInstance().signOut();
+
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 
