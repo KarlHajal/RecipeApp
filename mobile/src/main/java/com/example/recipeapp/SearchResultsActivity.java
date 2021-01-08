@@ -3,9 +3,18 @@ package com.example.recipeapp;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,11 +37,15 @@ public class SearchResultsActivity extends AppCompatActivity {
     private JSONArray resultsArr;
     private List<Recipe> lstRecipe = new ArrayList<>();
     private static String TAG = "SearchResultsActivity";
-
+    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static final DatabaseReference profileRef = database.getReference("profiles/" + user.getUid());
+    private Profile userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        readUserProfile();
         setContentView(R.layout.activity_search_results);
         String searchText = getIntent().getExtras().getString("ingredient_value");
         try {
@@ -42,6 +55,25 @@ public class SearchResultsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void readUserProfile() {
+        profileRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String diet = dataSnapshot.child("diet").getValue(String.class);
+                String intolerances = dataSnapshot.child("intolerances").getValue(String.class);
+
+                userProfile = new Profile(diet, intolerances);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Empty
+            }
+        });
+    }
+
 
     private String getStringFromList(List<String> ingredientsList) {
         StringBuilder result= new StringBuilder(ingredientsList.get(0));
@@ -55,7 +87,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void getResults(String searchText) throws JSONException, IOException {
         search_results = findViewById(R.id.ingredients_search_result);
         search_results.setLayoutManager(new GridLayoutManager(this, 2));
-        String URL = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + searchText + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710";
+        String URL = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + searchText + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710"+ "&diet=" + userProfile.diet ;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
