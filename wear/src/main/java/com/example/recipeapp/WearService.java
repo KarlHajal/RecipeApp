@@ -110,13 +110,15 @@ public class WearService extends WearableListenerService {
         PutDataMapRequest putDataMapRequest;
         switch (action) {
             case ACCELERATION:
-                Log.i(TAG, "ACCELERATION sending accel data");
 //                String acc = intent.getStringExtra(ACCELERATION);
 //                if (acc == null) acc = "";
 //                sendMessage(acc, BuildConfig.W_acceleration_path);
+                float[] acc = intent.getFloatArrayExtra(ACCELERATION);
+                Log.v(TAG, "ACCELERATION sending accel data" + acc[0] +" "+ acc[1] +" "+ acc[2]);
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_acceleration_path);
-                putDataMapRequest.getDataMap().putFloatArray(BuildConfig.W_acceleration_key, intent.getFloatArrayExtra(ACCELERATION));
+                putDataMapRequest.getDataMap().putFloatArray(BuildConfig.W_acceleration_key, acc);
                 sendPutDataMapRequest(putDataMapRequest);
+                break;
             default:
                 Log.w(TAG, "Unknown action " + action);
                 break;
