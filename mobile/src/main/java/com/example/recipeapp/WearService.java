@@ -179,16 +179,16 @@ public class WearService extends WearableListenerService {
                 switch (uri.getPath()) {
                     case BuildConfig.W_acceleration_path:
                         // Extract the data behind the key you know contains data
-                        String data = dataMapItem.getDataMap().getString(BuildConfig.W_acceleration_key);
-                        Log.i(TAG, "received acceleration data " + data);
+                        float[] acc = dataMapItem.getDataMap().getFloatArray(BuildConfig.W_acceleration_key);
+                        Log.v(TAG, "received acceleration data " + acc[0] +" "+ acc[1] +" "+ acc[2]);
 
                         // todo listen to this broadcast to do something with acceleration data
                         intent = new Intent(ACTION_ACCELERATION);
-                        intent.putExtra("accel", data);
+                        intent.putExtra("accel", acc);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                         break;
                     default:
-                        Log.v(TAG, "Data changed for unhandled path: " + uri);
+                        Log.w(TAG, "Data changed for unhandled path: " + uri);
                         break;
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {

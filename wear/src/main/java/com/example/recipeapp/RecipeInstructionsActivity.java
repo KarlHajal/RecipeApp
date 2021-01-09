@@ -117,8 +117,10 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
         switch(event.sensor.getType()) {
             case Sensor.TYPE_ACCELEROMETER:
                 // get accelerometer data
-                float acc_x = event.values[0], acc_y = -event.values[1], acc_z = event.values[2];
-                String acc = acc_x + " " + acc_y + " " + acc_z;
+                float[] acc = new float[3];
+                acc[0] = event.values[0];
+                acc[1] = -event.values[1];
+                acc[2] = event.values[2];
                 sendAccToMobile(acc);
                 break;
             default:
@@ -131,8 +133,8 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
 
     }
 
-    private void sendAccToMobile(String acc) {
-        Log.i(TAG, "sendAccToMobile - sending new acc data : " + acc);
+    private void sendAccToMobile(float[] acc) {
+        Log.v(TAG, "sendAccToMobile - sending new acc data : " + acc[0] +" "+ acc[1] +" "+ acc[2]);
         Intent intent = new Intent(this, WearService.class);
         intent.setAction(WearService.ACTION_SEND.ACCELERATION.name());
         intent.putExtra(WearService.ACCELERATION, acc);
