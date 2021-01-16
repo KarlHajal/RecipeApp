@@ -47,6 +47,17 @@ public class AnalysedInstructions implements Parcelable {
         return this.instructionSteps.get(index);
     }
 
+    @Override
+    public String toString(){
+        StringBuilder s = new StringBuilder("{ name " + name + ", size " + size() + ", instructionSteps ");
+        for(InstructionStep step:instructionSteps)
+        {
+            s.append(step.toString());
+        }
+        s.append("}");
+        return s.toString();
+    }
+
     // needed for dataMap -> sending through wear api
 
     public DataMap toDataMap() {

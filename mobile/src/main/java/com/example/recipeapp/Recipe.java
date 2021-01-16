@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 
 public class Recipe {
     private String id;
-    private String Title;
-    private String Thumbnail;
+    private String title;
+    private String thumbnail;
     private int servings;
     private int amountOfDishes;
     private int readyInMins;
@@ -13,12 +13,11 @@ public class Recipe {
 
     public Recipe(String id, String title, String thumbnail, int servings, int amountOfDishes, int readyInMins) {
         this.id = id;
-        Title = title;
-        Thumbnail = thumbnail;
+        this.title = title;
+        this.thumbnail = thumbnail;
         this.servings = servings;
         this.amountOfDishes = amountOfDishes;
         this.readyInMins = readyInMins;
-
     }
 
 
@@ -28,11 +27,11 @@ public class Recipe {
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public String getThumbnail() {
-        return Thumbnail;
+        return thumbnail;
     }
 
     public int getServings() {

@@ -57,9 +57,9 @@ public class Recipe_activity extends AppCompatActivity {
     private AnalysedInstructions analysedInstructions;
     private RecyclerView ingredients_rv;
     private RecyclerView instructions_rv;
-    private FloatingActionButton fab;
-    private FloatingActionButton useontab;
-    private FloatingActionButton sendtowatch;
+    private FloatingActionButton fab_bookmark;
+    private FloatingActionButton fab_useontab;
+    private FloatingActionButton fab_sendtowatch;
 
     private boolean like = false;
     private int RecipeAlarmTime;
@@ -86,9 +86,9 @@ public class Recipe_activity extends AppCompatActivity {
         healthy = findViewById(R.id.recipe_healthy);
         //vegeterian = findViewById(R.id.recipe_vegetarian);
         instructions = findViewById(R.id.recipe_instructions);
-        fab = findViewById(R.id.floatingActionButton);
-        useontab = findViewById(R.id.fab_useontab);
-        sendtowatch = findViewById(R.id.fab_sendtowatch);
+        fab_bookmark = findViewById(R.id.fab_bookmark);
+        fab_useontab = findViewById(R.id.fab_useontab);
+        fab_sendtowatch = findViewById(R.id.fab_sendtowatch);
 
         Log.v(TAG, "OnCreate - try getRecipeInstructions");
         try {
@@ -108,9 +108,9 @@ public class Recipe_activity extends AppCompatActivity {
         mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i("mRootRef", String.valueOf(dataSnapshot));
+                Log.v(TAG, String.valueOf(dataSnapshot));
                 if (dataSnapshot.getValue() != null) {
-                    fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    fab_bookmark.setImageResource(R.drawable.bookmarked);
                     like = true;
                 }
             }
@@ -121,7 +121,7 @@ public class Recipe_activity extends AppCompatActivity {
         });
 
         Log.v(TAG, "OnCreate - add listeners to fab");
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab_bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 like = !like;
@@ -129,14 +129,14 @@ public class Recipe_activity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (like) {
-                            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+                            fab_bookmark.setImageResource(R.drawable.bookmarked);
                             Map favorites = new HashMap();
                             favorites.put("img", intent.getExtras().getString("img"));
                             favorites.put("title", intent.getExtras().getString("title"));
                             mRootRef.setValue(favorites);
                         } else {
                             try {
-                                fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                                fab_bookmark.setImageResource(R.drawable.bookmark);
                                 mRootRef.setValue(null);
                             } catch (Exception e) {
                             }
@@ -150,7 +150,7 @@ public class Recipe_activity extends AppCompatActivity {
         });
 
         Log.i(TAG, "OnCreate - setting onclick to useontab fab");
-        useontab.setOnClickListener(new View.OnClickListener() {
+        fab_useontab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "useontab - onClick");
@@ -160,7 +160,7 @@ public class Recipe_activity extends AppCompatActivity {
         });
 
 
-        sendtowatch.setOnClickListener(new View.OnClickListener() {
+        fab_sendtowatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //send instructions to watch
@@ -299,9 +299,8 @@ public class Recipe_activity extends AppCompatActivity {
 
     private void sendRecipetoWatch() {
         Intent intentWear = new Intent(this, WearService.class);
-        intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS_SEND.name());
-        intentWear.putExtra(WearService.INSTRUCTIONS, analysedInstructions);
-        intentWear.putExtra(WearService.ACTIVITY_TO_START, BuildConfig.W_recipe_instructions_activity);
+        intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS.name());
+        intentWear.putExtra(WearService.EXTRA_INSTRUCTIONS, analysedInstructions);
         this.startService(intentWear);
     }
 
