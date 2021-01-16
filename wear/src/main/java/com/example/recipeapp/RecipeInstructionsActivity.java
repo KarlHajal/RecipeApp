@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -21,14 +20,14 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
     private TextView tv_instructionStep;
     private ImageButton bt_prev, bt_next;
     private int currentInstructionShown;
-    float totalAcc = 0;
-    float[] prevAcc = new float[3];
+    //float totalAcc = 0;
+    //float[] prevAcc = new float[3];
 
 
     private AnalysedInstructions instructions;
 
-    private SensorManager mSensorManager;
-    private Sensor mSensor_acc;
+    //private SensorManager mSensorManager;
+    //private Sensor mSensor_acc;
 
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
@@ -53,11 +52,11 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
         bt_next.setOnClickListener(onClickListener);
 
         // get sensor manager for accelerometer
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mSensor_acc = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if(mSensor_acc == null){
-            Log.w(TAG, "no TYPE_ACCELEROMETER sensor");
-        }
+      //  mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+      //  mSensor_acc = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+      //  if(mSensor_acc == null){
+      //      Log.w(TAG, "no TYPE_ACCELEROMETER sensor");
+       // }
 
         // Enables Always-on
         setAmbientEnabled();
@@ -67,17 +66,17 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
     protected void onResume() {
         super.onResume();
         // register accelerometer
-        mSensorManager.registerListener(this, mSensor_acc, SensorManager.SENSOR_DELAY_NORMAL);
+        //mSensorManager.registerListener(this, mSensor_acc, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         // unregister accelerometer
-        sendTotalAccToMobile(totalAcc);
-        totalAcc = 0;
-        Log.w(TAG, "instructions paused");
-        mSensorManager.unregisterListener(this);
+        //sendTotalAccToMobile(totalAcc);
+        //totalAcc = 0;
+        //Log.w(TAG, "instructions paused");
+        //mSensorManager.unregisterListener(this);
     }
 
     private void updateInstructionsDisplay() {
@@ -120,23 +119,23 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch(event.sensor.getType()) {
-            case Sensor.TYPE_ACCELEROMETER:
-                // get accelerometer data
-                float[] acc = new float[3];
-                acc[0] = event.values[0];
-                acc[1] = -event.values[1];
-                acc[2] = event.values[2];
-                totalAcc = (float) (totalAcc + Math.abs(prevAcc[0] - acc[0]) + Math.abs(prevAcc[1] - acc[1]) + Math.abs(prevAcc[2] - acc[2]));
-                prevAcc[0] = acc[0];
-                prevAcc[1] = acc[1];
-                prevAcc[2] = acc[2];
-//                sendAccToMobile(acc);
-                break;
-            default:
-                break;
-        }
-    }
+//        switch(event.sensor.getType()) {
+//            case Sensor.TYPE_ACCELEROMETER:
+//                // get accelerometer data
+//                float[] acc = new float[3];
+//                acc[0] = event.values[0];
+//                acc[1] = -event.values[1];
+//                acc[2] = event.values[2];
+//                totalAcc = (float) (totalAcc + Math.abs(prevAcc[0] - acc[0]) + Math.abs(prevAcc[1] - acc[1]) + Math.abs(prevAcc[2] - acc[2]));
+//                prevAcc[0] = acc[0];
+//                prevAcc[1] = acc[1];
+//                prevAcc[2] = acc[2];
+////                sendAccToMobile(acc);
+//                break;
+//            default:
+//                break;
+//        }
+   }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {

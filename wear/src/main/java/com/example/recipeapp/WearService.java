@@ -150,6 +150,8 @@ public class WearService extends WearableListenerService {
                     case BuildConfig.W_recipe_instructions_activity:
                         Log.d(TAG, "Start recipe instructions received");
                         startIntent = new Intent(this, RecipeInstructionsActivity.class);
+                        Intent ratingintent = new Intent(this, RatingService.class);
+                        startService(ratingintent);
                         break;
                 }
 

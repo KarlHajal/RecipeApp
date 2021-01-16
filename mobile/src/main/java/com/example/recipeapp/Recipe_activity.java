@@ -165,6 +165,8 @@ public class Recipe_activity extends AppCompatActivity {
             public void onClick(View v) {
                 //send instructions to watch
                 sendRecipetoWatch();
+
+
             }
         });
 
