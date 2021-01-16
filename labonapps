@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-01-16T23:13:17.811Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36" etag="aZcHLiPTf-i9AHK17tMb" version="14.2.4" type="github">
+<mxfile host="app.diagrams.net" modified="2021-01-16T23:16:41.157Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36" etag="tgpGU8_1ISZd-aaudIEx" version="14.2.4" type="github">
   <diagram id="J_TPFAno2ui0DlrbtSJd" name="Page-1">
     <mxGraphModel dx="782" dy="469" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -246,8 +246,8 @@
         <mxCell id="EFLHBBbD1i_Et0MEOCbq-103" value="Main Page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
           <mxGeometry x="290" y="590" width="120" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="EFLHBBbD1i_Et0MEOCbq-105" value="" style="image;html=1;image=img/lib/clip_art/general/Star_128x128.png;strokeWidth=4;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="476.5" y="200" width="30" height="28" as="geometry" />
+        <mxCell id="EFLHBBbD1i_Et0MEOCbq-106" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.star;fillColor=#0080f0;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="490" y="208" width="12" height="12" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
