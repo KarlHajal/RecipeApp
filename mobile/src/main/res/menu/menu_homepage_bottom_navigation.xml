@@ -10,6 +10,6 @@
         android:title="@string/search_for_recipes"/>
     <item
         android:id="@+id/favourites_button"
-        android:icon="@drawable/ca4477c4eeff8d0ac211fa114be21e6c"
+        android:icon="@drawable/bookmark"
         android:title="@string/favourites" />
 </menu>
