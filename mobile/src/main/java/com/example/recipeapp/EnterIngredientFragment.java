@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -44,7 +44,7 @@ public class EnterIngredientFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_enter_ingredient, container, false);
         mingredients = view.findViewById(R.id.ingredient);
 
-        Button rButton = view.findViewById(R.id.searchButton);
+        ImageButton rButton = view.findViewById(R.id.searchButton);
 
         rButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -21,6 +21,9 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
     private TextView tv_instructionStep;
     private ImageButton bt_prev, bt_next;
     private int currentInstructionShown;
+    float totalAcc = 0;
+    float[] prevAcc = new float[3];
+
 
     private AnalysedInstructions instructions;
 
@@ -71,6 +74,9 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
     protected void onPause() {
         super.onPause();
         // unregister accelerometer
+        sendTotalAccToMobile(totalAcc);
+        totalAcc = 0;
+        Log.w(TAG, "instructions paused");
         mSensorManager.unregisterListener(this);
     }
 
@@ -121,7 +127,11 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
                 acc[0] = event.values[0];
                 acc[1] = -event.values[1];
                 acc[2] = event.values[2];
-                sendAccToMobile(acc);
+                totalAcc = (float) (totalAcc + Math.abs(prevAcc[0] - acc[0]) + Math.abs(prevAcc[1] - acc[1]) + Math.abs(prevAcc[2] - acc[2]));
+                prevAcc[0] = acc[0];
+                prevAcc[1] = acc[1];
+                prevAcc[2] = acc[2];
+//                sendAccToMobile(acc);
                 break;
             default:
                 break;
@@ -138,6 +148,26 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
         Intent intent = new Intent(this, WearService.class);
         intent.setAction(WearService.ACTION_SEND.ACCELERATION.name());
         intent.putExtra(WearService.ACCELERATION, acc);
+        this.startService(intent);
+    }
+
+    private void sendTotalAccToMobile(float totalacc) {
+        Log.i(TAG, "sendTotalAccToMobile - sending total acc data : " + totalacc);
+        int rating = 0;
+        if (totalacc>100) {
+            rating = 5;
+        } else if ((totalacc>80)&(totalacc<=100)) {
+            rating = 4;
+        } else if ((totalacc>60)&(totalacc<=80)) {
+            rating = 3;
+        } else if ((totalacc>30)&(totalacc<=60)) {
+            rating = 2;
+        } else {
+            rating = 1;
+        }
+        Intent intent = new Intent(this, WearService.class);
+        intent.setAction(WearService.ACTION_SEND.TOTACCELERATION.name());
+        intent.putExtra(WearService.TOTACCELERATION, rating);
         this.startService(intent);
     }
 

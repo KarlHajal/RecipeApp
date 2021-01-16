@@ -48,7 +48,7 @@ public class FavouritesFragment extends Fragment {
         final View RootView = inflater.inflate(R.layout.fragment_favourites, container, false);
        // Toolbar mToolbarContact = RootView.findViewById(R.id.toolbar_favorites);
         //((AppCompatActivity) getActivity()).setSupportActionBar(mToolbarContact);
-        emptyView= RootView.findViewById(R.id.empty_view);
+        emptyView = RootView.findViewById(R.id.empty_view);
         //((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(mToolbarContact);
         getFavorites(RootView);
         return RootView;

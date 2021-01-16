@@ -30,8 +30,6 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class WearService extends WearableListenerService {
@@ -41,6 +39,7 @@ public class WearService extends WearableListenerService {
     public static final String LATITUDE = "LATITUDE";
     public static final String INSTRUCTIONS = "INSTRUCTIONS";
     public static final String ACCELERATION = "ACCELERATION";
+    public static final String TOTACCELERATION = "TOTACCELERATION";
 
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
@@ -118,6 +117,10 @@ public class WearService extends WearableListenerService {
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_acceleration_path);
                 putDataMapRequest.getDataMap().putFloatArray(BuildConfig.W_acceleration_key, acc);
                 sendPutDataMapRequest(putDataMapRequest);
+                break;
+            case TOTACCELERATION:
+                int rating = intent.getIntExtra(TOTACCELERATION,0);
+
                 break;
             default:
                 Log.w(TAG, "Unknown action " + action);
@@ -299,6 +302,7 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        ACCELERATION
+        ACCELERATION,
+        TOTACCELERATION;
     }
 }
