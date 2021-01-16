@@ -15,21 +15,21 @@ public class RatingService extends Service implements SensorEventListener {
     float[] prevAcc = new float[3];
     private SensorManager mSensorManager;
     private Sensor mSensor_acc;
+    long initTime;
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
-    public RatingService() {
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         super.onStartCommand(intent, flags, startId);
+        Log.i(TAG, "starting rating service");
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensor_acc = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, mSensor_acc, SensorManager.SENSOR_DELAY_NORMAL);
         if(mSensor_acc == null){
             Log.w(TAG, "no TYPE_ACCELEROMETER sensor");
         }
-        Log.w(TAG, "starting rating service");
+        initTime = System.currentTimeMillis();
         return START_NOT_STICKY;
     }
 
@@ -38,8 +38,8 @@ public class RatingService extends Service implements SensorEventListener {
         super.onDestroy();
         sendTotalAccToMobile(totalAcc);
         totalAcc = 0;
-        Log.w(TAG, "instructions paused");
         mSensorManager.unregisterListener(this);
+        Log.i(TAG, "rating service destroy");
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -54,7 +54,6 @@ public class RatingService extends Service implements SensorEventListener {
                 prevAcc[0] = acc[0];
                 prevAcc[1] = acc[1];
                 prevAcc[2] = acc[2];
-//                sendAccToMobile(acc);
                 break;
             default:
                 break;
@@ -68,6 +67,8 @@ public class RatingService extends Service implements SensorEventListener {
 
     private void sendTotalAccToMobile(float totalacc) {
         Log.i(TAG, "sendTotalAccToMobile - sending total acc data : " + totalacc);
+        long dt = (System.currentTimeMillis() - initTime)/1000;
+        totalacc = totalAcc / dt;
         int rating = 0;
         if (totalacc>100) {
             rating = 5;
@@ -83,6 +84,7 @@ public class RatingService extends Service implements SensorEventListener {
         Intent intent = new Intent(this, WearService.class);
         intent.setAction(WearService.ACTION_SEND.TOTACCELERATION.name());
         intent.putExtra(WearService.TOTACCELERATION, rating);
+        intent.putExtra(WearService.PATH, rating);
         this.startService(intent);
     }
     @Override

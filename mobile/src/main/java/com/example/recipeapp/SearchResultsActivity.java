@@ -39,7 +39,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         Log.v(TAG, "ingredient_to_search" + ingredient_to_search);
         userProfile = (Profile) getIntent().getExtras().getSerializable("user_profile");
         try {
-
             getResults(ingredient_to_search, userProfile);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
