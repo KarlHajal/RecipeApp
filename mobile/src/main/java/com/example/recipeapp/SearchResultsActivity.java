@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,6 +42,16 @@ public class SearchResultsActivity extends AppCompatActivity {
             getResults(searchText);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        RecyclerView.Adapter adapter = search_results.getAdapter();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
         }
     }
 

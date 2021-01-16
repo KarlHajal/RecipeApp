@@ -63,6 +63,9 @@ public class RecyclerViewAdapterSearchResult extends RecyclerView.Adapter<Recycl
                 if (dataSnapshot.getValue() != null) {
                     holder_copy.recipe_bookmark.setImageResource(R.drawable.bookmarked);
                 }
+                else {
+                    holder_copy.recipe_bookmark.setImageResource(R.drawable.bookmark);
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
