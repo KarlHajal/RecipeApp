@@ -54,11 +54,12 @@ public class RecyclerViewAdapterSearchResult extends RecyclerView.Adapter<Recycl
         final Recipe recipe = lstRecipe.get(position);
         final MyViewHolder holder_copy = holder;
         // todo check this : should check if the recipe is bookmarked by the user on the db
+        Log.v(TAG, "asking for recipe " + recipe.getId());
         DatabaseReference recipeRef = FirebaseDatabase.getInstance().getReference().child(uid).child(recipe.getId());
         recipeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.v(TAG, String.valueOf(dataSnapshot));
+                Log.i(TAG, "asking for recipe " + recipe.getId() + ", getting "+ String.valueOf(dataSnapshot));
                 if (dataSnapshot.getValue() != null) {
                     holder_copy.recipe_bookmark.setImageResource(R.drawable.bookmarked);
                 }
