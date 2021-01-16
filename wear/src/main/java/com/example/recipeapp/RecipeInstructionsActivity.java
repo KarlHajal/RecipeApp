@@ -131,7 +131,7 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
                 prevAcc[0] = acc[0];
                 prevAcc[1] = acc[1];
                 prevAcc[2] = acc[2];
-                sendAccToMobile(acc);
+//                sendAccToMobile(acc);
                 break;
             default:
                 break;
@@ -150,11 +150,24 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
         intent.putExtra(WearService.ACCELERATION, acc);
         this.startService(intent);
     }
+
     private void sendTotalAccToMobile(float totalacc) {
-        Log.v(TAG, "sendAccToMobile - sending total acc data : " + totalacc);
+        Log.i(TAG, "sendTotalAccToMobile - sending total acc data : " + totalacc);
+        int rating = 0;
+        if (totalacc>100) {
+            rating = 5;
+        } else if ((totalacc>80)&(totalacc<=100)) {
+            rating = 4;
+        } else if ((totalacc>60)&(totalacc<=80)) {
+            rating = 3;
+        } else if ((totalacc>30)&(totalacc<=60)) {
+            rating = 2;
+        } else {
+            rating = 1;
+        }
         Intent intent = new Intent(this, WearService.class);
         intent.setAction(WearService.ACTION_SEND.TOTACCELERATION.name());
-        intent.putExtra(WearService.TOTACCELERATION, totalacc);
+        intent.putExtra(WearService.TOTACCELERATION, rating);
         this.startService(intent);
     }
 
