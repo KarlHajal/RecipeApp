@@ -104,4 +104,7 @@ public class AnalysedInstructions implements Parcelable {
         }
     };
 
+    public boolean isInstructionsOk(){
+        return instructionsOk;
+    }
 }
