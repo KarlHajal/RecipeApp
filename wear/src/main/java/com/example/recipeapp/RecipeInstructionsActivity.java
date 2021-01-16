@@ -142,6 +142,12 @@ public class RecipeInstructionsActivity extends WearableActivity implements Sens
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent stopratingintent = new Intent(this, RatingService.class);
+        stopService(stopratingintent);
+    }
     private void sendAccToMobile(float[] acc) {
         Log.v(TAG, "sendAccToMobile - sending new acc data : " + acc[0] +" "+ acc[1] +" "+ acc[2]);
         Intent intent = new Intent(this, WearService.class);

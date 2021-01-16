@@ -29,6 +29,7 @@ public class RatingService extends Service implements SensorEventListener {
         if(mSensor_acc == null){
             Log.w(TAG, "no TYPE_ACCELEROMETER sensor");
         }
+        Log.w(TAG, "starting rating service");
         return START_NOT_STICKY;
     }
 

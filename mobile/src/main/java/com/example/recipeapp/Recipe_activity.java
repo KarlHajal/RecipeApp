@@ -179,6 +179,7 @@ public class Recipe_activity extends AppCompatActivity {
         instructions_rv.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
     private void getRecipeInstructions(final String recipeId) throws IOException, JSONException {
         //https://api.spoonacular.com/recipes/informationBulk?ids=1&apiKey=e5f41960a96343569669c5435cdc2710
         String URL = " https://api.spoonacular.com/recipes/" + recipeId + "/information?apiKey=e5f41960a96343569669c5435cdc2710";
@@ -317,6 +318,7 @@ public class Recipe_activity extends AppCompatActivity {
         myAlarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + RecipeAlarmTime*60*1000,pd);
 
     }
+
 
     private void StopRecipeAlarm(View view){
         Intent i1 = new Intent(this, Alarm.class);
