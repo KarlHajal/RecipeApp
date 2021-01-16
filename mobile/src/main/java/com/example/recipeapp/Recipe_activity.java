@@ -217,6 +217,7 @@ public class Recipe_activity extends AppCompatActivity {
                             title.setText((String) result.getString("title"));
                             ready_in.setText(Integer.toString((Integer) result.get("readyInMinutes")));
                             servings.setText(Integer.toString((Integer) result.get("servings")));
+                            healthy.setText("Health Score:" + Integer.toString((Integer) result.get("healthScore")));
                             RecipeAlarmTime = (int) result.get("readyInMinutes");
 
                             try{
