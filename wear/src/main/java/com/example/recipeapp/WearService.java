@@ -34,11 +34,7 @@ import java.util.List;
 
 public class WearService extends WearableListenerService {
 
-    public static final String HEART_RATE = "HEART_RATE";
-    public static final String LONGITUDE = "LONGITUDE";
-    public static final String LATITUDE = "LATITUDE";
     public static final String INSTRUCTIONS = "INSTRUCTIONS";
-    public static final String ACCELERATION = "ACCELERATION";
     public static final String TOTACCELERATION = "TOTACCELERATION";
 
     // Tag for Logcat
@@ -74,11 +70,6 @@ public class WearService extends WearableListenerService {
         return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
     }
 
-    public static final String ACTIVITY_TO_START = "ACTIVITY_TO_START";
-    public static final String MESSAGE = "MESSAGE";
-    public static final String DATAMAP_INT = "DATAMAP_INT";
-    public static final String DATAMAP_INT_ARRAYLIST = "DATAMAP_INT_ARRAYLIST";
-    public static final String IMAGE = "IMAGE";
     public static final String PATH = "PATH";
 
     public static Asset createAssetFromBitmap(Bitmap bitmap) {
@@ -106,22 +97,13 @@ public class WearService extends WearableListenerService {
 
         // Match against the given action
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
-        PutDataMapRequest putDataMapRequest;
+
         switch (action) {
-            case ACCELERATION:
-//                String acc = intent.getStringExtra(ACCELERATION);
-//                if (acc == null) acc = "";
-//                sendMessage(acc, BuildConfig.W_acceleration_path);
-                float[] acc = intent.getFloatArrayExtra(ACCELERATION);
-                Log.v(TAG, "ACCELERATION sending accel data" + acc[0] +" "+ acc[1] +" "+ acc[2]);
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_acceleration_path);
-                putDataMapRequest.getDataMap().putFloatArray(BuildConfig.W_acceleration_key, acc);
-                sendPutDataMapRequest(putDataMapRequest);
+            case TOTACCELERATION:
+                int rating = intent.getIntExtra(TOTACCELERATION,0);
+                String message = Integer.toString(rating);
+                sendMessage(message, BuildConfig.W_rating_path);
                 break;
-//            case TOTACCELERATION:
-//                int rating = intent.getIntExtra(TOTACCELERATION,0);
-//
-//                break;
             default:
                 Log.w(TAG, "Unknown action " + action);
                 break;
@@ -140,38 +122,6 @@ public class WearService extends WearableListenerService {
                 messageEvent.getSourceNodeId());
 
         switch (path) {
-            case BuildConfig.W_path_start_activity:
-                Log.v(TAG, "Message asked to open Activity");
-                Intent startIntent = null;
-                switch (data) {
-                    case BuildConfig.W_mainactivity:
-                        startIntent = new Intent(this, MainActivity.class);
-                        break;
-                    case BuildConfig.W_recipe_instructions_activity:
-                        Log.d(TAG, "Start recipe instructions received");
-                        startIntent = new Intent(this, RecipeInstructionsActivity.class);
-                        Intent ratingintent = new Intent(this, RatingService.class);
-                        startService(ratingintent);
-                        break;
-                }
-
-                if (startIntent == null) {
-                    Log.w(TAG, "Asked to start unhandled activity: " + data);
-                    return;
-                }
-                startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(startIntent);
-                break;
-            case BuildConfig.W_path_stop_activity:
-                switch (data) {
-                    case BuildConfig.W_recipe_instructions_activity:
-                        Intent intentStop = new Intent();
-                        intentStop.setAction(RecipeInstructionsActivity.STOP_ACTIVITY);
-                        LocalBroadcastManager.getInstance(WearService.this).sendBroadcast
-                                (intentStop);
-                        break;
-                }
-                break;
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + new String
                         (messageEvent.getData()));
@@ -204,12 +154,17 @@ public class WearService extends WearableListenerService {
                         // Extract the data behind the key you know contains data
                         DataMap instructionDataMap = dataMapItem.getDataMap().getDataMap(BuildConfig.W_instructions_key);
                         AnalysedInstructions instructions = new AnalysedInstructions(instructionDataMap);
-                        Log.i(TAG, "received instructions " + instructions.toString());
+                        Log.v(TAG, "W_instructions_path received instructions " + instructions.toString());
 
+                        Log.v(TAG, "W_instructions_path starting RecipeInstructionsActivity");
                         Intent startIntent = new Intent(this, RecipeInstructionsActivity.class);
                         startIntent.putExtra(INSTRUCTIONS, instructions);
                         startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(startIntent);
+
+                        Log.v(TAG, "W_instructions_path starting RatingService");
+                        Intent ratingIntent = new Intent(this, RatingService.class);
+                        startService(ratingIntent);
                         break;
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
@@ -304,7 +259,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        ACCELERATION,
         TOTACCELERATION;
     }
 }
