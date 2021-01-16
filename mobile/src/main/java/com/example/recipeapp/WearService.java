@@ -40,7 +40,7 @@ public class WearService extends WearableListenerService {
     public static final String PATH = "PATH";
     public static final String EXTRA_INSTRUCTIONS = "INSTRUCTIONS";
     public static final String ACTION_ACCELERATION = "ACTION_ACCELERATION"; // move this to receiving broadcast activity
-
+    public static final String TOTACCELERATION = "TOTACCELERATION";
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
 
@@ -120,8 +120,10 @@ public class WearService extends WearableListenerService {
                 putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions.toDataMap());
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
-            default:
-                Log.w(TAG, "Unknown action \" " + action + " \" ");
+            case TOTACCELERATION:
+                int rating = intent.getIntExtra(TOTACCELERATION,0);
+                // todo add this rating to database and display on favourites
+                Log.w(TAG, "Received rating on tab");
                 break;
         }
 
@@ -277,6 +279,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        START_ACTIVITY, STOP_ACTIVITY, MESSAGE, INSTRUCTIONS
+        START_ACTIVITY, STOP_ACTIVITY, MESSAGE, INSTRUCTIONS,TOTACCELERATION
     }
 }

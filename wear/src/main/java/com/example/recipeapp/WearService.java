@@ -118,10 +118,10 @@ public class WearService extends WearableListenerService {
                 putDataMapRequest.getDataMap().putFloatArray(BuildConfig.W_acceleration_key, acc);
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
-            case TOTACCELERATION:
-                int rating = intent.getIntExtra(TOTACCELERATION,0);
-
-                break;
+//            case TOTACCELERATION:
+//                int rating = intent.getIntExtra(TOTACCELERATION,0);
+//
+//                break;
             default:
                 Log.w(TAG, "Unknown action " + action);
                 break;
