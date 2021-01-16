@@ -34,12 +34,7 @@ import java.util.List;
 
 public class WearService extends WearableListenerService {
 
-    public static final String ACTIVITY_TO_START = "ACTIVITY_TO_START";
-    public static final String ACTIVITY_TO_STOP = "ACTIVITY_TO_STOP";
-    public static final String MESSAGE = "MESSAGE";
-    public static final String PATH = "PATH";
-    public static final String EXTRA_INSTRUCTIONS = "INSTRUCTIONS";
-    public static final String ACTION_ACCELERATION = "ACTION_ACCELERATION"; // move this to receiving broadcast activity
+    public static final String EXTRA_INSTRUCTIONS = "EXTRA_INSTRUCTIONS";
 
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
@@ -101,19 +96,6 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
         PutDataMapRequest putDataMapRequest;
         switch (action) {
-            case START_ACTIVITY:
-                String activity = intent.getStringExtra(ACTIVITY_TO_START);
-                sendMessage(activity, BuildConfig.W_path_start_activity);
-                break;
-            case STOP_ACTIVITY:
-                String activityStop = intent.getStringExtra(ACTIVITY_TO_STOP);
-                sendMessage(activityStop, BuildConfig.W_path_stop_activity);
-                break;
-            case MESSAGE:
-                String message = intent.getStringExtra(MESSAGE);
-                if (message == null) message = "";
-                sendMessage(message, intent.getStringExtra(PATH));
-                break;
             case INSTRUCTIONS:
                 AnalysedInstructions instructions = (AnalysedInstructions) intent.getParcelableExtra(EXTRA_INSTRUCTIONS);
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
@@ -121,7 +103,7 @@ public class WearService extends WearableListenerService {
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
-                Log.w(TAG, "Unknown action \" " + action + " \" ");
+                Log.w(TAG, "Unknown action " + action);
                 break;
         }
 
@@ -138,14 +120,11 @@ public class WearService extends WearableListenerService {
                 messageEvent.getSourceNodeId());
 
         switch (path) {
-            case BuildConfig.W_acceleration_path:
-                Log.i(TAG, "Message contained acceleration data : " + data);
-                // todo listen to this broadcast to do something with acceleration data
-                Intent intent = new Intent(ACTION_ACCELERATION);
-                intent.putExtra("accel", data);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            case BuildConfig.W_rating_path:
+                Log.i(TAG, "Message contained rating data : " + data);
+                int rating = Integer.parseInt(data);
+                // todo send to firebase, to add to favourite recipe as difficulty rating
                 break;
-
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + data);
                 break;
@@ -174,15 +153,8 @@ public class WearService extends WearableListenerService {
 
                 assert uri.getPath() != null;
                 switch (uri.getPath()) {
-                    case BuildConfig.W_acceleration_path:
-                        // Extract the data behind the key you know contains data
-                        float[] acc = dataMapItem.getDataMap().getFloatArray(BuildConfig.W_acceleration_key);
-                        Log.v(TAG, "received acceleration data " + acc[0] +" "+ acc[1] +" "+ acc[2]);
-
-                        // todo listen to this broadcast to do something with acceleration data
-                        intent = new Intent(ACTION_ACCELERATION);
-                        intent.putExtra("accel", acc);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                    case BuildConfig.W_instructions_path:
+                        Log.v(TAG, "not doing anything here");
                         break;
                     default:
                         Log.w(TAG, "Data changed for unhandled path: " + uri);
@@ -277,6 +249,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        START_ACTIVITY, STOP_ACTIVITY, MESSAGE, INSTRUCTIONS
+        INSTRUCTIONS
     }
 }

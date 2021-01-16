@@ -31,9 +31,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".search">
-
-        </activity>
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".Recipe_activity" />
         <activity android:name=".EditProfileActivity" />

@@ -20,17 +20,12 @@ allprojects {
     }
     project.ext {
         constants = [
-                path_start_activity : "/START_ACTIVITY",
-                path_stop_activity  : "/STOP_ACTIVITY",
-
-                mainactivity        : "MainActivity",
                 recipe_instructions_activity   : "RecipeInstructionsActivity",
 
-                instructions_path        : "/INSTRUCTIONS",
-                instructions_key         : "instructions",
+                instructions_path        : "/INSTRUCTIONS_PATH",
+                instructions_key         : "instructions_key",
 
-                acceleration_path     : "/ACCELERATION",
-                acceleration_key      : "acceleration",
+                rating_path     : "/RATING_PATH",
         ]
     }
 }
