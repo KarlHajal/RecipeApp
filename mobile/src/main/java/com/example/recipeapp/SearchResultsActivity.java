@@ -57,6 +57,10 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void getResults(String searchText) throws JSONException, IOException {
         search_results = findViewById(R.id.ingredients_search_result);
         search_results.setLayoutManager(new GridLayoutManager(this, 2));
+        //String URL = "https://api.spoonacular.com/recipes/complexSearch?includeIngredients=" + searchText + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710";
+        //+ "&diet=" + dietText ;
+
+
         String URL = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + searchText + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710"+ "&diet=" + userProfile.diet ;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

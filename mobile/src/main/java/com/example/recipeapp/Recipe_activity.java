@@ -155,7 +155,9 @@ public class Recipe_activity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.i(TAG, "useontab - onClick");
                 //startcountdown to alarm
-                StartRecipeAlarm(v);
+                //StartRecipeAlarm(v);
+                Intent activity2Intent = new Intent(Recipe_activity.this, Alarm1.class);
+                startActivity(activity2Intent);
             }
         });
 
