@@ -28,13 +28,14 @@ public class SearchResultsActivity extends AppCompatActivity {
     private JSONArray resultsArr;
     private List<Recipe> lstRecipe = new ArrayList<>();
     private static String TAG = "SearchResultsActivity";
-
+    private Profile userProfile = new Profile("", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
         String searchText = getIntent().getExtras().getString("ingredient_value");
+        userProfile = (Profile) getIntent().getExtras().getSerializable("user_profile");
         try {
             Log.v(TAG, "searchText" + searchText);
             getResults(searchText);
@@ -42,6 +43,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 
     private String getStringFromList(List<String> ingredientsList) {
         StringBuilder result= new StringBuilder(ingredientsList.get(0));
@@ -55,7 +57,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void getResults(String searchText) throws JSONException, IOException {
         search_results = findViewById(R.id.ingredients_search_result);
         search_results.setLayoutManager(new GridLayoutManager(this, 2));
-        String URL = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + searchText + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710";
+        String URL = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + searchText + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710"+ "&diet=" + userProfile.diet ;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
