@@ -8,4 +8,5 @@
     <string name="title_activity_show_alarm">ShowAlarm</string>
     <string name="Recipe_done">Your dish is ready</string>
     <string name="no_instructions">no instructions</string>
+    <string name="finish">Finish</string>
 </resources>
