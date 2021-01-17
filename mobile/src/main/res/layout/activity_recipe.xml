@@ -101,7 +101,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="60dp"
-                        android:layout_marginEnd="55dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginEnd="20dp"
                         android:textAlignment="center"
                         android:textSize="30dp"
                         android:text=""
@@ -138,8 +139,8 @@
 
                         <ImageView
                             android:id="@+id/imageView7"
-                            android:layout_width="48dp"
-                            android:layout_height="46dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="20dp"
                             android:layout_marginBottom="20dp"
@@ -156,6 +157,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:text="@string/_000"
+                            android:textSize="20sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/imageView7"
                             app:layout_constraintTop_toTopOf="parent"  />
@@ -163,8 +165,8 @@
 
                         <ImageView
                             android:id="@+id/imageView8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:layout_marginStart="40dp"
                             android:contentDescription="@string/servings"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -178,12 +180,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:text="@string/_000"
+                            android:textSize="20sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/imageView8"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
-                            android:id="@+id/imageView9"
+                            android:id="@+id/aggregate_likes_icon"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_marginStart="35dp"
@@ -191,15 +194,17 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/recipe_servings"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/healthy" />
+                            app:srcCompat="@drawable/ic_thumb_up" />
 
                         <TextView
                             android:id="@+id/recipe_healthy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
+                            android:text="@string/_000"
+                            android:textSize="20sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/imageView9"
+                            app:layout_constraintStart_toEndOf="@+id/aggregate_likes_icon"
                             app:layout_constraintTop_toTopOf="parent" />
 
 
