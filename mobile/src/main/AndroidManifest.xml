@@ -38,7 +38,8 @@
         <activity android:name=".Recipe_activity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".HomepageActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize"/>
 
         <receiver
             android:name=".Alarm"

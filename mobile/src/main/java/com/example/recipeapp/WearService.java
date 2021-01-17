@@ -98,7 +98,7 @@ public class WearService extends WearableListenerService {
         PutDataMapRequest putDataMapRequest;
         switch (action) {
             case INSTRUCTIONS:
-                
+
                 //if (watch_available==true){
                     AnalysedInstructions instructions = (AnalysedInstructions) intent.getParcelableExtra(EXTRA_INSTRUCTIONS);
                     putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
