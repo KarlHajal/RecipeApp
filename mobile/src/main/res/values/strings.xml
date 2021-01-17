@@ -33,5 +33,6 @@
     <string name="img_of_recipe">fav recipe image</string>
     <string name="sign_out">Sign out</string>
     <string name="search_results_title">Results</string>
+    <string name="ingredient_instruction">Enter ingredients (comma separated)</string>
 
 </resources>
