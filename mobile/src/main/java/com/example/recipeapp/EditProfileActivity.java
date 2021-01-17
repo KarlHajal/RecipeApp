@@ -103,9 +103,6 @@ public class EditProfileActivity extends AppCompatActivity {
             // which contains our result data
             setResult(Activity.RESULT_OK, data);
 
-            Intent intent = new Intent(this, HomepageActivity.class);
-            startActivity(intent);
-
             finish();
         }
         return super.onOptionsItemSelected(item);

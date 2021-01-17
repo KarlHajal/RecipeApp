@@ -35,19 +35,18 @@ public class SearchResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-        String searchText = getIntent().getExtras().getString("ingredient_value");
+        String ingredient_to_search = getIntent().getExtras().getString("ingredient_value");
+        Log.v(TAG, "ingredient_to_search" + ingredient_to_search);
         userProfile = (Profile) getIntent().getExtras().getSerializable("user_profile");
         try {
-            Log.v(TAG, "searchText" + searchText);
-            getResults(searchText);
+            getResults(ingredient_to_search, userProfile);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume(){
         super.onResume();
         RecyclerView.Adapter adapter = search_results.getAdapter();
         if (adapter != null) {
@@ -64,15 +63,19 @@ public class SearchResultsActivity extends AppCompatActivity {
         }
         return result.toString();
     }
-    String dietText=userProfile.diet;
-    String intolerancesText=userProfile.intolerances;
-    private void getResults(String searchText) throws JSONException, IOException {
+
+    private void getResults(String ingredients_to_search, Profile userProfile) throws JSONException, IOException {
         search_results = findViewById(R.id.ingredients_search_result);
         search_results.setLayoutManager(new GridLayoutManager(this, 2));
-        String URL = "https://api.spoonacular.com/recipes/complexSearch?includeIngredients=" + searchText + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710" + "&diet=" + dietText+ "&intolerances="+ intolerancesText ;
+        String diet = userProfile.diet;
+        String intolerances = userProfile.intolerances;
 
+        Log.i(TAG, "diet " + diet + ", intolerances " + intolerances);
+        //https://api.spoonacular.com/recipes/complexSearch?diet=vegan&intolerances=dairy,egg&includeIngredients=sugar&instructionsRequired=true&addRecipeInformation=true&number=9&apiKey=80a1ffa18fa845eaac0f4e8e869392b4
+        String URL = "https://api.spoonacular.com/recipes/complexSearch?diet="+diet+"&intolerances="+intolerances+"&includeIngredients="+ingredients_to_search+"&instructionsRequired=true&addRecipeInformation=true&apiKey="+Constants.spoonacularApiKey;
 
-        //String URL = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + searchText + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710"+ "&diet=" + userProfile.diet ;
+        // old call
+//        String URL = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + ingredients_to_search + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710"+ "&diet=" + userProfile.diet ;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
@@ -92,7 +95,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                     public void onResponse(Call call, Response response) throws IOException {
                         try {
                             String jsonData = response.body().string();
-                            resultsArr = new JSONArray(jsonData);
+                            JSONObject results = new JSONObject(jsonData);
+                            resultsArr = results.getJSONArray("results");
 
                             Log.v(TAG, "the res is:" + resultsArr);
                             for (int i = 0; i < resultsArr.length(); i++) {

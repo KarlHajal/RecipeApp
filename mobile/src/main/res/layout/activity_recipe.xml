@@ -155,7 +155,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text="@string/not_healthy"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/imageView9"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -193,6 +192,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
+                        android:background="#703232"
+                        android:backgroundTint="#54D164"
                         android:text="TextView" />
 
                     <androidx.recyclerview.widget.RecyclerView

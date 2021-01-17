@@ -36,8 +36,9 @@ public class ProfileFragment extends Fragment {
 
     private View fragmentView;
     private Profile userProfile;
+    private Menu optionsMenu;
 
-    private static int EDIT_PROFILE = 444;
+    private static final int RC_EDIT_PROFILE = 444;
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -62,10 +63,14 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
 
-        Drawable drawable = menu.findItem(R.id.edit_profile_button).getIcon();
+        MenuItem editProfileButton = menu.findItem(R.id.edit_profile_button);
+        Drawable drawable = editProfileButton.getIcon();
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(), R.color.colorAccent));
-        menu.findItem(R.id.edit_profile_button).setIcon(drawable);
+        editProfileButton.setIcon(drawable);
+        editProfileButton.setEnabled(false);
+
+        optionsMenu = menu;
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -79,7 +84,7 @@ public class ProfileFragment extends Fragment {
             b.putSerializable("userProfile", userProfile);
 
             intent.putExtras(b); //Put your id to your next Intent
-            startActivityForResult(intent, EDIT_PROFILE);
+            startActivityForResult(intent, RC_EDIT_PROFILE);
         }
         else if (item.getItemId() == R.id.sign_out_button){
 
@@ -96,7 +101,7 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == EDIT_PROFILE){
+        if(requestCode == RC_EDIT_PROFILE){
 
             if(resultCode == Activity.RESULT_OK) {
 
@@ -127,6 +132,7 @@ public class ProfileFragment extends Fragment {
 
                 userProfile = new Profile(diet, intolerances);
 
+                optionsMenu.findItem(R.id.edit_profile_button).setEnabled(true);
                 setProfileInfo("", true);
             }
 

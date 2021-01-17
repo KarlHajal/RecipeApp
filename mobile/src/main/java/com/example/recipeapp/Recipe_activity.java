@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -52,8 +54,7 @@ public class Recipe_activity extends AppCompatActivity {
     private ImageView img, vegeterian;
     private DatabaseReference mRootRef;
     private FirebaseAuth mAuth;
-    private JSONArray ingredientsArr;
-    private List<Ingredient> ingredientsLst = new ArrayList<Ingredient>();
+    private String recipe_sourceUrl;
     private AnalysedInstructions analysedInstructions;
     private RecyclerView ingredients_rv;
     private RecyclerView instructions_rv;
@@ -97,14 +98,7 @@ public class Recipe_activity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Log.v(TAG, "OnCreate - try getAnalysedInstructions");
-        try {
-            getAnalysedInstructions(recipeId);
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.i(TAG, "OnCreate - add listeners to firebase");
+        Log.v(TAG, "OnCreate - add listeners to firebase");
         mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -149,7 +143,7 @@ public class Recipe_activity extends AppCompatActivity {
             }
         });
 
-        Log.i(TAG, "OnCreate - setting onclick to useontab fab");
+        Log.v(TAG, "OnCreate - setting onclick to useontab fab");
         fab_useontab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +161,8 @@ public class Recipe_activity extends AppCompatActivity {
             public void onClick(View v) {
                 //send instructions to watch
                 sendRecipetoWatch();
+
+
             }
         });
 
@@ -179,9 +175,10 @@ public class Recipe_activity extends AppCompatActivity {
         instructions_rv.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
     private void getRecipeInstructions(final String recipeId) throws IOException, JSONException {
         //https://api.spoonacular.com/recipes/informationBulk?ids=1&apiKey=e5f41960a96343569669c5435cdc2710
-        String URL = " https://api.spoonacular.com/recipes/" + recipeId + "/information?apiKey=e5f41960a96343569669c5435cdc2710";
+        String URL = " https://api.spoonacular.com/recipes/" + recipeId + "/information?addRecipeInformation=true&apiKey="+Constants.spoonacularApiKey;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
@@ -216,21 +213,18 @@ public class Recipe_activity extends AppCompatActivity {
                             title.setText((String) result.getString("title"));
                             ready_in.setText(Integer.toString((Integer) result.get("readyInMinutes")));
                             servings.setText(Integer.toString((Integer) result.get("servings")));
+                            healthy.setText("Health Score:" + Integer.toString((Integer) result.get("healthScore")));
                             RecipeAlarmTime = (int) result.get("readyInMinutes");
+                            recipe_sourceUrl = (String) result.get("sourceUrl");
 
-                            try{
-                                if(result.getString("instructions").equals("")){
-                                    throw new Exception("No Instructions");
+                            if(!setAnalysedInstructions(result)){
+                                if(!setInstructions(result)){
+                                    setMsgForNoInstructions();
                                 }
-                                else {
-                                    instructions.setText(Html.fromHtml((String) result.get("instructions")));
-                                }
-                            } catch(Exception e) {
-                                String msg= "Unfortunately, the instructions you were looking for not found, view the original recipe <a href="+result.get("sourceUrl")+">here</a>";
-                                instructions.setMovementMethod(LinkMovementMethod.getInstance());
-                                instructions.setText(Html.fromHtml(msg));
                             }
-                            ingredientsArr = (JSONArray) result.get("extendedIngredients");
+
+                            JSONArray ingredientsArr = (JSONArray) result.get("extendedIngredients");
+                            List<Ingredient> ingredientsLst = new ArrayList<Ingredient>();
                             for (int i = 0; i < ingredientsArr.length(); i++) {
                                 JSONObject ingredient = ingredientsArr.getJSONObject(i);
                                 ingredientsLst.add(new Ingredient(ingredient.optString("originalString"), ingredient.optString("image")));
@@ -247,63 +241,16 @@ public class Recipe_activity extends AppCompatActivity {
         });
     }
 
-    private void getAnalysedInstructions(final String recipeId) throws IOException, JSONException {
-        String URL = "https://api.spoonacular.com/recipes/" + recipeId + "/analyzedInstructions?apiKey=e5f41960a96343569669c5435cdc2710";
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(URL)
-                .get()
-                .addHeader("cache-control", "no-cache")
-                .addHeader("postman-token", "0c62c820-d52c-fa96-eab0-b6829dc11b00")
-                .build();
-
-        //  RequestQueue requestQueue = Volley.newRequestQueue(this);
-        client.newCall(request).enqueue( new Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.v(TAG, "getAnalysedInstructions - onResponse");
-                final String resultString = response.body().string();
-                Recipe_activity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            JSONArray resultJSONArray = new JSONArray(resultString);
-                            JSONObject resultJSONObject = resultJSONArray.getJSONObject(0);
-                            Log.v(TAG, resultJSONObject.toString());
-                            analysedInstructions = new AnalysedInstructions(resultJSONObject);
-                            final RVAdapterRecipeInstructions adapter = new RVAdapterRecipeInstructions(getApplicationContext(), analysedInstructions);
-                            Log.v(TAG, "getAnalysedInstructions - setOnItemClickListener");
-                            adapter.setOnItemClickListener(new RVAdapterRecipeInstructions.ClickListener() {
-                                @Override
-                                public void onItemClick(int position, View v) {
-                                    Log.v(TAG, "onItemClick at pos " + position);
-                                    adapter.itemClicked(position);
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
-                            instructions_rv.setAdapter(adapter);
-                            instructions_rv.setItemAnimator(new DefaultItemAnimator());
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        });
-    }
-
     private void sendRecipetoWatch() {
-        Intent intentWear = new Intent(this, WearService.class);
-        intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS.name());
-        intentWear.putExtra(WearService.EXTRA_INSTRUCTIONS, analysedInstructions);
-        this.startService(intentWear);
+        if(analysedInstructions == null){
+            Toast.makeText(this, "No instructions to send to watch", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Intent intentWear = new Intent(this, WearService.class);
+            intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS.name());
+            intentWear.putExtra(WearService.EXTRA_INSTRUCTIONS, analysedInstructions);
+            this.startService(intentWear);
+        }
     }
 
     private void StartRecipeAlarm(View view){
@@ -318,6 +265,7 @@ public class Recipe_activity extends AppCompatActivity {
 
     }
 
+
     private void StopRecipeAlarm(View view){
         Intent i1 = new Intent(this, Alarm.class);
         i1.setAction("com.example.recipeapp.receiver.Message");
@@ -325,4 +273,47 @@ public class Recipe_activity extends AppCompatActivity {
         PendingIntent pd = PendingIntent.getBroadcast(this,0,i1,0);
         myAlarmManager.cancel(pd);
     }
+
+    private boolean setAnalysedInstructions(JSONObject result) throws JSONException {
+        JSONArray analysedInstructionsJSONArray = result.getJSONArray("analyzedInstructions");
+        if(analysedInstructionsJSONArray.length() != 0) {
+            analysedInstructions = new AnalysedInstructions(analysedInstructionsJSONArray.getJSONObject(0));
+            if (analysedInstructions.isInstructionsOk()) {
+                final RVAdapterRecipeInstructions adapter = new RVAdapterRecipeInstructions(getApplicationContext(), analysedInstructions);
+                Log.v(TAG, "getAnalysedInstructions - setOnItemClickListener");
+                adapter.setOnItemClickListener(new RVAdapterRecipeInstructions.ClickListener() {
+                    @Override
+                    public void onItemClick(int position, View v) {
+                        Log.v(TAG, "onItemClick at pos " + position);
+                        adapter.itemClicked(position);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                instructions_rv.setAdapter(adapter);
+                instructions_rv.setItemAnimator(new DefaultItemAnimator());
+                instructions.setVisibility(View.GONE);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean setInstructions(JSONObject result) throws JSONException {
+        String instructions_txt = result.getString("instructions");
+        Log.i(TAG, "getRecipeInstructions - instructions " + instructions_txt);
+        if(instructions_txt.equals("null") || instructions_txt.isEmpty()) {
+            return false;
+        }
+        else {
+            instructions.setText(instructions_txt);
+            return true;
+        }
+    }
+
+    private void setMsgForNoInstructions(){
+        String msg = "Unfortunately, the instructions you were looking for not found, view the original recipe <a href="+recipe_sourceUrl+">here</a>";
+        instructions.setText(Html.fromHtml(msg, Html.FROM_HTML_MODE_COMPACT));
+        instructions.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
 }
