@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataEvent;
@@ -30,6 +31,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class WearService extends WearableListenerService {
@@ -80,6 +82,21 @@ public class WearService extends WearableListenerService {
         return null;
     }
 
+    public boolean checkWatchConnected() throws ExecutionException, InterruptedException {
+        Log.i(TAG,"watch connect true");
+        Task<List<Node>> wearableList =
+                Wearable.getNodeClient(getApplicationContext()).getConnectedNodes();
+        List<Node> nodes = Tasks.await(wearableList);
+        //List<Node> nodes = Wearable.getNodeClient(this).getConnectedNodes().getResult();
+
+        if (nodes.size() > 0) {
+            Log.i(TAG,"watch connect true");
+            return true;
+        } else {
+            Log.i(TAG,"watch connect false");
+            return false;
+        }
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -97,11 +114,21 @@ public class WearService extends WearableListenerService {
         PutDataMapRequest putDataMapRequest;
         switch (action) {
             case INSTRUCTIONS:
-                AnalysedInstructions instructions = (AnalysedInstructions) intent.getParcelableExtra(EXTRA_INSTRUCTIONS);
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
-                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions.toDataMap());
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
+                try {
+                    boolean watch_available = checkWatchConnected();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //if (watch_available==true){
+                    AnalysedInstructions instructions = (AnalysedInstructions) intent.getParcelableExtra(EXTRA_INSTRUCTIONS);
+                    putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
+                    putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions.toDataMap());
+                    sendPutDataMapRequest(putDataMapRequest);
+                break;//} else {
+                   // Toast.makeText(this, "Watch not connected", Toast.LENGTH_LONG).show();
+                //}
             default:
                 Log.w(TAG, "Unknown action " + action);
                 break;
