@@ -65,38 +65,45 @@ public class RecipeInstructionsActivity extends WearableActivity {
 
     private void updateInstructionsDisplay() {
         Log.i(TAG, "updateInstructionsDisplay");
-        if(instructions == null){
+        if (instructions == null) {
             Log.i(TAG, "updateInstructionsDisplay instructions == null");
             tv_instructionStep.setText(R.string.no_instructions);
             currentInstructionShown = 0;
-        }
-        else {
+        } else {
             int instructionSize = instructions.size();
             Log.i(TAG, "updateInstructionsDisplay instructions != null size " + instructionSize);
-            if(currentInstructionShown >= instructionSize){
-                currentInstructionShown = instructionSize-1;
-                if(bt_next_visible) {
+            // born max
+            if (currentInstructionShown >= instructionSize) {
+                currentInstructionShown = instructionSize - 1;
+            }
+            // born min
+            if (currentInstructionShown < 0) {
+                currentInstructionShown = 0;
+            }
+
+            // next + finish button visibility
+            if (currentInstructionShown == instructionSize - 1) {
+                if (bt_next_visible) {
                     bt_next_visible = false;
                     bt_next.setVisibility(View.GONE);
                     bt_finish.setVisibility(View.VISIBLE);
                 }
-            }
-            else{
-                if(!bt_next_visible) {
+            } else {
+                if (!bt_next_visible) {
                     bt_next_visible = true;
                     bt_next.setVisibility(View.VISIBLE);
                     bt_finish.setVisibility(View.GONE);
                 }
             }
-            if(currentInstructionShown<0){
-                currentInstructionShown = 0;
-                if(bt_prev_visible){
+
+            // prev button visibility
+            if (currentInstructionShown == 0) {
+                if (bt_prev_visible) {
                     bt_prev_visible = false;
                     bt_prev.setVisibility(View.GONE);
                 }
-            }
-            else{
-                if(!bt_prev_visible){
+            } else {
+                if (!bt_prev_visible) {
                     bt_prev_visible = true;
                     bt_prev.setVisibility(View.VISIBLE);
                 }
@@ -111,21 +118,18 @@ public class RecipeInstructionsActivity extends WearableActivity {
         @Override
         public void onClick(View view) {
             Log.i(TAG, "onClickListener");
-            if(view.getId() == R.id.bt_prev){
+            if (view.getId() == R.id.bt_prev) {
                 Log.i(TAG, "onClickListener bt_prev");
                 currentInstructionShown--;
                 updateInstructionsDisplay();
-            }
-            else if (view.getId() == R.id.bt_next){
+            } else if (view.getId() == R.id.bt_next) {
                 Log.i(TAG, "onClickListener bt_next");
                 currentInstructionShown++;
                 updateInstructionsDisplay();
-            }
-            else if(view.getId() == R.id.bt_finish){
+            } else if (view.getId() == R.id.bt_finish) {
                 Log.i(TAG, "onClickListener bt_finish");
                 finish();
-            }
-            else{
+            } else {
                 Log.w(TAG, "onClickListener unrecognised view");
             }
         }

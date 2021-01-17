@@ -69,7 +69,7 @@
                 android:minHeight="0dp"
                 android:text="@string/finish"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
         </LinearLayout>
 
