@@ -37,6 +37,7 @@ public class RecyclerViewAdapterFavorites extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(RecyclerViewAdapterFavorites.MyViewHolder holder, final int position) {
         holder.recipe_title.setText(favData.get(position).getTitle());
+        holder.recipe_title.setTextSize(20);
         if (favData.get(position).getThumbnail().isEmpty()) {
             holder.img_recipe_thumbnail.setImageResource(R.drawable.nopicture);
         } else{
