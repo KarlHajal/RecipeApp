@@ -17,7 +17,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Results"
+            android:text="@string/search_results_title"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textSize="35sp" />
