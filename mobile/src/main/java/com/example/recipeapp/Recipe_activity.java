@@ -5,15 +5,20 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -46,6 +51,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
 public class Recipe_activity extends AppCompatActivity {
 
     private static final String TAG = "Recipe_activity";
@@ -61,10 +67,15 @@ public class Recipe_activity extends AppCompatActivity {
     private FloatingActionButton fab_bookmark;
     private FloatingActionButton fab_useontab;
     private FloatingActionButton fab_sendtowatch;
+    private EditText timeEt;
+    private Button startBtn;
+    private boolean started;
+    private CountDownTimer countDownTimer;
 
     private boolean like = false;
     private int RecipeAlarmTime;
     private int RecipeID;
+    private static final Handler HANDLER = new Handler();
 
     AlarmManager myAlarmManager;
 
@@ -91,6 +102,74 @@ public class Recipe_activity extends AppCompatActivity {
         fab_bookmark = findViewById(R.id.fab_bookmark);
         fab_useontab = findViewById(R.id.fab_useontab);
         fab_sendtowatch = findViewById(R.id.fab_sendtowatch);
+
+
+        timeEt = findViewById(R.id.timeEt);
+        startBtn = findViewById(R.id.startBtn);
+        startBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (started) {
+                    started = false;
+                    startBtn.setText(R.string.start);
+                    timeEt.setCursorVisible(true);
+                    countDownTimer.cancel(); // we cancel the countdown timer execution when user click on the stop button
+                } else {
+                    started = true;
+                    startBtn.setText(R.string.stop);
+                    timeEt.setCursorVisible(false);
+
+                    // we get raw time entered by user at min:sec format
+                    String rawTime = timeEt.getText().toString();
+                    String[] tmp = rawTime.split(":");
+
+                    long time = 60 * 1000; // default time = 60 sec.
+
+                    // we try to parse the time entered by user
+                    try {
+                        time = (Integer.parseInt(tmp[0]) * 60 + Integer.parseInt(tmp[1])) * 1000;
+                    } catch (Exception e) {
+                        timeEt.setText(R.string.default_time); // default time is set if error !
+                    }
+
+                    countDownTimer = new CountDownTimer(time, 100) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            // we update the counter during the execution
+                            long remainingSeconds = millisUntilFinished / 1000;
+                            long min = remainingSeconds / 60;
+                            long seconds = remainingSeconds % 60;
+
+                            timeEt.setText(min + ":" + (seconds < 10 ? "0" + seconds : seconds));
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            // execution is finished, we set default values
+                            timeEt.setText(R.string.start_time);
+                            startBtn.setText(R.string.start);
+
+                            // we display a user message
+                            new AlertDialog.Builder(Recipe_activity.this).
+                                    setTitle(R.string.app_name).
+                                    setMessage(R.string.lets_eat).
+                                    show();
+
+                            // we reset to default time in the future (1.5 seconds seem good)
+                            HANDLER.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    timeEt.setText(R.string.default_time);
+                                }
+                            }, 1500);
+                        }
+                    };
+
+                    countDownTimer.start();
+
+                }
+            }
+        });
 
         Log.v(TAG, "OnCreate - try getRecipeInstructions");
         try {
