@@ -33,7 +33,7 @@
 
     <LinearLayout
         android:id="@+id/search_linear_layout"
-        android:layout_width="match_parent"
+        android:layout_width="600dp"
         android:layout_height="50dp"
         android:layout_below="@+id/instructions_text"
         android:layout_centerHorizontal="true"
