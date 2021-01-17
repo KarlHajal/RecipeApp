@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -72,7 +73,10 @@ public class Recipe_activity extends AppCompatActivity {
     private boolean started;
     private CountDownTimer countDownTimer;
 
-    private boolean like = false;
+    private boolean thumbsLike = false;
+    private FloatingActionButton fabThumbsLike;
+
+    private boolean bookmarkLike = false;
     private int RecipeAlarmTime;
     private int RecipeID;
     private static final Handler HANDLER = new Handler();
@@ -102,6 +106,7 @@ public class Recipe_activity extends AppCompatActivity {
         fab_bookmark = findViewById(R.id.fab_bookmark);
         fab_useontab = findViewById(R.id.fab_useontab);
         fab_sendtowatch = findViewById(R.id.fab_sendtowatch);
+        fabThumbsLike = findViewById(R.id.fab_like_button);
 
 
         timeEt = findViewById(R.id.timeEt);
@@ -185,7 +190,7 @@ public class Recipe_activity extends AppCompatActivity {
                 Log.v(TAG, String.valueOf(dataSnapshot));
                 if (dataSnapshot.getValue() != null) {
                     fab_bookmark.setImageResource(R.drawable.bookmarked);
-                    like = true;
+                    bookmarkLike = true;
                 }
             }
             @Override
@@ -198,11 +203,11 @@ public class Recipe_activity extends AppCompatActivity {
         fab_bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                like = !like;
+                bookmarkLike = !bookmarkLike;
                 mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (like) {
+                        if (bookmarkLike) {
                             fab_bookmark.setImageResource(R.drawable.bookmarked);
                             Map favorites = new HashMap();
                             favorites.put("img", intent.getExtras().getString("img"));
@@ -257,6 +262,22 @@ public class Recipe_activity extends AppCompatActivity {
                 }
             }
         });
+
+        fabThumbsLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                thumbsLike = !thumbsLike;
+                if(thumbsLike){
+                    fabThumbsLike.getBackground().setTint(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                    fabThumbsLike.getDrawable().setTint(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                }
+                else{
+                    fabThumbsLike.getBackground().setTint(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                    fabThumbsLike.getDrawable().setTint(ContextCompat.getColor(getApplicationContext(), R.color.common_google_signin_btn_text_light_focused));
+                }
+            }
+        });
+
 
         Log.v(TAG, "OnCreate - set recycler view ingredient");
         ingredients_rv = findViewById(R.id.recipe_ingredients_rv);

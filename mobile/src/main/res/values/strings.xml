@@ -41,5 +41,6 @@
     <string name="ingredient_instruction">Enter ingredients (comma separated)</string>
     <string name="search_for_recipes_title">Search for Recipes</string>
     <string name="search_instructions_text">Enter a comma separated list of ingredients</string>
+    <string name="like_button_description">like_button</string>
 
 </resources>
