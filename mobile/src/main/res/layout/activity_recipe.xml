@@ -96,7 +96,7 @@
 
                         <EditText
                             android:id="@+id/timeEt"
-                            android:layout_width="wrap_content"
+                            android:layout_width="10dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/default_time"
@@ -104,7 +104,7 @@
 
                         <Button
                             android:id="@+id/startBtn"
-                            android:layout_width="wrap_content"
+                            android:layout_width="10dp"
                             android:layout_height="wrap_content"
                             android:text="@string/start"
                             android:layout_weight="1"
