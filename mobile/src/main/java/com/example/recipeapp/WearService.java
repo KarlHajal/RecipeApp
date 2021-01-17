@@ -123,6 +123,7 @@ public class WearService extends WearableListenerService {
             case BuildConfig.W_rating_path:
                 Log.i(TAG, "Message contained rating data : " + data);
                 int rating = Integer.parseInt(data);
+                Constants.Recipe_on_Watch = false;
                 // todo send to firebase, to add to favourite recipe as difficulty rating
                 break;
             default:

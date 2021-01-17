@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -64,6 +63,7 @@ public class Recipe_activity extends AppCompatActivity {
 
     private boolean like = false;
     private int RecipeAlarmTime;
+    private int RecipeID;
 
     AlarmManager myAlarmManager;
 
@@ -149,7 +149,9 @@ public class Recipe_activity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.i(TAG, "useontab - onClick");
                 //startcountdown to alarm
+
                 StartRecipeAlarm(v);
+
             }
         });
 
@@ -158,9 +160,12 @@ public class Recipe_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //send instructions to watch
-                sendRecipetoWatch();
-
-
+                if (Constants.Recipe_on_Watch==false){
+                    sendRecipetoWatch(recipeId);
+                    Toast.makeText(getApplicationContext(), "Instructions sent to watch!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Another recipe running on watch!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -211,7 +216,8 @@ public class Recipe_activity extends AppCompatActivity {
                             title.setText((String) result.getString("title"));
                             ready_in.setText(Integer.toString((Integer) result.get("readyInMinutes")));
                             servings.setText(Integer.toString((Integer) result.get("servings")));
-                            healthy.setText("Health Score:" + Integer.toString((Integer) result.get("healthScore")));
+                            healthy.setText("Health Score: " + result.get("healthScore"));
+                            //RecipeID = (int) result.get("id");
                             RecipeAlarmTime = (int) result.get("readyInMinutes");
                             recipe_sourceUrl = (String) result.get("sourceUrl");
 
@@ -239,7 +245,7 @@ public class Recipe_activity extends AppCompatActivity {
         });
     }
 
-    private void sendRecipetoWatch() {
+    private void sendRecipetoWatch(String recipeId) {
         if(analysedInstructions == null){
             Toast.makeText(this, "No instructions to send to watch", Toast.LENGTH_LONG).show();
         }
@@ -248,6 +254,8 @@ public class Recipe_activity extends AppCompatActivity {
             intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS.name());
             intentWear.putExtra(WearService.EXTRA_INSTRUCTIONS, analysedInstructions);
             this.startService(intentWear);
+            Constants.Recipe_ID = recipeId;
+            Constants.Recipe_on_Watch = true;
         }
     }
 
@@ -308,6 +316,7 @@ public class Recipe_activity extends AppCompatActivity {
         }
     }
 
+   // @RequiresApi(api = Build.VERSION_CODES.N)
     private void setMsgForNoInstructions(){
         String msg = "Unfortunately, the instructions you were looking for not found, view the original recipe <a href="+recipe_sourceUrl+">here</a>";
         instructions.setText(Html.fromHtml(msg, Html.FROM_HTML_MODE_COMPACT));
