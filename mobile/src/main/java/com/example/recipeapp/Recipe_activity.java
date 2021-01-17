@@ -57,7 +57,7 @@ public class Recipe_activity extends AppCompatActivity {
     private static final String TAG = "Recipe_activity";
     
     private TextView title, ready_in, servings, instructions, healthy;
-    private ImageView img, vegeterian;
+    private ImageView img;
     private DatabaseReference mRootRef;
     private FirebaseAuth mAuth;
     private String recipe_sourceUrl;

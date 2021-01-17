@@ -67,7 +67,7 @@ public class InstructionStep implements Parcelable {
     }
 
     public String getStepText(){
-        return this.number + ": " + this.step;
+        return "\u25BA " + this.number + ":   " + this.step + System.lineSeparator();
     }
 
     public List<Ingredient> getIngredients(){

@@ -25,6 +25,8 @@ public class RVAdapterRecipeInstructions extends RecyclerView.Adapter<RecyclerVi
     private final ArrayList<String> positionToExtend = new ArrayList<>();
     private static final String TAG = "RVAdapterRecipeInstru";
 
+    private static final int instructionsTextSize = 15;
+
     public RVAdapterRecipeInstructions(Context applicationContext, AnalysedInstructions instructions) {
         this.applicationContext = applicationContext;
         this.instructions = instructions;
@@ -49,9 +51,12 @@ public class RVAdapterRecipeInstructions extends RecyclerView.Adapter<RecyclerVi
         if (holder.getItemViewType() == 0) {
             ViewHolderSimple viewHolderSimple = (ViewHolderSimple) holder;
             viewHolderSimple.instruction_step.setText(this.instructions.get(position).getStepText());
+            viewHolderSimple.instruction_step.setTextSize(instructionsTextSize);
+            viewHolderSimple.instruction_step.setLineSpacing(4, 1);
         } else {
             ViewHolderDetails viewHolderDetails = (ViewHolderDetails) holder;
             viewHolderDetails.instruction_step.setText(this.instructions.get(position).getStepText());
+            viewHolderDetails.instruction_step.setTextSize(instructionsTextSize);
             List<Equipment> equipments = instructions.get(position).getEquipments();
             if (!equipments.isEmpty())
                 Picasso.get().load(equipments.get(0).getThumbnail()).into(viewHolderDetails.equipment_img);
