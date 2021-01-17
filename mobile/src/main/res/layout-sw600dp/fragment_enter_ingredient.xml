@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
+        android:layout_centerHorizontal="true"
         android:text="@string/search_for_recipes_title"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
@@ -33,7 +33,7 @@
 
     <LinearLayout
         android:id="@+id/search_linear_layout"
-        android:layout_width="match_parent"
+        android:layout_width="600dp"
         android:layout_height="50dp"
         android:layout_below="@+id/instructions_text"
         android:layout_centerHorizontal="true"

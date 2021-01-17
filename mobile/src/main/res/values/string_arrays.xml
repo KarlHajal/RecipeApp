@@ -26,7 +26,7 @@
 
     
 
-    <string name="ingredient">Enter ingredient(s)</string>
+    <string name="ingredient">Enter ingredients</string>
     <string name="search_button">Find</string>
 
 </resources>
