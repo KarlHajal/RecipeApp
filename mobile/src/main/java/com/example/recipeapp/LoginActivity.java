@@ -19,6 +19,7 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
+    private static final int RC_EDIT_PROFILE = 777;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +63,14 @@ public class LoginActivity extends AppCompatActivity {
                     profileRef.child("diet").setValue("");
 
                     Intent goToEditProfile = new Intent(LoginActivity.this, EditProfileActivity.class);
-                    startActivity(goToEditProfile);
+                    startActivityForResult(goToEditProfile, RC_EDIT_PROFILE);
                 }
                 else{
                     Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
                     startActivity(goToHomepage);
+                    finish();
                 }
 
-                finish();
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
@@ -78,6 +79,11 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Sign in failed.", Toast.LENGTH_SHORT).show();
                 createSignInIntent();
             }
+        }
+        else if (requestCode == RC_EDIT_PROFILE){
+            Intent goToHomepage = new Intent(LoginActivity.this, HomepageActivity.class);
+            startActivity(goToHomepage);
+            finish();
         }
     }
 
