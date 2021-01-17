@@ -14,7 +14,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        android:layout_centerHorizontal="true"
         android:text="@string/search_for_recipes_title"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
