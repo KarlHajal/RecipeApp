@@ -60,6 +60,7 @@ public class Recipe_activity extends AppCompatActivity {
     private TextView title, ready_in, servings, instructions, healthy;
     private ImageView img;
     private DatabaseReference mRootRef;
+    private DatabaseReference mLikesRef;
     private FirebaseAuth mAuth;
     private String recipe_sourceUrl;
     private AnalysedInstructions analysedInstructions;
@@ -96,6 +97,7 @@ public class Recipe_activity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
         mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child(recipeId);
+        mLikesRef = FirebaseDatabase.getInstance().getReference().child(uid).child("likes").child(recipeId);
         img = findViewById(R.id.recipe_img);
         title = findViewById(R.id.recipe_title);
         ready_in = findViewById(R.id.recipe_ready_in);
@@ -263,10 +265,27 @@ public class Recipe_activity extends AppCompatActivity {
             }
         });
 
+        mLikesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.v(TAG, String.valueOf(dataSnapshot));
+                if (dataSnapshot.getValue() != null) {
+                    fabThumbsLike.getBackground().setTint(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                    fabThumbsLike.getDrawable().setTint(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                    thumbsLike = true;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         fabThumbsLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 thumbsLike = !thumbsLike;
+
                 if(thumbsLike){
                     fabThumbsLike.getBackground().setTint(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
                     fabThumbsLike.getDrawable().setTint(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
@@ -275,6 +294,23 @@ public class Recipe_activity extends AppCompatActivity {
                     fabThumbsLike.getBackground().setTint(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
                     fabThumbsLike.getDrawable().setTint(ContextCompat.getColor(getApplicationContext(), R.color.common_google_signin_btn_text_light_focused));
                 }
+
+                mLikesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (thumbsLike) {
+                            mLikesRef.setValue(true);
+                        } else {
+                            try {
+                                mLikesRef.setValue(null);
+                            } catch (Exception e) {
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
             }
         });
 
