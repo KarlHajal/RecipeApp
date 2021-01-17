@@ -352,7 +352,7 @@ public class Recipe_activity extends AppCompatActivity {
     private void StartRecipeAlarm(View view){
 
         Log.i(TAG, "StartRecipeAlarm");
-
+        Toast.makeText(getApplicationContext(), "You will be notified in "+ RecipeAlarmTime +"mins", Toast.LENGTH_SHORT).show();
         Intent i1 = new Intent(this, Alarm.class);
         i1.setAction("com.example.recipeapp.receiver.Message");
         i1.addCategory("android.intent.category.DEFAULT");
