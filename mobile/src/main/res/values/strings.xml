@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Recipe App</string>
+    <string name="app_name">RecipeApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="start">Start timer</string>
     <string name="stop">Stop timer</string>

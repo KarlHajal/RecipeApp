@@ -40,6 +40,7 @@ public class ProfileFragment extends Fragment {
     private View fragmentView;
     private Profile userProfile;
     private Menu optionsMenu;
+    private ValueEventListener profileDataChangesListener;
 
     private static final int RC_EDIT_PROFILE = 444;
 
@@ -94,6 +95,10 @@ public class ProfileFragment extends Fragment {
                 public void onComplete(@NonNull Task<Void> task) {
                     // user is now signed out
                     startActivity(new Intent(getActivity(), LoginActivity.class));
+
+                    if(profileDataChangesListener != null) {
+                        profileRef.removeEventListener(profileDataChangesListener);
+                    }
                     getActivity().finish();
                 }
             });
@@ -128,7 +133,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void readUserProfile() {
-        profileRef.addValueEventListener(new ValueEventListener() {
+        profileDataChangesListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String diet = dataSnapshot.child("diet").getValue(String.class);
@@ -144,7 +149,9 @@ public class ProfileFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Empty
             }
-        });
+        };
+
+        profileRef.addValueEventListener(profileDataChangesListener);
     }
 
     private static String capitalizeFirstLetter(String original) {
