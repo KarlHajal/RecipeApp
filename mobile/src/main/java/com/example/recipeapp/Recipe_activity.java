@@ -3,6 +3,7 @@ package com.example.recipeapp;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -239,6 +240,15 @@ public class Recipe_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //send instructions to watch
+                try {
+                    getPackageManager().getPackageInfo("com.google.android.wearable.app", PackageManager.GET_META_DATA);
+
+                    //Toast.makeText(getApplicationContext(), "The Android Wear App is installed", Toast.LENGTH_SHORT).show();
+                } catch (PackageManager.NameNotFoundException e) {
+                    //android wear app is not installed
+                    Toast.makeText(getApplicationContext(), "The Android Wear App is NOT installed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (Constants.Recipe_on_Watch==false){
                     sendRecipetoWatch(recipeId);
                     Toast.makeText(getApplicationContext(), "Instructions sent to watch!", Toast.LENGTH_LONG).show();
@@ -293,7 +303,7 @@ public class Recipe_activity extends AppCompatActivity {
                             }
 
                             title.setText((String) result.getString("title"));
-                            ready_in.setText(Integer.toString((Integer) result.get("readyInMinutes")));
+                            ready_in.setText(Integer.toString((Integer) result.get("readyInMinutes"))+"mins");
                             servings.setText(Integer.toString((Integer) result.get("servings")));
                             healthy.setText("Health Score: " + result.get("healthScore"));
                             //RecipeID = (int) result.get("id");
@@ -325,6 +335,7 @@ public class Recipe_activity extends AppCompatActivity {
     }
 
     private void sendRecipetoWatch(String recipeId) {
+
         if(analysedInstructions == null){
             Toast.makeText(this, "No instructions to send to watch", Toast.LENGTH_LONG).show();
         }
@@ -401,5 +412,6 @@ public class Recipe_activity extends AppCompatActivity {
         instructions.setText(Html.fromHtml(msg, Html.FROM_HTML_MODE_COMPACT));
         instructions.setMovementMethod(LinkMovementMethod.getInstance());
     }
+
 
 }

@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -72,7 +71,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         Log.i(TAG, "diet " + diet + ", intolerances " + intolerances);
         //https://api.spoonacular.com/recipes/complexSearch?diet=vegan&intolerances=dairy,egg&includeIngredients=sugar&instructionsRequired=true&addRecipeInformation=true&number=9&apiKey=80a1ffa18fa845eaac0f4e8e869392b4
-        String URL = "https://api.spoonacular.com/recipes/complexSearch?diet="+diet+"&intolerances="+intolerances+"&includeIngredients="+ingredients_to_search+"&instructionsRequired=true&addRecipeInformation=true&apiKey="+Constants.spoonacularApiKey;
+        String URL = "https://api.spoonacular.com/recipes/complexSearch?diet="+diet+"&intolerances="+intolerances+"&includeIngredients="+ingredients_to_search+"&instructionsRequired=true&addRecipeInformation=true&number=70&apiKey="+Constants.spoonacularApiKey;
 
         // old call
 //        String URL = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + ingredients_to_search + "&number=30&instructionsRequired=true&apiKey=e5f41960a96343569669c5435cdc2710"+ "&diet=" + userProfile.diet ;
