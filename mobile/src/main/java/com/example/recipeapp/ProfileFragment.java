@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment {
     private View fragmentView;
     private Profile userProfile;
 
-    private static int EDIT_PROFILE = 444;
+    private static final int RC_EDIT_PROFILE = 444;
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -79,7 +79,7 @@ public class ProfileFragment extends Fragment {
             b.putSerializable("userProfile", userProfile);
 
             intent.putExtras(b); //Put your id to your next Intent
-            startActivityForResult(intent, EDIT_PROFILE);
+            startActivityForResult(intent, RC_EDIT_PROFILE);
         }
         else if (item.getItemId() == R.id.sign_out_button){
 
@@ -96,7 +96,7 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == EDIT_PROFILE){
+        if(requestCode == RC_EDIT_PROFILE){
 
             if(resultCode == Activity.RESULT_OK) {
 
