@@ -35,7 +35,6 @@ import java.util.List;
 public class WearService extends WearableListenerService {
 
     public static final String EXTRA_INSTRUCTIONS = "EXTRA_INSTRUCTIONS";
-    public static final String EXTRA_RECIPEID = "EXTRA_RECIPEID";
 
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
@@ -99,10 +98,8 @@ public class WearService extends WearableListenerService {
         switch (action) {
             case INSTRUCTIONS:
                 AnalysedInstructions instructions = (AnalysedInstructions) intent.getParcelableExtra(EXTRA_INSTRUCTIONS);
-                int Recipe_ID = intent.getIntExtra(EXTRA_RECIPEID,0);
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
                 putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions.toDataMap());
-                // putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_recipeid_key, Recipe_ID);
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
