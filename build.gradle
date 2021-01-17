@@ -26,6 +26,10 @@ allprojects {
                 instructions_key         : "instructions_key",
 
                 rating_path     : "/RATING_PATH",
+
+                recipeid_path     : "/RECIPEID_PATH",
+                recipeid_key     : "/recipeid_key",
+
         ]
     }
 }
