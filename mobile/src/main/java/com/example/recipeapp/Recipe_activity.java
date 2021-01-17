@@ -253,7 +253,6 @@ public class Recipe_activity extends AppCompatActivity {
             Intent intentWear = new Intent(this, WearService.class);
             intentWear.setAction(WearService.ACTION_SEND.INSTRUCTIONS.name());
             intentWear.putExtra(WearService.EXTRA_INSTRUCTIONS, analysedInstructions);
-            //intentWear.putExtra(WearService.EXTRA_RECIPEID, RecipeID);
             this.startService(intentWear);
             Constants.Recipe_ID = recipeId;
             Constants.Recipe_on_Watch = true;
