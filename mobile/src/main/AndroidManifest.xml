@@ -33,6 +33,7 @@
 
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".Alarm1">
+
         </activity>
         <activity android:name=".Recipe_activity" />
         <activity android:name=".EditProfileActivity" />

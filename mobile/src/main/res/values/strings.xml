@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Recipe App</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="start">Start timer</string>
+    <string name="stop">Stop timer</string>
+    <string name="start_time">0:00</string>
+    <string name="default_time">Set your time</string>
+    <string name="lets_eat">Ready !</string>
     <string name="EditProfileTitle">Edit Profile</string>
     <string name="recipe_title">Recipe Title</string>
     <string name="ready_in_min_img">ready_in_min_img</string>
