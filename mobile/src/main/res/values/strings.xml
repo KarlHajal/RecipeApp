@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RecipeApp</string>
+    <string name="app_name">Recipe App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="EditProfileTitle">Edit Profile</string>
     <string name="recipe_title">Recipe Title</string>
