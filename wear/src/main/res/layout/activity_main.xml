@@ -15,10 +15,20 @@
         android:padding="@dimen/inner_frame_layout_padding"
         app:layout_boxedEdges="all">
 
+
+        <ImageView
+            android:id="@+id/appimage"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:layout_gravity="center|top"
+            android:src="@drawable/spatula" />
+
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:gravity="center"
             android:text="@string/hello_world" />
 
     </FrameLayout>
