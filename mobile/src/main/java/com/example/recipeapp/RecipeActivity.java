@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -64,6 +65,7 @@ public class RecipeActivity extends AppCompatActivity {
     private DatabaseReference mRootRef;
     private DatabaseReference mLikesRef;
     private DatabaseReference mRecipeLikesCountRef;
+    private DatabaseReference mRecipeAverageDifficultyRatingRef;
     private FirebaseAuth mAuth;
     private String recipe_sourceUrl;
     private AnalysedInstructions analysedInstructions;
@@ -76,6 +78,7 @@ public class RecipeActivity extends AppCompatActivity {
     private Button startBtn;
     private boolean started;
     private CountDownTimer countDownTimer;
+    private AppCompatRatingBar difficultyRatingBar;
 
     private boolean thumbsLike = false;
     private FloatingActionButton fabThumbsLike;
@@ -102,6 +105,7 @@ public class RecipeActivity extends AppCompatActivity {
         mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child(recipeId);
         mLikesRef = FirebaseDatabase.getInstance().getReference().child("profiles").child(uid).child("likes").child(recipeId);
         mRecipeLikesCountRef = FirebaseDatabase.getInstance().getReference().child("recipes").child(recipeId).child("likes");
+        mRecipeAverageDifficultyRatingRef = FirebaseDatabase.getInstance().getReference().child("recipes").child(recipeId).child("difficulty_ratings").child("average");
         img = findViewById(R.id.recipe_img);
         title = findViewById(R.id.recipe_title);
         ready_in = findViewById(R.id.recipe_ready_in);
@@ -113,9 +117,10 @@ public class RecipeActivity extends AppCompatActivity {
         fab_useontab = findViewById(R.id.fab_useontab);
         fab_sendtowatch = findViewById(R.id.fab_sendtowatch);
         fabThumbsLike = findViewById(R.id.fab_like_button);
+        difficultyRatingBar = findViewById(R.id.difficulty_rating_bar);
 
 
-        timeEt = findViewById(R.id.timeEt);
+                timeEt = findViewById(R.id.timeEt);
         startBtn = findViewById(R.id.startBtn);
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,6 +286,21 @@ public class RecipeActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mRecipeAverageDifficultyRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Long average = (Long) snapshot.getValue();
+                if(average != null) {
+                    difficultyRatingBar.setRating(average);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
