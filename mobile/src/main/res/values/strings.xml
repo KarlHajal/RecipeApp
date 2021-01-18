@@ -42,5 +42,6 @@
     <string name="search_for_recipes_title">Search for Recipes</string>
     <string name="search_instructions_text">Enter a comma separated list of ingredients</string>
     <string name="like_button_description">like_button</string>
+    <string name="search_text_hint">e.g. tomatoes, olive oil, ...</string>
 
 </resources>
