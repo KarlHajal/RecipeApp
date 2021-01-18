@@ -118,9 +118,9 @@
                             android:layout_width="10dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:inputType="time"
-                            android:text="@string/default_time"
-                         />
+                            android:backgroundTint="#99C3D1"
+                            android:hint="@string/default_time"
+                            android:inputType="time" />
 
                         <Button
                             android:id="@+id/startBtn"
