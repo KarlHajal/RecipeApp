@@ -76,8 +76,21 @@ public class ProfileFragment extends Fragment {
 
         optionsMenu = menu;
 
-        readUserProfile();
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onResume() {
+        readUserProfile();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(profileDataChangesListener != null) {
+            profileRef.removeEventListener(profileDataChangesListener);
+        }
     }
 
     @Override
@@ -97,9 +110,6 @@ public class ProfileFragment extends Fragment {
                     // user is now signed out
                     startActivity(new Intent(getActivity(), LoginActivity.class));
 
-                    if(profileDataChangesListener != null) {
-                        profileRef.removeEventListener(profileDataChangesListener);
-                    }
                     getActivity().finish();
                 }
             });
