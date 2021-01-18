@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey"
+    android:background="#090909"
     android:padding="@dimen/box_inset_layout_padding"
     tools:context=".RecipeInstructionsActivity"
     tools:deviceIds="wear">
@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="#39A0CF"
+            android:backgroundTint="#070707"
             app:layout_constraintBottom_toTopOf="@+id/linLayout_prev_next"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
@@ -29,9 +30,13 @@
                 android:id="@+id/tv_instruction_step"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#050505"
+                android:textSize="14sp"
                 android:text="instruction_step" />
 
         </ScrollView>
+
+
 
         <LinearLayout
             android:id="@+id/linLayout_prev_next"
@@ -46,33 +51,44 @@
                 android:id="@+id/bt_prev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#F5343E95"
+                android:background="#F5A0A1A1"
                 android:contentDescription="prev"
-                android:src="@android:drawable/ic_media_previous" />
+                android:src="@android:drawable/ic_media_previous"
+                tools:layout_conversion_absoluteHeight="32dp"
+                tools:layout_editor_absoluteY="139dp"
+                tools:layout_editor_absoluteX="71dp"
+                tools:layout_conversion_absoluteWidth="32dp" />
 
             <ImageButton
                 android:id="@+id/bt_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#963EB6"
+                android:background="#F5A0A1A1"
                 android:contentDescription="next"
                 android:foregroundTint="#FFFFFF"
                 android:src="@android:drawable/ic_media_next"
-                android:visibility="visible"/>
+                android:visibility="visible"
+                tools:layout_conversion_absoluteHeight="32dp"
+                tools:layout_editor_absoluteY="139dp"
+                tools:layout_editor_absoluteX="103dp"
+                tools:layout_conversion_absoluteWidth="32dp" />
 
             <Button
                 android:id="@+id/bt_finish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#79C34B"
+                android:backgroundTint="#00BCD4"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:text="@string/finish"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:layout_conversion_absoluteHeight="1dp"
+                tools:layout_editor_absoluteY="139dp"
+                tools:layout_editor_absoluteX="71dp"
+                tools:layout_conversion_absoluteWidth="1dp" />
 
         </LinearLayout>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
