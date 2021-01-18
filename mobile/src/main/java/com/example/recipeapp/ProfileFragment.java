@@ -151,7 +151,10 @@ public class ProfileFragment extends Fragment {
 
                 userProfile = new Profile(diet, intolerances);
 
-                optionsMenu.findItem(R.id.edit_profile_button).setEnabled(true);
+                MenuItem editProfileButton = optionsMenu.findItem(R.id.edit_profile_button);
+                if(editProfileButton != null) {
+                    editProfileButton.setEnabled(true);
+                }
                 setProfileInfo("", true);
             }
 
@@ -204,8 +207,8 @@ public class ProfileFragment extends Fragment {
         dietText = capitalizeLetterAfterSequencer(dietText, "-");
         dietText = capitalizeLetterAfterSequencer(dietText, " ");
 
-        if(dietText.isEmpty()) {
-            dietText = getString(R.string.diet_non_restrictive);
+        if(dietText.isEmpty() && getActivity() != null) {
+            dietText = getActivity().getString(R.string.diet_non_restrictive);
         }
 
         dietTextView.setText(dietText);
