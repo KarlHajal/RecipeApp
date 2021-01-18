@@ -111,22 +111,33 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:elevation="1dp"
+                        android:background="@color/lighterGray">
 
                         <EditText
                             android:id="@+id/timeEt"
                             android:layout_width="10dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:backgroundTint="#99C3D1"
+
+                            android:inputType="time"
                             android:hint="@string/default_time"
-                            android:inputType="time" />
+                            android:textAlignment="center"
+                            android:textCursorDrawable="@null"
+                            android:backgroundTint="@color/colorPrimary"
+                         />
+
 
                         <Button
                             android:id="@+id/startBtn"
                             android:layout_width="10dp"
                             android:layout_height="wrap_content"
                             android:text="@string/start"
+                            android:textColor="@color/colorAccent"
+                            android:backgroundTint="@color/colorPrimary"
                             android:layout_weight="1"
                            />
 
