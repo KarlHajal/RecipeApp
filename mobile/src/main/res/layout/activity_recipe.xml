@@ -197,7 +197,7 @@
                             app:srcCompat="@drawable/ic_thumb_up" />
 
                         <TextView
-                            android:id="@+id/recipe_healthy"
+                            android:id="@+id/aggregate_likes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"

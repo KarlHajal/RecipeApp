@@ -57,7 +57,9 @@ public class RecipeActivity extends AppCompatActivity {
 
     private static final String TAG = "RecipeActivity";
     
-    private TextView title, ready_in, servings, instructions, healthy;
+    private TextView title, ready_in, servings, instructions, aggregateLikes;
+    private Long spoonacularAggregateLikes = 0L;
+    private Long recipeAppLikes = 0L;
     private ImageView img;
     private DatabaseReference mRootRef;
     private DatabaseReference mLikesRef;
@@ -104,7 +106,7 @@ public class RecipeActivity extends AppCompatActivity {
         title = findViewById(R.id.recipe_title);
         ready_in = findViewById(R.id.recipe_ready_in);
         servings = findViewById(R.id.recipe_servings);
-        healthy = findViewById(R.id.recipe_healthy);
+        aggregateLikes = findViewById(R.id.aggregate_likes);
         //vegeterian = findViewById(R.id.recipe_vegetarian);
         instructions = findViewById(R.id.recipe_instructions);
         fab_bookmark = findViewById(R.id.fab_bookmark);
@@ -283,6 +285,23 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
 
+        mRecipeLikesCountRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Long likesCount = (Long) snapshot.getValue();
+                        if(likesCount == null){
+                            likesCount = 0L;
+                        }
+                        recipeAppLikes = likesCount;
+                        aggregateLikes.setText(getAddedLikesString());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
         fabThumbsLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -385,8 +404,12 @@ public class RecipeActivity extends AppCompatActivity {
                             title.setText((String) result.getString("title"));
                             ready_in.setText(Integer.toString((Integer) result.get("readyInMinutes"))+"mins");
                             servings.setText(Integer.toString((Integer) result.get("servings")));
-                            healthy.setText(Integer.toString((Integer) result.get("aggregateLikes")));
-                            healthy.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                            Integer jsonLikes = (Integer) result.get("aggregateLikes");
+                            spoonacularAggregateLikes = jsonLikes.longValue();
+                            aggregateLikes.setText(getAddedLikesString());
+                            aggregateLikes.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
                             //RecipeID = (int) result.get("id");
                             RecipeAlarmTime = (int) result.get("readyInMinutes");
                             recipe_sourceUrl = (String) result.get("sourceUrl");
@@ -413,6 +436,10 @@ public class RecipeActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private String getAddedLikesString(){
+        return Long.toString(spoonacularAggregateLikes + recipeAppLikes);
     }
 
     private void sendRecipetoWatch(String recipeId) {
