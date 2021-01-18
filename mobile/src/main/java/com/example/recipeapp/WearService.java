@@ -45,7 +45,9 @@ public class WearService extends WearableListenerService {
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
 
-    private DatabaseReference mDifficultyRatingsRef;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mUserDifficultyRatingsRef;
+    private DatabaseReference mRecipeDifficultyRatingsRef;
     private String m_recipeId = "";
 
     private static Bitmap resizeImage(Bitmap bitmap, int newSize) {
@@ -92,9 +94,10 @@ public class WearService extends WearableListenerService {
 
     @Override
     public void onCreate() {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
-        mDifficultyRatingsRef = FirebaseDatabase.getInstance().getReference().child("profiles").child(uid).child("difficulty_ratings");
+        mUserDifficultyRatingsRef = FirebaseDatabase.getInstance().getReference().child("profiles").child(uid).child("difficulty_ratings");
+        mRecipeDifficultyRatingsRef = FirebaseDatabase.getInstance().getReference().child("recipes");
 
         super.onCreate();
     }
@@ -154,11 +157,34 @@ public class WearService extends WearableListenerService {
     }
 
     private void saveDifficultyRatingToDB(final int rating) {
-        final DatabaseReference userRecipeRef = mDifficultyRatingsRef.child(m_recipeId);
+        final DatabaseReference userRecipeRef = mUserDifficultyRatingsRef.child(m_recipeId);
+        final String uid = mAuth.getCurrentUser().getUid();
+        final DatabaseReference recipeDifficultyRef = mRecipeDifficultyRatingsRef.child(m_recipeId).child("difficulty_ratings");
         userRecipeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userRecipeRef.setValue(rating);
+                recipeDifficultyRef.child(uid).setValue(rating);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        recipeDifficultyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Long average = (Long) snapshot.child("average").getValue();
+                Long childrenCount = snapshot.getChildrenCount();
+                if(average == null){
+                    average = (long) rating;
+                }
+                else{
+                    average = (average * childrenCount + rating) / (childrenCount + 1);
+                }
+                recipeDifficultyRef.child("average").setValue(average);
             }
 
             @Override
