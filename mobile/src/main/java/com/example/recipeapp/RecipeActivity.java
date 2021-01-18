@@ -414,7 +414,7 @@ public class RecipeActivity extends AppCompatActivity {
                             RecipeAlarmTime = (int) result.get("readyInMinutes");
                             recipe_sourceUrl = (String) result.get("sourceUrl");
 
-                            if(!setAnalysedInstructions(result)){
+                            if(!setAnalysedInstructions(result, recipeId)){
                                 if(!setInstructions(result)){
                                     setMsgForNoInstructions();
                                 }
@@ -478,10 +478,10 @@ public class RecipeActivity extends AppCompatActivity {
         myAlarmManager.cancel(pd);
     }
 
-    private boolean setAnalysedInstructions(JSONObject result) throws JSONException {
+    private boolean setAnalysedInstructions(JSONObject result, String recipeId) throws JSONException {
         JSONArray analysedInstructionsJSONArray = result.getJSONArray("analyzedInstructions");
         if(analysedInstructionsJSONArray.length() != 0) {
-            analysedInstructions = new AnalysedInstructions(analysedInstructionsJSONArray.getJSONObject(0));
+            analysedInstructions = new AnalysedInstructions(analysedInstructionsJSONArray.getJSONObject(0), recipeId);
             if (analysedInstructions.isInstructionsOk()) {
                 final RVAdapterRecipeInstructions adapter = new RVAdapterRecipeInstructions(getApplicationContext(), analysedInstructions);
                 Log.v(TAG, "getAnalysedInstructions - setOnItemClickListener");

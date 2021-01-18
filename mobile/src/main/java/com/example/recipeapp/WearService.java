@@ -26,6 +26,12 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -38,6 +44,9 @@ public class WearService extends WearableListenerService {
 
     // Tag for Logcat
     private final String TAG = this.getClass().getSimpleName();
+
+    private DatabaseReference mDifficultyRatingsRef;
+    private String m_recipeId = "";
 
     private static Bitmap resizeImage(Bitmap bitmap, int newSize) {
         int width = bitmap.getWidth();
@@ -83,6 +92,10 @@ public class WearService extends WearableListenerService {
 
     @Override
     public void onCreate() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final String uid = mAuth.getCurrentUser().getUid();
+        mDifficultyRatingsRef = FirebaseDatabase.getInstance().getReference().child("profiles").child(uid).child("difficulty_ratings");
+
         super.onCreate();
     }
 
@@ -101,6 +114,7 @@ public class WearService extends WearableListenerService {
 
                 //if (watch_available==true){
                     AnalysedInstructions instructions = (AnalysedInstructions) intent.getParcelableExtra(EXTRA_INSTRUCTIONS);
+                    m_recipeId = instructions.getRecipeId();
                     putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_instructions_path);
                     putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_instructions_key, instructions.toDataMap());
                     sendPutDataMapRequest(putDataMapRequest);
@@ -129,12 +143,29 @@ public class WearService extends WearableListenerService {
                 Log.i(TAG, "Message contained rating data : " + data);
                 int rating = Integer.parseInt(data);
                 Constants.Recipe_on_Watch = false;
-                // todo send to firebase, to add to favourite recipe as difficulty rating
+
+                saveDifficultyRatingToDB(rating);
+
                 break;
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + data);
                 break;
         }
+    }
+
+    private void saveDifficultyRatingToDB(final int rating) {
+        final DatabaseReference userRecipeRef = mDifficultyRatingsRef.child(m_recipeId);
+        userRecipeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userRecipeRef.setValue(rating);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override

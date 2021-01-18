@@ -18,10 +18,15 @@ public class AnalysedInstructions implements Parcelable {
     private static final String TAG = "AnalysedInstructions";
 
     private String name;
+    private String m_recipeId = "";
     private List<InstructionStep> instructionSteps = new ArrayList<InstructionStep>();
     private boolean instructionsOk;
 
-    public AnalysedInstructions(JSONObject instructionJSON){
+    public AnalysedInstructions(JSONObject instructionJSON, String recipeId){
+        if(recipeId != null){
+            m_recipeId = recipeId;
+        }
+
         try {
             this.name = instructionJSON.getString("name");
         } catch (JSONException e) {
@@ -59,6 +64,7 @@ public class AnalysedInstructions implements Parcelable {
         // current analysedInstructions into dataMap
         DataMap map = new DataMap();
         map.putString("name", name);
+        map.putString("recipeId", m_recipeId);
         map.putDataMapArrayList("instructionSteps", instructionStepsDataMap);
         map.putBoolean("instructionsOk", instructionsOk);
         return map;
@@ -66,6 +72,7 @@ public class AnalysedInstructions implements Parcelable {
 
     public AnalysedInstructions(DataMap dataMap){
         this.name = dataMap.getString("name");
+        this.m_recipeId = dataMap.getString("recipeId");
         ArrayList<DataMap> instructionStepsDataMap = dataMap.getDataMapArrayList("instructionSteps");
         for (DataMap instructionStepDataMap: instructionStepsDataMap) {
             this.instructionSteps.add(new InstructionStep(instructionStepDataMap));
@@ -83,12 +90,14 @@ public class AnalysedInstructions implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeString(m_recipeId);
         dest.writeList(instructionSteps);
         dest.writeString(Boolean.toString(instructionsOk));
     }
 
     private AnalysedInstructions(Parcel in) {
         name = in.readString();
+        m_recipeId = in.readString();
         in.readList(instructionSteps, InstructionStep.class.getClassLoader());
         instructionsOk = Boolean.parseBoolean(in.readString());
     }
@@ -106,5 +115,9 @@ public class AnalysedInstructions implements Parcelable {
 
     public boolean isInstructionsOk(){
         return instructionsOk;
+    }
+
+    public String getRecipeId() {
+        return m_recipeId;
     }
 }
