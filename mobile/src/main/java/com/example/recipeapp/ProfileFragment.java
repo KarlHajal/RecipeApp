@@ -161,7 +161,7 @@ public class ProfileFragment extends Fragment {
             }
         };
 
-        profileRef.addValueEventListener(profileDataChangesListener);
+        profileRef.addListenerForSingleValueEvent(profileDataChangesListener);
     }
 
     private static String capitalizeFirstLetter(String original) {
