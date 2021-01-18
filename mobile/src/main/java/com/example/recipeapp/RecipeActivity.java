@@ -120,7 +120,7 @@ public class RecipeActivity extends AppCompatActivity {
         difficultyRatingBar = findViewById(R.id.difficulty_rating_bar);
 
 
-                timeEt = findViewById(R.id.timeEt);
+        timeEt = findViewById(R.id.timeEt);
         startBtn = findViewById(R.id.startBtn);
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
