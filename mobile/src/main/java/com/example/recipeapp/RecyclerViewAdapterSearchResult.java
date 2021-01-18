@@ -81,7 +81,7 @@ public class RecyclerViewAdapterSearchResult extends RecyclerView.Adapter<Recycl
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(applicationContext, Recipe_activity.class);
+                Intent intent = new Intent(applicationContext, RecipeActivity.class);
                 intent.putExtra("id", recipe.getId());
                 intent.putExtra("title",recipe.getTitle());
                 intent.putExtra("img",recipe.getThumbnail());

@@ -46,7 +46,7 @@ public class RecyclerViewAdapterFavorites extends RecyclerView.Adapter<RecyclerV
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(favContext, Recipe_activity.class);
+                Intent intent = new Intent(favContext, RecipeActivity.class);
                 intent.putExtra("id", favData.get(position).getId());
                 intent.putExtra("title",favData.get(position).getTitle());
                 intent.putExtra("img",favData.get(position).getThumbnail());

@@ -53,9 +53,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class Recipe_activity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity {
 
-    private static final String TAG = "Recipe_activity";
+    private static final String TAG = "RecipeActivity";
     
     private TextView title, ready_in, servings, instructions, healthy;
     private ImageView img;
@@ -159,7 +159,7 @@ public class Recipe_activity extends AppCompatActivity {
                             startBtn.setText(R.string.start);
 
                             // we display a user message
-                            new AlertDialog.Builder(Recipe_activity.this).
+                            new AlertDialog.Builder(RecipeActivity.this).
                                     setTitle(R.string.app_name).
                                     setMessage(R.string.lets_eat).
                                     show();
@@ -370,7 +370,7 @@ public class Recipe_activity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String myResponse = response.body().string();
-                Recipe_activity.this.runOnUiThread(new Runnable() {
+                RecipeActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
