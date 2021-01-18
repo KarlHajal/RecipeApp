@@ -35,4 +35,13 @@
         <item name="android:typeface">monospace</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+
+    <style name="CustomRatingBarStyle" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratings_bar_style</item>
+        <item name="android:minHeight">15dip</item>
+        <item name="android:maxHeight">47dip</item>
+        <item name="colorControlNormal">@android:color/holo_blue_bright</item>
+        <item name="colorControlActivated">@android:color/holo_red_light</item>
+    </style>
 </resources>
