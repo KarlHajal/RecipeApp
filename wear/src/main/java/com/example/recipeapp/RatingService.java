@@ -70,13 +70,13 @@ public class RatingService extends Service implements SensorEventListener {
         long dt = (System.currentTimeMillis() - initTime)/1000;
         totalacc = totalAcc / dt;
         int rating = 0;
-        if (totalacc>800) {
+        if (totalacc>300) {
             rating = 5;
-        } else if ((totalacc>640)&(totalacc<=800)) {
+        } else if ((totalacc>225)&(totalacc<=300)) {
             rating = 4;
-        } else if ((totalacc>480)&(totalacc<=640)) {
+        } else if ((totalacc>150)&(totalacc<=225)) {
             rating = 3;
-        } else if ((totalacc>160)&(totalacc<=320)) {
+        } else if ((totalacc>75)&(totalacc<=150)) {
             rating = 2;
         } else {
             rating = 1;
